@@ -1,0 +1,424 @@
+<html>
+	<head>
+		<title>Chimera visualization</title>
+		<style>
+   			body {
+    			background: #000;
+				color: #fff;
+   			}
+            .container {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+  		</style>
+        <style>
+        #bg {
+            position: fixed; 
+            top: auto; 
+            left: auto; 
+            width: auto; 
+            height: auto;
+        }
+        #bg img {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            margin: auto; 
+            min-width: 50%;
+            min-height: 50%;
+        }
+        </style>
+		<style>canvas { width: 100%; height: 100% }</style>
+		<script type="text/javascript" src="scr/three.min.js"></script>
+        <script type="text/javascript" src="scr/loadingPages.js"></script>
+        <script type="text/javascript" src="scr/settingContext.js"></script>
+        <script type="text/javascript" src="scr/colorContext.js"></script>
+        <script type="text/javascript" src="scr/cut.js"></script>
+	</head>
+	<body  onKeyDown="keyEvent()" onmousedown ="onDocumentMouseDown" onmouseup ="onDocumentMouseUp" onresize = "windowSizeChange()">
+        <div id="container" class="container"></div>
+<script type="text/javascript">
+
+    var reader = new FileReader();
+    var textBox;
+
+    var line;
+    var videoEnabled = false;
+    var timeMoment = 1;
+    var startVisualizationEnabled = true;
+
+    var colors = [];
+    var arrayMin = [];
+    var arrayMax = [];
+    var pauseValue = false;
+    var cutProcessing = false;
+    //initialize WebGL components    
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    var particleSystem;
+    var particles = new THREE.Geometry();
+    var cutParticles = new THREE.Geometry();
+    var container = document.getElementById('container');
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    container.appendChild(renderer.domElement);
+
+    function keyEvent() {
+        if (!startVisualizationEnabled) {
+            switch (event.keyCode) {
+                case 37:
+                    rotate_left();
+                    break;
+                case 38:
+                    rotate_up();
+                    break;
+                case 39:
+                    rotate_right();
+                    break;
+                case 40:
+                    rotate_down();
+                    break;
+                case 107:
+                    zoom();
+                    break;
+                case 109:
+                    unZoom();
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (initialisePagesLoadHandler.currentPage == "preVisualization" || initialisePagesLoadHandler.currentPage == "visualization") {
+            switch (event.keyCode) {
+                case 13:
+                    StartVisualization();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    function getWindowWidth() {
+        return window.innerWidth;
+    }
+
+    function getWindowHeight() {
+        return window.innerHeight;
+    }
+
+    function getInitialColor() {
+        cutContext.initialControlColor = document.getElementById('CutLines').style.backgroundColor;
+    }
+
+    window.onload = function () {
+        getInitialColor();
+        initialisePagesLoadHandler.loadingLabelHide(document);
+        initialisePagesLoadHandler.setInitialComponentProperty(document);
+        settingContext.width = getWindowWidth();
+        settingContext.height = getWindowHeight();
+        initialisePagesLoadHandler.loadInitialPage(document);
+    }
+
+    function getTimeMoment() {
+        timeMoment = document.getElementById('time').value;
+    }
+    function setTimeMoment() {
+        document.getElementById('time').value = timeMoment;
+    }
+
+    function readText(that) {
+        textBox = document.getElementById('TEXTBOX_ID');
+        initialisePagesLoadHandler.loadingLabel(document);
+        if (that.files && that.files[0]) {
+            reader.onload = function (e) {
+                line = e.target.result;
+                settingContext.moments = line.length / (2 * settingContext.neuronsCount);
+                settingContext.moments = settingContext.moments - (settingContext.moments % 1);
+                document.getElementById('textLabel').innerHTML = "Please input a time moment in the range [1 to " + settingContext.moments + " ]";
+                calculateCoordinates();
+                initialisePagesLoadHandler.loadPreVisualizationPage(document);
+                initialisePagesLoadHandler.loadingLabelHide(document);
+                cutContext.initCutComponentsPositions(document);
+            };
+            reader.readAsText(that.files[0]);
+        }
+    }
+
+    function calculateCoordinates() {
+        for (var p = 0; p < settingContext.neuronsCount; p++) {
+            var pX = ((p) % Math.pow(settingContext.oscillations, 2)) % settingContext.oscillations / 3 - 8.3,
+                    pY = ((p) % Math.pow(settingContext.oscillations, 2)) / settingContext.oscillations / 3 - 8.3,
+                    pZ = p / Math.pow(settingContext.oscillations, 2) / 3 - 8.3,
+                particle = new THREE.Vertex(
+                new THREE.Vector3(pX, pY, pZ)
+                );
+            particles.vertices.push(particle);
+        }
+
+        var temp, mn = 1000, mx = 0, j = 0;
+
+        for (var i = 0 ; i < line.length; i += 2) {
+            if (j == settingContext.neuronsCount - 1) {
+                arrayMin.push(mn);
+                arrayMax.push(mx);
+                mn = 1000;
+                mx = 0;
+                j = 0;
+            }
+            temp = line[i].charCodeAt(0) + "." + line[i + 1].charCodeAt(0);
+            if (temp > mx) mx = temp;
+            if (temp < mn) mn = temp;
+            j++;
+        }
+    }
+
+    function loadFileReaderPage() {
+        initialisePagesLoadHandler.loadFileReaderPage(document);
+    }
+
+    function phaseClick() {
+        settingContext.modelType = 'phase';
+        loadFileReaderPage();
+    }
+
+    function freqClick() {
+        settingContext.modelType = 'freq';
+        loadFileReaderPage();
+    }
+
+    function StartVisualization() {
+        startVisualizationEnabled = true;
+        initialisePagesLoadHandler.loadVisualizationPage(document);
+        getTimeMoment();
+        buildModel();
+        startVisualizationEnabled = false;
+    }
+
+    function video() {
+        initialisePagesLoadHandler.loadVideo3DPage(document);
+        videoEnabled = true;
+        animate();
+        videoEnabled = false;
+    }
+
+    function animate() {
+        timeMoment++;
+        if (timeMoment > settingContext.moments) return;
+        if (pauseValue) {
+            cancelAnimationFrame(animate);
+            initialisePagesLoadHandler.loadVisualizationPage(document);
+            videoEnabled = false;
+            pauseValue = false;
+            buildModel();
+            setTimeMoment();
+            return;
+        }
+        document.getElementById('videoLabelTime').innerHTML = "Current time moment: " + timeMoment;
+        buildModel();
+        requestAnimationFrame(animate);
+    }
+
+    function pauseClick() {
+        pauseValue = true;
+    }
+
+    function buildModel() {
+        scene.remove(scene.children[0]);
+        delete particleSystem;
+        delete colors;
+        var H, Vm, a, Vi, Vd, R, G, B;
+        min = arrayMin[timeMoment - 1];
+        max = arrayMax[timeMoment - 1];
+        var S = (1 - min/max)*100;
+        var V = (max * 60) / 3.6;
+        var displacementValue = 2 * (timeMoment - 1) * settingContext.neuronsCount;
+        if (settingContext.modelType == 'phase')
+        {
+            var j = 0;
+            for (var i = 0; i < settingContext.neuronsCount; i++) {
+                colors[i] = new THREE.Color();
+                var temporary = line[j + displacementValue].charCodeAt(0) + "." + line[j + 1 + displacementValue].charCodeAt(0);
+                j += 2;
+                H = temporary;
+                Vm = V * (100 - S) / 100;
+                a = (V - Vm) * (H % 1) / 60;
+                Vi = Vm + a;
+                Vd = V - a;
+                H = Math.floor(H);
+                delete temporary;
+                switch (H) {
+                    case 0: colors[i].setRGB(V, Vi, Vm);
+                        break;
+                    case 1: colors[i].setRGB(Vd, V, Vm);
+                        break;
+                    case 2: colors[i].setRGB(Vm, V, Vi);
+                        break;
+                    case 3: colors[i].setRGB(Vm, Vd, V);
+                        break;
+                    case 4: colors[i].setRGB(Vi, Vm, V);
+                        break;
+                    case 5: colors[i].setRGB(V, Vm, Vd);
+                        break;
+                }
+            }
+
+        }
+        else {
+            var freqArray = [];
+            var dif, step, minFr = arrayMin[timeMoment - 1], maxFr = arrayMax[timeMoment - 1];
+            for (var i = 0; i < 2 * settingContext.neuronsCount; i+=2) {
+                freqArray.push(line[i + displacementValue].charCodeAt(0) + "." + line[i + displacementValue + 1].charCodeAt(0));
+            }
+            colorContext.setRGBdivArray();
+            dif = maxFr - minFr;
+            step = dif / colorContext.arrayR.length;
+            for (var i = 0; i < freqArray.length; i++) {
+                var temp = (freqArray[i] - min) / step;
+                temp = Math.floor(temp);
+                colors[i] = new THREE.Color();
+                colors[i].setRGB(colorContext.arrayR[temp], colorContext.arrayG[temp], colorContext.arrayB[temp]);
+            }
+            
+        }
+        particles.colorsNeedUpdate = true;
+        particles.colors = colors;
+        var pMaterial = new THREE.ParticleBasicMaterial({
+            size: 0.8,
+            shading: THREE.FlatShading,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.12,
+            vertexColors: true
+        });
+        particleSystem = new THREE.ParticleSystem(
+                particles,
+                pMaterial);
+        scene.add(particleSystem);
+        camera.position.z = 50;
+        if (settingContext.oscillations == 100) {
+            camera.position.z *= 2;
+        }
+        particleSystem.rotation.x += 0.6;
+        particleSystem.rotation.y -= 0.6;
+        if (!videoEnabled) {
+            renderer.render(scene, camera);
+        }
+    }
+
+    function cutRendering() {
+
+
+
+
+
+
+    }
+
+    function zoom() {
+        camera.position.z -= 5;
+        renderer.render(scene, camera);
+    }
+    function unZoom() {
+        camera.position.z += 5;
+        renderer.render(scene, camera);
+    }
+    function rotate_right() {
+        particleSystem.rotation.y += 0.05;
+        renderer.render(scene, camera);
+    }
+    function rotate_left() {
+        particleSystem.rotation.y -= 0.05;
+        renderer.render(scene, camera);
+
+    }
+    function rotate_down() {
+        particleSystem.rotation.x += 0.05;
+        renderer.render(scene, camera);
+    }
+    function rotate_up() {
+        particleSystem.rotation.x -= 0.05;
+        renderer.render(scene, camera);
+
+    }
+
+    function setControlBackColor(controlName, backColor) {
+        document.getElementById(controlName).style.backgroundColor = backColor;
+    }
+
+    function cutLines() {
+        cutContext.cutType = 'cutSelected';
+        setControlBackColor('cutFront', cutContext.initialControlColor);
+        setControlBackColor('cutBack', cutContext.initialControlColor);
+        setControlBackColor('CutLines', '#ff0000');
+        cutContext.loadSelectedCut(document);
+    }
+    function cut_front() {
+        cutContext.cutType = 'cutFront';
+        setControlBackColor('CutLines', cutContext.initialControlColor);
+        setControlBackColor('cutBack', cutContext.initialControlColor);
+        setControlBackColor('cutFront', '#ff0000');
+        cutContext.loadFrontBackCut(document);
+    }
+    function cut_back() {
+        cutContext.cutType = 'cutBack';
+        setControlBackColor('cutFront', cutContext.initialControlColor);
+        setControlBackColor('CutLines', cutContext.initialControlColor);
+        setControlBackColor('cutBack', '#ff0000');
+        cutContext.loadFrontBackCut(document);
+    }
+
+    function cutCancel() {
+        cutContext.unVisibleAll(document);
+        setControlBackColor('cutFront', cutContext.initialControlColor);
+        setControlBackColor('CutLines', cutContext.initialControlColor);
+        setControlBackColor('cutBack', cutContext.initialControlColor);
+        cutContext.cutType = '';
+    }
+
+    function cutApply() {
+        cutProcessing = true;
+        cutContext.getCutValues(document);
+        cutRendering();
+        cutContext.clearCutValues();
+        cutProcessing = false;
+    }
+
+</script>
+	<label id="main">Data file: </label>
+  	<input id="openFile" type="file" onchange='readText(this)' multiple/>	
+	<label id ="textLabel">Please input a time moment in the range [100, 100]</label>
+    <input type="text" id ="time" value ="1"/>
+    <input id="phase" type="button" value="Phase Visualization" onClick="phaseClick()">
+    <input id="freq" type="button" value="Frequency Visualization" onClick="freqClick()">
+	<input id="Build" type="button" value="Start Visualization" onClick="StartVisualization()">
+	<input id="Video3D" type="button" value="Video 3D" onClick="video()">
+	<label id ="cut">Cut type</label>
+	<input id="cutFront"  type ="button" value="Front" onClick="cut_front()">
+	<input id="cutBack" type="button" value="Back" onClick="cut_back()">
+	<input id="CutLines" type="button" value="Cut Selected" onClick="cutLines()">
+    <label id ="loadingLabel">Loading... Please wait...</label>
+    <label id ="X1">X: </label>
+    <label id ="X2">X2: </label>
+    <label id ="Y1">Y: </label>
+    <label id ="Y2">Y2: </label>
+    <label id ="Z1">Z: </label>
+    <label id ="Z2">Z2: </label>
+    <input type="text" id ="textX1" value =""/>
+    <input type="text" id ="textX2" value =""/>
+    <input type="text" id ="textY1" value =""/>
+    <input type="text" id ="textY2" value =""/>
+    <input type="text" id ="textZ1" value =""/>
+    <input type="text" id ="textZ2" value =""/>
+    <input id="btnApplyCut" type="button" value="OK" onClick="cutApply()">
+    <input id="btnCancel" type="button" value="Cancel" onClick="cutCancel()">
+    <input id="stop" type="button" value="Previous" onClick="prevClick()">
+    <input id="pause" type="button" value="Pause" onClick="pauseClick()">
+    <input id="delay" type="button" value="Next" onClick="nextClick()">
+    <label id ="videoLabelTime"></label>
+    </body>
+</html>

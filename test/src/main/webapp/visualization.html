@@ -4,17 +4,29 @@
 		<style>
    			body {
     			background: #000;
+                transform-style:preserve-3d;
 				color: #fff;
    			}
+            .container {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
   		</style>
 		<style>canvas { width: 100%; height: 100% }</style>
-		<script type="text/javascript" src="resources/js/three.min.js"></script>
+		<script type="text/javascript" src="scr/three.min.js"></script>
+        <script type="text/javascript" src="scr/config.js"></script>
+        <script type="text/javascript" src="scr/visualizationSettingsContext.js"></script>
+        <script type="text/javascript" src="scr/JQuery.js"></script>
 	</head>
 	<body  onKeyDown="keyEvent()" onmousedown ="onDocumentMouseDown" onmouseup ="onDocumentMouseUp" onresize = "windowSizeChange()">
+        <div id="container" class="container"></div>
 <script type="text/javascript">
-        
+
         //initialize FileReader components
 
+
+        var container = document.getElementById('container');
 		var reader = new FileReader();
 		var textBox;
 
@@ -29,22 +41,27 @@
 		var controls = [];       //this array contain all controls
 		var videoControlsContainer = [];
 		var cutControlsArray = [];
-		var oscilations = 50;
-		var neuronsCount = pow(oscilations, 3);
 		var startVisualizationEnabled = true;
 		var colors = [];
+		var pauseValue;
 		var cutType = null;
-		var modelType = 0;       //0 - phase visualization; 1 - frequency visualization
+		var videoMaxTimeMoment;
+		var colorReverse = false;
 
         //initialize WebGL components    
 
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-		var renderer = new THREE.WebGLRenderer();
+		var renderer = new THREE.WebGLRenderer({ antialias: true });
 		var particleSystem;
 		var particlesTemporary = new THREE.Geometry();
+		renderer.setSize(container.offsetWidth, container.offsetHeight);
+		container.appendChild(renderer.domElement);
+		var particles = new THREE.Geometry();
+		
 
-		function InitializeGeneralControls() {
+		function InitializeGeneralControls() 
+        {
 		    controls.push("main");          //0     text label
 		    controls.push("openFile");      //1     file open dialog
 		    controls.push("textLabel");     //2     text label
@@ -77,6 +94,8 @@
 		    videoControlsContainer.push("pause");   //0     pause video play or play video after pause
 		    videoControlsContainer.push("stop");    //1     stop video play and exit from video block
 		    videoControlsContainer.push("delay");   //2     delay video play
+		    videoControlsContainer.push("videoLabelTime");
+		    setVisibleUnArrayControlProperty('videoLabelTime', false);
 		    setVisibleUnArrayControlProperty('pause', false);
 		    setVisibleUnArrayControlProperty('stop', false);
 		    setVisibleUnArrayControlProperty('delay', false);
@@ -147,7 +166,7 @@
 		}
 		function setControlsFontSize() {
 		    for (var i = 0; i < controls.length; i++) {
-		        document.getElementById(controls[i]).style.fontSize = width/(1600/16);
+		        document.getElementById(controls[i]).style.fontSize = width / (1600 / 16);
 		    }
 		    for (var i = 0; i < cutControlsArray.length; i++) {
 		        document.getElementById(cutControlsArray[i]).style.fontSize = width / (1600 / 16);
@@ -181,13 +200,13 @@
 		    initColorButton = document.getElementById(controls[9]).style.backgroundColor;
 		}
 		function phaseClick() {
-		    modelType = 0;
+		    config.typeModelling = 0;
 		    setVisibleUnArrayControlProperty('phase', false);
 		    setVisibleUnArrayControlProperty('freq', false);
 		    loadVisualPage();
 		}
 		function freqClick() {
-		    modelType = 1;
+		    config.typeModelling = 1;
 		    setVisibleUnArrayControlProperty('phase', false);
 		    setVisibleUnArrayControlProperty('freq', false);
 		    loadVisualPage();
@@ -212,7 +231,22 @@
 		    particlesTemporary.vertices = [];
 		    scene.remove(scene.children[0]);
 		}
-		window.onload = function onload() {
+        
+		function setImage(){
+		    document.getElementById('phase').style.backgroundImage = "url('images/standart.jpg')";
+		    document.getElementById('phase').style.backgroundSize = "contain";
+		    document.getElementById('phase').style.backgroundPosition = 'center';
+		    document.getElementById('phase').style.border = "medium solid red";
+		    document.getElementById('phase').style.fontStyle = "italic";
+		    document.getElementById('freq').style.backgroundImage = "url('images/standart.jpg')";
+		    document.getElementById('freq').style.backgroundSize = "contain";
+		    document.getElementById('freq').style.backgroundPosition = 'center';
+		    document.getElementById('freq').style.border = "medium solid red";
+		    document.getElementById('freq').style.fontStyle = "italic";
+		    
+		}
+
+        window.onload = function onload() {
 		    destroyAll();
 		    InitializeGeneralControls();
 		    InitializeCutControls();
@@ -223,6 +257,8 @@
 		    getWindowSize();
 		    initializeInitialPageComponents();
 		    initialiseVideoComponents();
+		    setImage();
+
 		}
 		function loadVisualPage() {
 		    initControlsPosition();
@@ -261,21 +297,16 @@
 		function destroyValueContainer() {
 		    delete valueContainer;
 		}
+		var line;
 		function readText(that) {
 		    destroyValueContainer();
 			textBox = document.getElementById('TEXTBOX_ID');
 			setVisibleControlProperty(10, true);
 			if(that.files && that.files[0]){
 			    reader.onload = function (e) {
-				    var line = e.target.result;
-					moments = line.length / (2 * neuronsCount);
+				    line = e.target.result;
+					moments = line.length / (2 * settingContext.neuronsCount);
 					document.getElementById('textLabel').innerHTML = "Please input a time moment in the range [1 to "+ (moments - (moments%1)) + " ]";
-					var temp;
-					for (var i = 0; i < line.length - 1; i += 2)
-					{
-						temp = line[i].charCodeAt(0) + "." + line[i + 1].charCodeAt(0);
-					    valueContainer.push(temp);
-					}
 					initialiasePositions();
 					setVisibleControlProperty(0, false);
 					setVisibleControlProperty(1, false);
@@ -284,27 +315,49 @@
 					setVisibleControlProperty(4, true);
 					setVisibleControlProperty(5, true);
 					setVisibleControlProperty(10, false);
-					delete line;
-					delete temp;
 			    };
 			    reader.readAsText(that.files[0]);
 			}
 		}
+
+		var arrayMin = [];
+		var arrayMax = [];
+        
 		function initialiasePositions() {
-		    for (var p = 0; p < neuronsCount; p++) {
-		        var pX = ((p) % pow(oscilations, 2)) % oscilations / 3 - 8.3,
-                        pY = ((p) % pow(oscilations, 2)) / oscilations / 3 - 8.3,
-                        pZ = p / pow(oscilations, 2) / 3 - 8.3,
+		    for (var p = 0; p < settingContext.neuronsCount; p++) {
+		        var pX = ((p) % pow(settingContext.oscilations, 2)) % settingContext.oscilations / 3 - 8.3,
+                        pY = ((p) % pow(settingContext.oscilations, 2)) / settingContext.oscilations / 3 - 8.3,
+                        pZ = p / pow(settingContext.oscilations, 2) / 3 - 8.3,
                     particle = new THREE.Vertex(
                     new THREE.Vector3(pX, pY, pZ)
                     );
 		        particlesTemporary.vertices.push(particle);
-		        if (valueContainer[p + (timeMoment - 1) * neuronsCount] > max) max = valueContainer[p + (timeMoment - 1) * neuronsCount];
-		        if (valueContainer[p + (timeMoment - 1) * neuronsCount] < min) min = valueContainer[p + (timeMoment - 1) * neuronsCount];
+		        particles.vertices = particlesTemporary.vertices;
+		        //delete particlesTemporary;
 		    }
+
+		    var temp, mn = 1000, mx = 0, j = 0;
+
+		    for (var i = 0 ; i < line.length; i += 2) {
+		        if (j == settingContext.neuronsCount - 1) {
+		            arrayMin.push(mn);
+		            arrayMax.push(mx);
+		            mn = 1000;
+		            mx = 0;
+		            j = 0;
+		        }
+		        temp = line[i].charCodeAt(0) + "." + line[i + 1].charCodeAt(0);
+		        if (temp > mx) mx = temp;
+		        if (temp < mn) mn = temp;
+		        j++;
+		    }
+
 		}
 		function getTimeMoment() {
 		    timeMoment = document.getElementById(controls[3]).value;
+		}
+		function getVideoMaxTimeMoment() {
+		    videoMaxTimeMoment = document.getElementById(controls[3]).value;
 		}
 		function setTimeMoment(val) {
 		    timeMoment = val;
@@ -334,21 +387,61 @@
 		    setVisibleUnArrayControlProperty('pause', true);
 		    setVisibleUnArrayControlProperty('stop', true);
 		    setVisibleUnArrayControlProperty('delay', true);
+		    setVisibleUnArrayControlProperty('videoLabelTime', true);
+		    getVideoMaxTimeMoment();
+		    if (videoMaxTimeMoment <= 1 || videoMaxTimeMoment >= moments) videoMaxTimeMoment = moments;
+		    timeMoment--;
 		    videoEnabled = true;
 		    unVisibleAll();
 		    animate();
 		    videoEnabled = false;
 		}
+		function pauseVideo() {
+		    document.getElementById('pause').value = "Start";
+		}
+
 		function animate() {
-		    requestAnimationFrame(animate);
-		    render();
 		    timeMoment++;
-		    if (timeMoment > 30) return;
+		    if (timeMoment > moments) return;
+		    if (pauseValue) {
+		        pauseVideo();
+		        return;
+		    }
+		    document.getElementById('videoLabelTime').innerHTML = "Current time moment: " + timeMoment;
 		    buildModel();
+		    requestAnimationFrame(animate);
+		    //render();
 		}
 
 		function render() {
 		    renderer.render(scene, camera);
+		}
+		function pauseClick() {
+		    if (pauseValue) {
+		        document.getElementById('pause').value = "Pause";
+		        pauseValue = false;
+		        videoEnabled = true;
+		        timeMoment-=2;
+		        animate();
+		        videoEnabled = true;
+		    }
+		    else pauseValue = true;
+		}
+		function prevClick() {
+		    if (timeMoment > 1) {
+		        timeMoment--;
+		        document.getElementById('videoLabelTime').innerHTML = "Current time moment: " + timeMoment;
+		        buildModel();
+		        render();
+		    }
+		}
+		function nextClick() {
+		    if (timeMoment < moments) {
+		        timeMoment++;
+		        document.getElementById('videoLabelTime').innerHTML = "Current time moment: " + timeMoment;
+		        buildModel();
+		        render();
+		    }
 		}
 		function pow(number, power) {
 		    return Math.pow(number, power);
@@ -391,33 +484,46 @@
 		    var new_color = [];
 		    var count = 0;
 		    var H, Vm, a, Vi, Vd;
+		    min = arrayMin[timeMoment - 1];
+		    max = arrayMax[timeMoment - 1];
 		    var S = (1 - min / max) * 100;
 		    var V = (max * 60) / 3.6;
 		    var particles = new THREE.Geometry();
-		    for (var p = 0; p < neuronsCount; p++) {
-		        var pX = ((p) % pow(oscilations, 2)) % oscilations / 3 - 8.3,
-                        pY = ((p) % pow(oscilations, 2)) / oscilations / 3 - 8.3,
-                        pZ = p / pow(oscilations, 2) / 3 - 8.3,
+		    var displacementValue = 2 * (timeMoment - 1) * settingContext.neuronsCount;
+		    var j = 0;
+		    for (var p = 0; p < settingContext.neuronsCount; p++) {
+		        var pX = ((p) % pow(settingContext.oscilations, 2)) % settingContext.oscilations / 3 - 8.3,
+                        pY = ((p) % pow(settingContext.oscilations, 2)) / settingContext.oscilations / 3 - 8.3,
+                        pZ = p / pow(settingContext.oscilations, 2) / 3 - 8.3,
                     particle = new THREE.Vertex(
-                    new THREE.Vector3(pX, pY, pZ)
+                    new THREE.Vector(pX, pY, pZ)
                     );
 		        if ((cutType == 2 && pX >= x1 && pX <= x2 && pY >= y1 && pY <= y2 && pZ >= z1 && pZ <= z2) || (cutType == 0 && pX < x1 && pY < y1 && pZ < z1) || (cutType == 1 && pX > x1 && pY > y1 && pZ > z1)) {
 		            new_color[count] = new THREE.Color();
-		            H = 3 * valueContainer[p + (timeMoment - 1) * neuronsCount] / 3.1427;
+		            var temporary = line[j + displacementValue].charCodeAt(0) + "." + line[j + 1].charCodeAt(0);
+		            H = 3 * temporary / 3.1427;
 		            Vm = V * (100 - S) / 100;
 		            a = (V - Vm) * (H) / 60;
 		            Vi = Vm + a;
 		            Vd = V - a;
-		            if (H >= 0 && H < 1) { R = V; G = Vi; B = Vm; }
-		            if (H >= 1 && H < 2) { R = Vd; G = V; B = Vm; }
-		            if (H >= 2 && H < 3) { R = Vm; G = V; B = Vi; }
-		            if (H >= 3 && H < 4) { R = Vm; G = Vd; B = V; }
-		            if (H >= 4 && H < 5) { R = Vi; G = Vm; B = V; }
-		            if (H >= 5 && H < 6) { R = V; G = Vm; B = Vd; }
-		            new_color[count].setRGB(R, G, B);
+		            switch (H) {
+		                case 0: new_color[i].setRGB(V, Vi, Vm);
+		                    break;
+		                case 1: new_color[i].setRGB(Vd, V, Vm);
+		                    break;
+		                case 2: new_color[i].setRGB(Vm, V, Vi);
+		                    break;
+		                case 3: new_color[i].setRGB(Vm, Vd, V);
+		                    break;
+		                case 4: new_color[i].setRGB(Vi, Vm, V);
+		                    break;
+		                case 5: new_color[i].setRGB(V, Vm, Vd);
+		                    break;
+		            }
 		            count++;
 		            particles.vertices.push(particle);
 		        }
+		        j+=2;
 		    }
 		    particles.colors = new_color;
 		    var pMaterial = new THREE.ParticleBasicMaterial({
@@ -439,53 +545,103 @@
 		function buildModel() {
 		    scene.remove(scene.children[0]);
 		    delete particleSystem;
-		    delete particles;
-		    renderer.setSize(window.innerWidth, window.innerHeight);
-		    document.body.appendChild(renderer.domElement);
-		    var particles = new THREE.Geometry();
-		    particles.vertices = particlesTemporary.vertices;
+		    //renderer.setSize(container.offsetWidth, container.offsetHeight);
+		    //container.appendChild(renderer.domElement);
 		    delete colors;
 		    var H, Vm, a, Vi, Vd, R, G, B;
+		    min = arrayMin[timeMoment - 1];
+		    max = arrayMax[timeMoment - 1];
+		    //alert(min);
+		    //alert(max);
 		    var S = (1 - min/max)*100;
-		    var V = (max * 60) / 3.6;            
-		    var displacementValue = (timeMoment - 1) * neuronsCount;
-		    if (modelType == 0)
+		    var V = (max * 60) / 3.6;
+		    //var displacementValue = (timeMoment - 1) * settingContext.neuronsCount;
+		    var displacementValue = 2 * (timeMoment - 1) * settingContext.neuronsCount;
+		    if (config.typeModelling == 0)
 		    {
-		        for (var i = 0; i < neuronsCount; i++) {
+		        var j = 0;
+		        for (var i = 0; i < settingContext.neuronsCount; i++) {
 		            colors[i] = new THREE.Color();
-		            H = 3 * valueContainer[i + displacementValue] / 3.1427;
+		            var temporary = line[j + displacementValue].charCodeAt(0) + "." + line[j + 1 + displacementValue].charCodeAt(0);
+		            //if (timeMoment == 7) alert(temporary);
+		            j += 2;
+		            //H = 3 * temporary / 3.1427;
+		            H = temporary;
+		            //H = temporary * (180 / 3.14);
+		            //colors[i].setHSV(H, S / 100, V / 100);
 		            Vm = V * (100 - S) / 100;
-		            a = (V - Vm) * (H) / 60;
+		            a = (V - Vm) * (H % 1) / 60;
 		            Vi = Vm + a;
 		            Vd = V - a;
-		            if (H >= 0 && H < 1) colors[i].setRGB(V, Vi, Vm);
-		            if (H >= 1 && H < 2) colors[i].setRGB(Vd, V, Vm);
-		            if (H >= 2 && H < 3) colors[i].setRGB(Vm, V, Vi);
-		            if (H >= 3 && H < 4) colors[i].setRGB(Vm, Vd, V);
-		            if (H >= 4 && H < 5) colors[i].setRGB(Vi, Vm, V);
-		            if (H >= 5 && H < 6) colors[i].setRGB(V, Vm, Vd);    
+		            //colors[i] = new THREE.Color();
+		            //colors[i].setHSV(H, S, V);
+		            H = Math.floor(H);
+		            delete temporary;
+		            switch (H) {
+		                case 0: colors[i].setRGB(V, Vi, Vm);
+		                    break;
+		                case 1: colors[i].setRGB(Vd, V, Vm);
+		                    break;
+		                case 2: colors[i].setRGB(Vm, V, Vi);
+		                    break;
+		                case 3: colors[i].setRGB(Vm, Vd, V);
+		                    break;
+		                case 4: colors[i].setRGB(Vi, Vm, V);
+		                    break;
+		                case 5: colors[i].setRGB(V, Vm, Vd);
+		                    break;
+		            }
 		        }
 
 		    }
-		    else if (modelType == 1) {
+		    else if (config.typeModelling == 1) {
 		        var freqArray = [];
-		        var step, minFr = 10000, maxFr = 0;
-		        for (var i = 0; i < neuronsCount; i++) {
-		            freqArray.push(valueContainer[i + displacementValue]);
-		            if (freqArray[i] < minFr) minFr = freqArray[i];
-		            if (freqArray[i] > maxFr) maxFr = freqArray[i];
+		        var step, minFr = arrayMin[timeMoment - 1], maxFr = arrayMax[timeMoment - 1];
+		        for (var i = 0; i < 2 * settingContext.neuronsCount; i+=2) {
+		            freqArray.push(line[i + displacementValue].charCodeAt(0) + "." + line[i + 1].charCodeAt(0));
 		        }
 		        step = (maxFr - minFr);
-		        for (var i = 0; i < neuronsCount; i++) {
+		        for (var i = 0; i < settingContext.neuronsCount; i++) {
 		            colors[i] = new THREE.Color();
-		            if (freqArray[i] - minFr <= step / 3) colors[i].setRGB(freqArray[i] - minFr, freqArray[i], freqArray[i]);
-		            else if (freqArray[i] - minFr <= 2 * step / 3) colors[i].setRGB(freqArray[i], freqArray[i] - minFr, freqArray[i]);
-		            else colors[i].setRGB(freqArray[i], freqArray[i], freqArray[i] - minFr);
+		            if (freqArray[i] - minFr <= step / 3) colors[i].setRGB((freqArray[i] - minFr) / (maxFr / 6.8), 0, 0);
+		            else if (freqArray[i] - minFr <= 2 * step / 3) colors[i].setRGB(0, (freqArray[i] - minFr) / (maxFr / 6.8), 0);
+		            else colors[i].setRGB(0, 0, (freqArray[i] - minFr) / (maxFr / 6.8));
 		        }
+		        //V = max / 2.6;
+		        //for (var i = 0; i < settingContext.neuronsCount; i++) {
+		        //    colors[i] = new THREE.Color();
+		        //    H = 3 * valueContainer[i + displacementValue] / 3.1427;
+		        //    H = Math.floor(H) / 60;
+		        //    Vm = V * (100 - S) / 100;
+		        //    a = (V - Vm) * (H) / 60;
+		        //    Vi = Vm + a;
+		        //    Vd = V - a;
+		        //    switch (H) {
+		        //        case 0: colors[i].setRGB(V, Vi, Vm);
+		        //            break;
+		        //        case 1: colors[i].setRGB(Vd, V, Vm);
+		        //            break;
+		        //        case 2: colors[i].setRGB(Vm, V, Vi);
+		        //            break;
+		        //        case 3: colors[i].setRGB(Vm, Vd, V);
+		        //            break;
+		        //        case 4: colors[i].setRGB(Vi, Vm, V);
+		        //            break;
+		        //        case 5: colors[i].setRGB(V, Vm, Vd);
+		        //            break;
+		        //    }
+		        //}
 		    }
+		    if (colorReverse) {
+		        colors.reverse();
+		        colorReverse = false;
+		    }
+		    particles.colorsNeedUpdate = true;
 		    particles.colors = colors;
 		    var pMaterial = new THREE.ParticleBasicMaterial({
 		        size: 0.8,
+		        shading: THREE.FlatShading,
+		        wireframe: true,
 		        transparent: true,
 		        opacity: 0.12,
 		        vertexColors: true
@@ -495,9 +651,14 @@
                     pMaterial);
 		    scene.add(particleSystem);
 		    camera.position.z = 50;
+		    if (settingContext.oscilations == 100) {
+		        camera.position.z *= 2;
+		    }
 		    particleSystem.rotation.x += 0.6;
 		    particleSystem.rotation.y -= 0.6;
-		    renderer.render(scene, camera);
+		    if (!videoEnabled) {
+		        renderer.render(scene, camera);
+		    }
 		}
 		function setCutControlVisibleProperty(controlID, visible) {
 		    if (visible) document.getElementById(cutControlsArray[controlID]).style.visibility = "visible";
@@ -591,7 +752,9 @@
 		    renderer.render(scene, camera);
 		}
 		function rotate_left() {
-		    particleSystem.rotation.y -= 0.05;
+		    //particleSystem.rotation.y -= 0.05;
+		    colorReverse = true;
+		    buildModel();
 		    renderer.render(scene, camera);
 
 		}
@@ -632,8 +795,9 @@
     <input type="text" id ="textZ2" value =""/>
     <input id="btnApplyCut" type="button" value="OK" onClick="cutApply()">
     <input id="btnCancel" type="button" value="Cancel" onClick="cutCancel()">
-    <input id="stop" type="button" value="Stop" onClick="stopClick()">
+    <input id="stop" type="button" value="Previous" onClick="prevClick()">
     <input id="pause" type="button" value="Pause" onClick="pauseClick()">
-    <input id="delay" type="button" value="Delay" onClick="delayClick()">
+    <input id="delay" type="button" value="Next" onClick="nextClick()">
+    <label id ="videoLabelTime"></label>
     </body>
 </html>
