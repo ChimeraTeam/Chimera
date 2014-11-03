@@ -1,0 +1,639 @@
+<html>
+	<head>
+		<title>Chimera visualization</title>
+		<style>
+   			body {
+    			background: #000;
+				color: #fff;
+   			}
+  		</style>
+		<style>canvas { width: 100%; height: 100% }</style>
+		<script type="text/javascript" src="resources/js/three.min.js"></script>
+	</head>
+	<body  onKeyDown="keyEvent()" onmousedown ="onDocumentMouseDown" onmouseup ="onDocumentMouseUp" onresize = "windowSizeChange()">
+<script type="text/javascript">
+        
+        //initialize FileReader components
+
+		var reader = new FileReader();
+		var textBox;
+
+        var width, height;       //window size
+		var max = 0;             
+		var min = 1000;
+		var valueContainer = [];     //phase array
+		var timeMoment = 1;
+		var videoEnabled = false;
+		var moments;
+		var initColorButton;
+		var controls = [];       //this array contain all controls
+		var videoControlsContainer = [];
+		var cutControlsArray = [];
+		var oscilations = 50;
+		var neuronsCount = pow(oscilations, 3);
+		var startVisualizationEnabled = true;
+		var colors = [];
+		var cutType = null;
+		var modelType = 0;       //0 - phase visualization; 1 - frequency visualization
+
+        //initialize WebGL components    
+
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		var renderer = new THREE.WebGLRenderer();
+		var particleSystem;
+		var particlesTemporary = new THREE.Geometry();
+
+		function InitializeGeneralControls() {
+		    controls.push("main");          //0     text label
+		    controls.push("openFile");      //1     file open dialog
+		    controls.push("textLabel");     //2     text label
+		    controls.push("time");          //3     textbox for input time moment 
+		    controls.push("Build");         //4     button for start visualization
+		    controls.push("Video3D");       //5     button for play a video
+		    controls.push("cut");           //6     text label
+		    controls.push("cutFront");      //7     cut front mode
+		    controls.push("cutBack");       //8     cut back mode
+		    controls.push("CutLines");      //9     cut lines mode
+		    controls.push("loadingLabel");  //10    loading label
+		}
+		function InitializeCutControls() {
+		    cutControlsArray.push("X1");            //0
+		    cutControlsArray.push("textX1");        //1
+		    cutControlsArray.push("Y1");            //2
+		    cutControlsArray.push("textY1");        //3
+		    cutControlsArray.push("Z1");            //4
+		    cutControlsArray.push("textZ1");        //5
+		    cutControlsArray.push("X2");            //6
+		    cutControlsArray.push("textX2");        //7
+		    cutControlsArray.push("Y2");            //8
+		    cutControlsArray.push("textY2");        //9
+		    cutControlsArray.push("Z2");            //10
+		    cutControlsArray.push("textZ2");        //11
+		    cutControlsArray.push("btnApplyCut");   //12
+		    cutControlsArray.push("btnCancel");     //13
+		}
+		function InitialiseVideoControlsContainer() {
+		    videoControlsContainer.push("pause");   //0     pause video play or play video after pause
+		    videoControlsContainer.push("stop");    //1     stop video play and exit from video block
+		    videoControlsContainer.push("delay");   //2     delay video play
+		    setVisibleUnArrayControlProperty('pause', false);
+		    setVisibleUnArrayControlProperty('stop', false);
+		    setVisibleUnArrayControlProperty('delay', false);
+		}
+        
+        /*function for hidden all general controls*/
+		function unVisibleAll() {
+		    for (var i = 0; i < controls.length; i++) {
+		        document.getElementById(controls[i]).style.visibility = "hidden";
+		    }
+		}
+
+        /*function for hidden all cut controls*/
+		function unVisibleCut() {
+		    for (var i = 0; i < cutControlsArray.length; i++) {
+		        document.getElementById(cutControlsArray[i]).style.visibility = "hidden";
+		    }
+		}
+
+        /*function for visible all general controls*/
+		function VisibleAll() {
+		    for (var i = 0; i < controls.length; i++) {
+		        document.getElementById(controls[i]).style.visibility = "visible";
+		    }
+		}
+
+        /*function for visible all cut controls*/
+		function VisibleCut() {
+		    for (var i = 0; i < cutControlsArray.length; i++) {
+		        document.getElementById(cutControlsArray[i]).style.visibility = "visible";
+		    }
+		}
+		function setVisibleControlProperty(controlID, value) {
+		    if (value == true) document.getElementById(controls[controlID]).style.visibility = "visible";
+		    else document.getElementById(controls[controlID]).style.visibility = "hidden";
+		}
+		function setVisibleUnArrayControlProperty(controlName, value) {
+		    if (value == true) document.getElementById(controlName).style.visibility = "visible";
+		    else document.getElementById(controlName).style.visibility = "hidden";
+		}
+		function getWindowSize() {
+		    width = window.innerWidth;
+		    height = window.innerHeight;
+		}
+		function setAbsolutePositionProperty() {
+		    for (var i = 0; i < controls.length; i++) {
+		        document.getElementById(controls[i]).style.position = "absolute";		        
+		    }
+		    for (var i = 0; i < cutControlsArray.length; i++) {
+		        document.getElementById(cutControlsArray[i]).style.position = "absolute";
+		    }
+		}
+
+        /*Funtion for set position for control by param:   
+         param [in]: controlID, left, top, width, height */
+
+		function setControlPosition(controlID, x, y, wd, ht) {
+		    document.getElementById(controls[controlID]).style.width = wd;
+		    document.getElementById(controls[controlID]).style.height = ht;
+		    document.getElementById(controls[controlID]).style.top = y;
+		    document.getElementById(controls[controlID]).style.left = x;
+		}
+		function setUnArrayControlPosition(controlName, x, y, wd, ht) {
+		    document.getElementById(controlName).style.width = wd;
+		    document.getElementById(controlName).style.height = ht;
+		    document.getElementById(controlName).style.top = y;
+		    document.getElementById(controlName).style.left = x;
+		}
+		function setControlsFontSize() {
+		    for (var i = 0; i < controls.length; i++) {
+		        document.getElementById(controls[i]).style.fontSize = width/(1600/16);
+		    }
+		    for (var i = 0; i < cutControlsArray.length; i++) {
+		        document.getElementById(cutControlsArray[i]).style.fontSize = width / (1600 / 16);
+		    }
+		}
+		function initControlsPosition() {
+		    getWindowSize();
+		    setControlsFontSize();
+		    setAbsolutePositionProperty();
+		    unVisibleAll();
+		    unVisibleCut();
+		    if (width > height) {
+		        setControlPosition(0, width / 100, height / 50, 5 * width / 100, height / 50);
+		        setControlPosition(1, 5.5 * width / 100, height / 50, 18 * width / 100, 2 * height / 50);
+		        setControlPosition(2, width / 100, 4 * height / 50, 25 * width / 100, 2 * height / 50);
+		        setControlPosition(3, 25 * width / 100, 4 * height / 50, 5 * width / 100, 3 * height / 100);
+		        setControlPosition(4, 39 * width / 100, 4 * height / 50, 10 * width / 100, 4 * height / 100);
+		        setControlPosition(5, 51 * width / 100, 4 * height / 50, 10 * width / 100, 4 * height / 100);
+		        setControlPosition(6, 90 * width / 100, 10 * height / 50, 5 * width / 100, 2 * height / 100);
+		        setControlPosition(7, 87 * width / 100, 12 * height / 50, 10 * width / 100, 3 * height / 100);
+		        setControlPosition(8, 87 * width / 100, 14 * height / 50, 10 * width / 100, 3 * height / 100);
+		        setControlPosition(9, 87 * width / 100, 16 * height / 50, 10 * width / 100, 3 * height / 100);
+		        setControlPosition(10, 46 * width / 100, 25 * height / 50, 10 * width / 100, 3 * height / 100);
+		    }
+		    else if (width < height) {
+		    }
+		    setVisibleControlProperty(0, true);
+		    setVisibleControlProperty(1, true);
+		}
+		function getButtonsInitialBackColor() {
+		    initColorButton = document.getElementById(controls[9]).style.backgroundColor;
+		}
+		function phaseClick() {
+		    modelType = 0;
+		    setVisibleUnArrayControlProperty('phase', false);
+		    setVisibleUnArrayControlProperty('freq', false);
+		    loadVisualPage();
+		}
+		function freqClick() {
+		    modelType = 1;
+		    setVisibleUnArrayControlProperty('phase', false);
+		    setVisibleUnArrayControlProperty('freq', false);
+		    loadVisualPage();
+		}
+		function initializeInitialPageComponents() {
+		    document.getElementById('phase').style.position = "absolute";
+		    document.getElementById('freq').style.position = "absolute";
+		    setUnArrayControlPosition('phase', 2.3 * width / 6, height / 3, width / 10, height / 10);
+		    setUnArrayControlPosition('freq', 3.3 * width / 6, height / 3, width / 10, height / 10);
+		}
+		function initialiseVideoComponents() {
+		    document.getElementById('stop').style.position = "absolute";
+		    document.getElementById('pause').style.position = "absolute";
+		    document.getElementById('delay').style.position = "absolute";
+		    setUnArrayControlPosition('stop', 3 * width / 11, height / 10, width / 10, height / 15);
+		    setUnArrayControlPosition('pause', 5 * width / 11, height / 10, width / 10, height / 15);
+		    setUnArrayControlPosition('delay', 7 * width / 11, height / 10, width / 10, height / 15);
+		}
+		function destroyAll() {
+		    destroyValueContainer();
+		    colors = [];
+		    particlesTemporary.vertices = [];
+		    scene.remove(scene.children[0]);
+		}
+		window.onload = function onload() {
+		    destroyAll();
+		    InitializeGeneralControls();
+		    InitializeCutControls();
+		    InitialiseVideoControlsContainer();
+		    setVisibleUnArrayControlProperty('openFile', false);
+		    unVisibleAll();
+		    unVisibleCut();
+		    getWindowSize();
+		    initializeInitialPageComponents();
+		    initialiseVideoComponents();
+		}
+		function loadVisualPage() {
+		    initControlsPosition();
+		    getButtonsInitialBackColor();
+		    onloadFinish = true;
+		}
+		function windowSizeChange() {
+		    onload();
+		}
+		function keyEvent() {
+		    if (document.getElementById(controls[9]).style.visibility == "visible") {
+		        switch (event.keyCode) {
+		            case 37:
+		                rotate_left();
+		                break;
+		            case 38:
+		                rotate_up();
+		                break;
+		            case 39:
+		                rotate_right();
+		                break;
+		            case 40:
+		                rotate_down();
+		                break;
+		            case 107:
+		                zoom();
+		                break;
+		            case 109:
+		                unZoom();
+		                break;
+		            default:
+		                break;
+		        }
+		    }
+		}
+		function destroyValueContainer() {
+		    delete valueContainer;
+		}
+		function readText(that) {
+		    destroyValueContainer();
+			textBox = document.getElementById('TEXTBOX_ID');
+			setVisibleControlProperty(10, true);
+			if(that.files && that.files[0]){
+			    reader.onload = function (e) {
+				    var line = e.target.result;
+					moments = line.length / (2 * neuronsCount);
+					document.getElementById('textLabel').innerHTML = "Please input a time moment in the range [1 to "+ (moments - (moments%1)) + " ]";
+					var temp;
+					for (var i = 0; i < line.length - 1; i += 2)
+					{
+						temp = line[i].charCodeAt(0) + "." + line[i + 1].charCodeAt(0);
+					    valueContainer.push(temp);
+					}
+					initialiasePositions();
+					setVisibleControlProperty(0, false);
+					setVisibleControlProperty(1, false);
+					setVisibleControlProperty(2, true);
+					setVisibleControlProperty(3, true);
+					setVisibleControlProperty(4, true);
+					setVisibleControlProperty(5, true);
+					setVisibleControlProperty(10, false);
+					delete line;
+					delete temp;
+			    };
+			    reader.readAsText(that.files[0]);
+			}
+		}
+		function initialiasePositions() {
+		    for (var p = 0; p < neuronsCount; p++) {
+		        var pX = ((p) % pow(oscilations, 2)) % oscilations / 3 - 8.3,
+                        pY = ((p) % pow(oscilations, 2)) / oscilations / 3 - 8.3,
+                        pZ = p / pow(oscilations, 2) / 3 - 8.3,
+                    particle = new THREE.Vertex(
+                    new THREE.Vector3(pX, pY, pZ)
+                    );
+		        particlesTemporary.vertices.push(particle);
+		        if (valueContainer[p + (timeMoment - 1) * neuronsCount] > max) max = valueContainer[p + (timeMoment - 1) * neuronsCount];
+		        if (valueContainer[p + (timeMoment - 1) * neuronsCount] < min) min = valueContainer[p + (timeMoment - 1) * neuronsCount];
+		    }
+		}
+		function getTimeMoment() {
+		    timeMoment = document.getElementById(controls[3]).value;
+		}
+		function setTimeMoment(val) {
+		    timeMoment = val;
+		}
+		function StartVisualization() {
+		    setVisibleControlProperty(10, true);
+		    if (startVisualizationEnabled == true) {
+		        startVisualizationEnabled = false;
+		        getTimeMoment();
+		        if (timeMoment >= 1 && timeMoment <= moments) {
+		            setVisibleControlProperty(6, true);
+		            setVisibleControlProperty(7, true);
+		            setVisibleControlProperty(8, true);
+		            setVisibleControlProperty(9, true);
+		            buildModel();
+		        }
+		        else {
+		            alert("Error input, the time moment can't out the range [1;" + (moments - moments % 1) + "]");
+		            document.getElementById('time').value = 1;
+		        }
+		        startVisualizationEnabled = true;
+		    }
+		    setVisibleControlProperty(10, false);
+		}
+
+		function video() {
+		    setVisibleUnArrayControlProperty('pause', true);
+		    setVisibleUnArrayControlProperty('stop', true);
+		    setVisibleUnArrayControlProperty('delay', true);
+		    videoEnabled = true;
+		    unVisibleAll();
+		    animate();
+		    videoEnabled = false;
+		}
+		function animate() {
+		    requestAnimationFrame(animate);
+		    render();
+		    timeMoment++;
+		    if (timeMoment > 30) return;
+		    buildModel();
+		}
+
+		function render() {
+		    renderer.render(scene, camera);
+		}
+		function pow(number, power) {
+		    return Math.pow(number, power);
+		}
+		function getCutX1() {
+		    return (document.getElementById(cutControlsArray[1]).value - 25) / 3;
+		}
+		function getCutY1() {
+		    return (document.getElementById(cutControlsArray[3]).value - 25) / 3;
+		}
+		function getCutZ1() {
+		    return (document.getElementById(cutControlsArray[5]).value - 25) / 3;
+		}
+		function getCutX2() {
+		    return (document.getElementById(cutControlsArray[7]).value - 25) / 3;
+		}
+		function getCutY2() {
+		    return (document.getElementById(cutControlsArray[9]).value - 25) / 3;
+		}
+		function getCutZ2() {
+		    return (document.getElementById(cutControlsArray[11]).value - 25) / 3;
+		}
+		function cutApply() {
+		    unVisibleCut();
+		    var x1, x2, y1, y2, z1, z2;
+		    if (cutType != 2) {
+		        x1 = getCutX1();
+		        y1 = getCutY1();
+		        z1 = getCutZ1();
+		    }
+		    else {
+		        x1 = getCutX1();
+		        y1 = getCutY1();
+		        z1 = getCutZ1();
+		        x2 = getCutX2();
+		        y2 = getCutY2();
+		        z2 = getCutZ2();
+		    }
+		    scene.remove(scene.children[0]);
+		    var new_color = [];
+		    var count = 0;
+		    var H, Vm, a, Vi, Vd;
+		    var S = (1 - min / max) * 100;
+		    var V = (max * 60) / 3.6;
+		    var particles = new THREE.Geometry();
+		    for (var p = 0; p < neuronsCount; p++) {
+		        var pX = ((p) % pow(oscilations, 2)) % oscilations / 3 - 8.3,
+                        pY = ((p) % pow(oscilations, 2)) / oscilations / 3 - 8.3,
+                        pZ = p / pow(oscilations, 2) / 3 - 8.3,
+                    particle = new THREE.Vertex(
+                    new THREE.Vector3(pX, pY, pZ)
+                    );
+		        if ((cutType == 2 && pX >= x1 && pX <= x2 && pY >= y1 && pY <= y2 && pZ >= z1 && pZ <= z2) || (cutType == 0 && pX < x1 && pY < y1 && pZ < z1) || (cutType == 1 && pX > x1 && pY > y1 && pZ > z1)) {
+		            new_color[count] = new THREE.Color();
+		            H = 3 * valueContainer[p + (timeMoment - 1) * neuronsCount] / 3.1427;
+		            Vm = V * (100 - S) / 100;
+		            a = (V - Vm) * (H) / 60;
+		            Vi = Vm + a;
+		            Vd = V - a;
+		            if (H >= 0 && H < 1) { R = V; G = Vi; B = Vm; }
+		            if (H >= 1 && H < 2) { R = Vd; G = V; B = Vm; }
+		            if (H >= 2 && H < 3) { R = Vm; G = V; B = Vi; }
+		            if (H >= 3 && H < 4) { R = Vm; G = Vd; B = V; }
+		            if (H >= 4 && H < 5) { R = Vi; G = Vm; B = V; }
+		            if (H >= 5 && H < 6) { R = V; G = Vm; B = Vd; }
+		            new_color[count].setRGB(R, G, B);
+		            count++;
+		            particles.vertices.push(particle);
+		        }
+		    }
+		    particles.colors = new_color;
+		    var pMaterial = new THREE.ParticleBasicMaterial({
+		        size: 0.8,
+		        transparent: true,
+		        opacity: 0.12,
+		        vertexColors: true
+		    });
+		    particleSystem = new THREE.ParticleSystem(
+    				particles,
+    				pMaterial);
+		    scene.add(particleSystem);
+		    camera.position.z = 50;
+		    particleSystem.rotation.x += 0.6;
+		    particleSystem.rotation.y -= 0.6;
+		    renderer.render(scene, camera);
+		    destroyCutElements();
+		}
+		function buildModel() {
+		    scene.remove(scene.children[0]);
+		    delete particleSystem;
+		    delete particles;
+		    renderer.setSize(window.innerWidth, window.innerHeight);
+		    document.body.appendChild(renderer.domElement);
+		    var particles = new THREE.Geometry();
+		    particles.vertices = particlesTemporary.vertices;
+		    delete colors;
+		    var H, Vm, a, Vi, Vd, R, G, B;
+		    var S = (1 - min/max)*100;
+		    var V = (max * 60) / 3.6;            
+		    var displacementValue = (timeMoment - 1) * neuronsCount;
+		    if (modelType == 0)
+		    {
+		        for (var i = 0; i < neuronsCount; i++) {
+		            colors[i] = new THREE.Color();
+		            H = 3 * valueContainer[i + displacementValue] / 3.1427;
+		            Vm = V * (100 - S) / 100;
+		            a = (V - Vm) * (H) / 60;
+		            Vi = Vm + a;
+		            Vd = V - a;
+		            if (H >= 0 && H < 1) colors[i].setRGB(V, Vi, Vm);
+		            if (H >= 1 && H < 2) colors[i].setRGB(Vd, V, Vm);
+		            if (H >= 2 && H < 3) colors[i].setRGB(Vm, V, Vi);
+		            if (H >= 3 && H < 4) colors[i].setRGB(Vm, Vd, V);
+		            if (H >= 4 && H < 5) colors[i].setRGB(Vi, Vm, V);
+		            if (H >= 5 && H < 6) colors[i].setRGB(V, Vm, Vd);    
+		        }
+
+		    }
+		    else if (modelType == 1) {
+		        var freqArray = [];
+		        var step, minFr = 10000, maxFr = 0;
+		        for (var i = 0; i < neuronsCount; i++) {
+		            freqArray.push(valueContainer[i + displacementValue]);
+		            if (freqArray[i] < minFr) minFr = freqArray[i];
+		            if (freqArray[i] > maxFr) maxFr = freqArray[i];
+		        }
+		        step = (maxFr - minFr);
+		        for (var i = 0; i < neuronsCount; i++) {
+		            colors[i] = new THREE.Color();
+		            if (freqArray[i] - minFr <= step / 3) colors[i].setRGB(freqArray[i] - minFr, freqArray[i], freqArray[i]);
+		            else if (freqArray[i] - minFr <= 2 * step / 3) colors[i].setRGB(freqArray[i], freqArray[i] - minFr, freqArray[i]);
+		            else colors[i].setRGB(freqArray[i], freqArray[i], freqArray[i] - minFr);
+		        }
+		    }
+		    particles.colors = colors;
+		    var pMaterial = new THREE.ParticleBasicMaterial({
+		        size: 0.8,
+		        transparent: true,
+		        opacity: 0.12,
+		        vertexColors: true
+		    });
+		    particleSystem = new THREE.ParticleSystem(
+                    particles,
+                    pMaterial);
+		    scene.add(particleSystem);
+		    camera.position.z = 50;
+		    particleSystem.rotation.x += 0.6;
+		    particleSystem.rotation.y -= 0.6;
+		    renderer.render(scene, camera);
+		}
+		function setCutControlVisibleProperty(controlID, visible) {
+		    if (visible) document.getElementById(cutControlsArray[controlID]).style.visibility = "visible";
+		    else document.getElementById(cutControlsArray[controlID]).style.visibility = "hidden";
+		}
+		function setCutControlPosition(controlID, left, top, wd, ht) {
+		    document.getElementById(cutControlsArray[controlID]).style.width = wd;
+		    document.getElementById(cutControlsArray[controlID]).style.height = ht;
+		    document.getElementById(cutControlsArray[controlID]).style.top = top;
+		    document.getElementById(cutControlsArray[controlID]).style.left = left;
+		}
+		function setControlBackColor(controlID, backColor) {
+		    document.getElementById(controls[controlID]).style.backgroundColor = backColor;
+		}
+		function cutLines() {
+		    setControlBackColor(7, initColorButton);
+		    setControlBackColor(8, initColorButton);
+		    setControlBackColor(9, '#ff0000');
+		    unVisibleCut();
+		    cutInit(2);
+		}
+		function cut_front() {
+		    setControlBackColor(9, initColorButton);
+		    setControlBackColor(8, initColorButton);
+		    setControlBackColor(7, '#ff0000');
+		    unVisibleCut();
+		    cutInit(0);
+		}
+		function cut_back() {
+		    setControlBackColor(9, initColorButton);
+		    setControlBackColor(7, initColorButton);
+		    setControlBackColor(8, '#ff0000');
+		    unVisibleCut();
+		    cutInit(1);
+		}
+		function cutInit(type) {
+		    setCutControlPosition(0, 81 * width / 100, 20 * height / 50, 2 * width / 100, 2 * height / 100);
+		    setCutControlPosition(1, 84 * width / 100, 20 * height / 50, 2 * width / 100, 3 * height / 100);
+		    setCutControlPosition(2, 87 * width / 100, 20 * height / 50, 2 * width / 100, 2 * height / 100);
+		    setCutControlPosition(3, 90 * width / 100, 20 * height / 50, 2 * width / 100, 3 * height / 100);
+		    setCutControlPosition(4, 93 * width / 100, 20 * height / 50, 2 * width / 100, 2 * height / 100);
+		    setCutControlPosition(5, 96 * width / 100, 20 * height / 50, 2 * width / 100, 3 * height / 100);
+		    if (type != 2) {
+		        setCutControlVisibleProperty(0, true);
+		        setCutControlVisibleProperty(1, true);
+		        setCutControlVisibleProperty(2, true);
+		        setCutControlVisibleProperty(3, true);
+		        setCutControlVisibleProperty(4, true);
+		        setCutControlVisibleProperty(5, true);
+		        setCutControlPosition(12, 83 * width / 100, 23 * height / 50, 5 * width / 100, 3 * height / 100);
+		        setCutControlPosition(13, 90 * width / 100, 23 * height / 50, 5 * width / 100, 3 * height / 100);
+		        setCutControlVisibleProperty(12, true);
+		        setCutControlVisibleProperty(13, true);
+		    }
+		    else {
+		        setCutControlPosition(6, 81 * width / 100, 23 * height / 50, 2 * width / 100, 2 * height / 100);
+		        setCutControlPosition(7, 84 * width / 100, 23 * height / 50, 2 * width / 100, 3 * height / 100);
+		        setCutControlPosition(8, 87 * width / 100, 23 * height / 50, 2 * width / 100, 2 * height / 100);
+		        setCutControlPosition(9, 90 * width / 100, 23 * height / 50, 2 * width / 100, 3 * height / 100);
+		        setCutControlPosition(10, 93 * width / 100, 23 * height / 50, 2 * width / 100, 2 * height / 100);
+		        setCutControlPosition(11, 96 * width / 100, 23 * height / 50, 2 * width / 100, 3 * height / 100);
+		        setCutControlPosition(12, 83 * width / 100, 26 * height / 50, 5 * width / 100, 3 * height / 100);
+		        setCutControlPosition(13, 90 * width / 100, 26 * height / 50, 5 * width / 100, 3 * height / 100);
+		        VisibleCut();
+		    }
+		    cutType = type;
+		}
+		function destroyCutElements() {
+		    for (var i = 1; i <= 11; i += 2) {
+		        document.getElementById(cutControlsArray[i]).value = 0;
+		    }
+		    cutType = null;
+		    setControlBackColor(9, initColorButton);
+		    setControlBackColor(8, initColorButton);
+		    setControlBackColor(7, initColorButton);
+		}
+		function cutCancel() {
+		    unVisibleCut();
+		    destroyCutElements();
+		}
+		function zoom() {
+		    camera.position.z -= 5;
+		    renderer.render(scene, camera);
+		}
+		function unZoom() {
+		    camera.position.z += 5;
+		    renderer.render(scene, camera);
+		}
+		function rotate_right() {
+		    particleSystem.rotation.y += 0.05;
+		    renderer.render(scene, camera);
+		}
+		function rotate_left() {
+		    particleSystem.rotation.y -= 0.05;
+		    renderer.render(scene, camera);
+
+		}
+		function rotate_down() {
+		    particleSystem.rotation.x += 0.05;
+		    renderer.render(scene, camera);
+		}
+		function rotate_up() {
+		    particleSystem.rotation.x -= 0.05;
+		    renderer.render(scene, camera);
+
+		}
+</script>
+	<label id="main">Data file: </label>
+  	<input id="openFile" type="file" onchange='readText(this)' multiple/>	
+	<label id ="textLabel">Please input a time moment in the range [100, 100]</label>
+    <input type="text" id ="time" value ="1"/>
+    <input id="phase" type="button" value="Phase Visualization" onClick="phaseClick()">
+    <input id="freq" type="button" value="Frequency Visualization" onClick="freqClick()">
+	<input id="Build" type="button" value="Start Visualization" onClick="StartVisualization()">
+	<input id="Video3D" type="button" value="Video 3D" onClick="video()">
+	<label id ="cut">Cut type</label>
+	<input id="cutFront"  type ="button" value="Front" onClick="cut_front()">
+	<input id="cutBack" type="button" value="Back" onClick="cut_back()">
+	<input id="CutLines" type="button" value="Cut Selected" onClick="cutLines()">
+    <label id ="loadingLabel">Loading... Please wait...</label>
+    <label id ="X1">X: </label>
+    <label id ="X2">X2: </label>
+    <label id ="Y1">Y: </label>
+    <label id ="Y2">Y2: </label>
+    <label id ="Z1">Z: </label>
+    <label id ="Z2">Z2: </label>
+    <input type="text" id ="textX1" value =""/>
+    <input type="text" id ="textX2" value =""/>
+    <input type="text" id ="textY1" value =""/>
+    <input type="text" id ="textY2" value =""/>
+    <input type="text" id ="textZ1" value =""/>
+    <input type="text" id ="textZ2" value =""/>
+    <input id="btnApplyCut" type="button" value="OK" onClick="cutApply()">
+    <input id="btnCancel" type="button" value="Cancel" onClick="cutCancel()">
+    <input id="stop" type="button" value="Stop" onClick="stopClick()">
+    <input id="pause" type="button" value="Pause" onClick="pauseClick()">
+    <input id="delay" type="button" value="Delay" onClick="delayClick()">
+    </body>
+</html>
