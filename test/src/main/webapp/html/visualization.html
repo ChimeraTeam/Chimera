@@ -1,23 +1,10 @@
 <html>
 	<head>
 		<title>Chimera visualization</title>
-		<style>
-   			body {
-    			background: #000;
-                transform-style:preserve-3d;
-				color: #fff;
-   			}
-            .container {
-                position: absolute;
-                height: 100%;
-                width: 100%;
-            }
-  		</style>
-		<style>canvas { width: 100%; height: 100% }</style>
-		<script type="text/javascript" src="scr/three.min.js"></script>
-        <script type="text/javascript" src="scr/config.js"></script>
-        <script type="text/javascript" src="scr/visualizationSettingsContext.js"></script>
-        <script type="text/javascript" src="scr/JQuery.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<script type="text/javascript" src="../js/three.min.js"></script>
+        <script type="text/javascript" src="../js/config.js"></script>
+        <script type="text/javascript" src="../js/visualizationSettingsContext.js"></script>
 	</head>
 	<body  onKeyDown="keyEvent()" onmousedown ="onDocumentMouseDown" onmouseup ="onDocumentMouseUp" onresize = "windowSizeChange()">
         <div id="container" class="container"></div>
@@ -300,11 +287,12 @@
 		var line;
 		function readText(that) {
 		    destroyValueContainer();
-			textBox = document.getElementById('TEXTBOX_ID');
+		    textBox = document.getElementById('TEXTBOX_ID');
+		    alert(openFile.innerText);
 			setVisibleControlProperty(10, true);
 			if(that.files && that.files[0]){
 			    reader.onload = function (e) {
-				    line = e.target.result;
+			        line = e.target.result;
 					moments = line.length / (2 * settingContext.neuronsCount);
 					document.getElementById('textLabel').innerHTML = "Please input a time moment in the range [1 to "+ (moments - (moments%1)) + " ]";
 					initialiasePositions();
