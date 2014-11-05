@@ -1,6 +1,6 @@
 package solr;
 
-import interfaces.ISolrDAO;
+import interfaces.DefaultSolrDAO;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -15,17 +15,16 @@ import java.util.List;
 /**
  * Created by gleb on 03.11.2014.
  */
-public class SolrDAO<T, ID extends Serializable> extends ISolrDAO<T, ID> {
+public class SolrDAO<T, ID extends Serializable> extends DefaultSolrDAO<T, ID> {
 
     private static Logger logger = Logger.getLogger(SolrDAO.class.getName());
 
     @Override
     public UpdateResponse addFeed(T t) {
         logger.debug("SolrDAO:addFeed:in");
-        SolrServer solrServer = DataSource.getSolrServer("");
         if (t instanceof SolrDocument) {
             try {
-                solrServer.addBean(t);
+                save(t);
             } catch (Exception e) {
                 logger.error("SolrDAO:addFeed:exception on add feed " + e);
             }

@@ -12,6 +12,7 @@
         <module>test</module>
         <module>chimera_dao</module>
         <module>chimera_common</module>
+        <module>chimera_core</module>
     </modules>
     <dependencies>
         <dependency>
