@@ -60,22 +60,12 @@ private:
 			{
 				continue;
 			}
-			array.push_back(current);
-		}
-	}
-	
-	void FillTimeMomentList()
-	{
-		int i = 0;
-		for (list<string>::iterator it = array.begin(); it != array.end(); ++it)
-		{
-			if (i == 0 || i % oscillationNumber == 0)
+			if (current.find("0.000000") == 1 || current.find("0.000000") == 2 || current.find("0.000000") == 3 || current.find("0.000000") == 3)
 			{
-				/*data.timeMoment.push_back(ConvertStringToDouble(*it));
-				array.erase(it);
-				--it;*/
+				data.timeMoment.push_back(ConvertStringToDouble(current));
+				continue;
 			}
-			i++;
+			array.push_back(current);
 		}
 	}
 	
@@ -110,8 +100,8 @@ public:
 	
 	CData GetDataObject(char *path)
 	{
+		data.oscillationNumber = oscillationNumber;
 		GetTextFromFile(path);
-		FillTimeMomentList();
 		FillPhaseFrequencyList();
 		return data;
 	}
@@ -123,7 +113,7 @@ int main(int argc, char** argv) {
 	fileReaderPtr->SetOscillationNumber();
 	data = fileReaderPtr->GetDataObject("F:\\last.txt");
 	delete fileReaderPtr;
-	for (list<double>::iterator it = data.phase.begin(); it != data.phase.end(); ++it)
+	for (list<double>::iterator it = data.timeMoment.begin(); it != data.timeMoment.end(); ++it)
 	{
 		cout<<*it<<endl;
 	}
