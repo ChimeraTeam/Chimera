@@ -1,121 +1,107 @@
-#include <iostream>
-#include <list>
-#include <fstream>
-#include <string>
-#include <math.h>
-#include <stdlib.h>     
+#include "stdafx.h"
+#include "CFileReader.h"
 
 using namespace std;
 
-class CData
+bool CFileReader::isDouble(string str)
 {
-public:
-	list<double> phase;
-	list<double> frequency;
-	list<double> timeMoment;
-	int oscillationNumber;
-	~CData()
+	for (int i = 0; i < str.length(); i++)
 	{
-		phase.clear();
-		frequency.clear();
-		timeMoment.clear();
+		if (str[i] == '.')
+			return true;
 	}
-};
+	
+	return false;
+}
 
-class CFileReader
+double CFileReader::ConvertStringToDouble(string str)
 {
-private: 
-	int oscillationNumber;
-	list<string> array;
-	CData data;
-	bool isDouble(string str)
+	const char* c_str = new char[str.size() + 1];
+	c_str = str.c_str();
+	return atof(c_str);
+}
+
+void CFileReader::GetTextFromFile()
+{
+	unsigned int start_time =  clock();
+	ifstream file(path);
+	string current;
+	
+	while (file.good())
 	{
-		for (int i = 0; i < str.length(); i++)
+		file >> current;
+		if (current == "[" || current == "]" || !isDouble(current))
 		{
-			if (str[i] == '.')
-				return true;
+			continue;
 		}
-		return false;
+		if (current.find("0.000000") == 1 || current.find("0.000000") == 2 || current.find("0.000000") == 3)
+		{
+			data.timeMoment.push_back(ConvertStringToDouble(current));
+			continue;
+		}
+		array.push_back(current);
 	}
 
-	double ConvertStringToDouble(string str)
+	unsigned int end_time = clock();
+	cout<<"Total time : "<<end_time - start_time<<endl;
+}
+	
+void CFileReader::FillPhaseList()
+{	
+	for (list<string>::iterator it = array.begin(); it != array.end(); ++(++it))
 	{
-		char* c_str = new char[str.size() + 1];
-		copy(str.begin(), str.end(), c_str);
-		return atof(c_str);
+		data.phase.push_back(ConvertStringToDouble(*it));
 	}
+}
 
-	void GetTextFromFile(char* path)
+void CFileReader::FillFrequencyList()
+{
+	list<string>::iterator it = array.begin();
+	++it;
+	for (it; it != array.end(); ++(++it))
 	{
-		ifstream file(path);
-		string current;
-		while (true)
-		{
-			if (file.eof())
-			{
-				break;
-			}
-			file >> current;
-			if (current == "[" || current == "]" || !isDouble(current))
-			{
-				continue;
-			}
-			if (current.find("0.000000") == 1 || current.find("0.000000") == 2 || current.find("0.000000") == 3 || current.find("0.000000") == 3)
-			{
-				data.timeMoment.push_back(ConvertStringToDouble(current));
-				continue;
-			}
-			array.push_back(current);
-		}
+		data.frequency.push_back(ConvertStringToDouble(*it));
 	}
-	
-	void FillPhaseFrequencyList()
-	{
-		int i = 0;
-		for (list<string>::iterator it = array.begin(); it != array.end(); ++it)
-		{
-			if (i % 2 == 0)
-			{
-				data.phase.push_back(ConvertStringToDouble(*it));
-			}
-			else
-			{
-				data.frequency.push_back(ConvertStringToDouble(*it));
-			}
-		}
-		array.clear();
-	}
-	
-public:
-	
-	~CFileReader()
-	{
-		array.clear();
-	}
-	
-	void SetOscillationNumber(int number = 50)
-	{
-		oscillationNumber = pow(number, 3);
-	}
-	
-	CData GetDataObject(char *path)
-	{
-		data.oscillationNumber = oscillationNumber;
-		GetTextFromFile(path);
-		FillPhaseFrequencyList();
-		return data;
-	}
-};
+}
 
-int main(int argc, char** argv) {
+CFileReader::~CFileReader()
+{
+	array.clear();
+}
+	
+void CFileReader::SetOscillationNumber(int number)
+{
+	oscillationNumber = pow(number, 3);
+}
+	
+CData CFileReader::GetDataObject(char *filepath)
+{
+	data.oscillationNumber = oscillationNumber;
+	path = filepath;
+	unsigned int start_time =  clock();
+	thread thread1(&CFileReader::GetTextFromFile, this);
+	thread thread2(&CFileReader::FillPhaseList, this);
+	thread thread3(&CFileReader::FillFrequencyList, this);
+	thread1.join();
+	thread2.join();
+	thread3.join();
+	unsigned int end_time = clock();
+	cout<<"Total time : "<<end_time - start_time<<endl;
+	return data;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
 	CFileReader *fileReaderPtr = new CFileReader();
 	CData data;
 	fileReaderPtr->SetOscillationNumber();
 	data = fileReaderPtr->GetDataObject("F:\\last.txt");
 	delete fileReaderPtr;
-	for (list<double>::iterator it = data.timeMoment.begin(); it != data.timeMoment.end(); ++it)
+	/*for (list<double>::iterator it = data.phase.begin(); it != data.phase.end(); ++it)
 	{
 		cout<<*it<<endl;
-	}
+	}*/
+	system("PAUSE");
 	return 0;
 }
+
