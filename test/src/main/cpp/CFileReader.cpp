@@ -10,6 +10,7 @@ bool CFileReader::isDouble(string str)
 		if (str[i] == '.')
 			return true;
 	}
+	
 	return false;
 }
 
@@ -22,14 +23,12 @@ double CFileReader::ConvertStringToDouble(string str)
 
 void CFileReader::GetTextFromFile()
 {
+	unsigned int start_time =  clock();
 	ifstream file(path);
 	string current;
+	
 	while (file.good())
 	{
-		if (file.eof())
-		{
-			break;
-		}
 		file >> current;
 		if (current == "[" || current == "]" || !isDouble(current))
 		{
@@ -41,24 +40,27 @@ void CFileReader::GetTextFromFile()
 			continue;
 		}
 		array.push_back(current);
-
 	}
+
+	unsigned int end_time = clock();
+	cout<<"Total time : "<<end_time - start_time<<endl;
 }
 	
-void CFileReader::FillPhaseFrequencyList()
+void CFileReader::FillPhaseList()
 {	
-	int i = 0;
-	for (list<string>::iterator it = array.begin(); it != array.end(); ++it)
+	for (list<string>::iterator it = array.begin(); it != array.end(); ++(++it))
 	{
-		if (i % 2 == 0)
-		{
-			data.phase.push_back(ConvertStringToDouble(*it));
-		}
-		else
-		{
-			data.frequency.push_back(ConvertStringToDouble(*it));
-		}
-		i++;
+		data.phase.push_back(ConvertStringToDouble(*it));
+	}
+}
+
+void CFileReader::FillFrequencyList()
+{
+	list<string>::iterator it = array.begin();
+	++it;
+	for (it; it != array.end(); ++(++it))
+	{
+		data.frequency.push_back(ConvertStringToDouble(*it));
 	}
 }
 
@@ -77,12 +79,14 @@ CData CFileReader::GetDataObject(char *filepath)
 	data.oscillationNumber = oscillationNumber;
 	path = filepath;
 	unsigned int start_time =  clock();
-	thread query1(&CFileReader::GetTextFromFile, this);
-	thread query2(&CFileReader::FillPhaseFrequencyList, this);
-	query1.join();
-	query2.join();
+	thread thread1(&CFileReader::GetTextFromFile, this);
+	thread thread2(&CFileReader::FillPhaseList, this);
+	thread thread3(&CFileReader::FillFrequencyList, this);
+	thread1.join();
+	thread2.join();
+	thread3.join();
 	unsigned int end_time = clock();
-	cout<<end_time - start_time<<endl;
+	cout<<"Total time : "<<end_time - start_time<<endl;
 	return data;
 }
 
@@ -93,11 +97,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	fileReaderPtr->SetOscillationNumber();
 	data = fileReaderPtr->GetDataObject("F:\\last.txt");
 	delete fileReaderPtr;
-	for (list<double>::iterator it = data.timeMoment.begin(); it != data.timeMoment.end(); ++it)
+	/*for (list<double>::iterator it = data.phase.begin(); it != data.phase.end(); ++it)
 	{
 		cout<<*it<<endl;
-	}
-	cin.get();
+	}*/
+	system("PAUSE");
 	return 0;
 }
 

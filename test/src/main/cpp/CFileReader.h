@@ -15,7 +15,8 @@ private:
 	bool isDouble(string str);
 	double ConvertStringToDouble(string str);
 	void GetTextFromFile();
-	void FillPhaseFrequencyList();
+	void FillPhaseList();
+	void FillFrequencyList();
 public:
 	~CFileReader();
 	void SetOscillationNumber(int number = 50);
