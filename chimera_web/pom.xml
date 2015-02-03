@@ -8,11 +8,12 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>chimera_dao</artifactId>
+    <artifactId>chimera_web</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <spring.data.solr>1.3.2.RELEASE</spring.data.solr>
+        <jetty.verion>9.3.0.M1</jetty.verion>
+        <sping.web.version>4.1.4.RELEASE</sping.web.version>
     </properties>
 
     <dependencies>
@@ -23,18 +24,24 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!--Jetty dependencies-->
         <dependency>
-            <groupId>univ.kiev.ua</groupId>
-            <artifactId>chimera_data</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.verion}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-solr</artifactId>
-            <version>${spring.data.solr}</version>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.verion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.verion}</version>
         </dependency>
 
     </dependencies>
+
 
 </project>
