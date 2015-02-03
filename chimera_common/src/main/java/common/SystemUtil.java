@@ -1,6 +1,10 @@
 package common;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -8,36 +12,25 @@ import java.util.ResourceBundle;
 /**
  * Created by gleb on 03.11.2014.
  */
+@Configuration
+@PropertySource("classpath:config/chimera.properties")
 public class SystemUtil {
 
     private static Logger logger = Logger.getLogger(SystemUtil.class);
-    private static SystemUtil instance;
-    private static ResourceBundle rb;
-    private static final String CONFIGURATION_PROPERTIES_FILE = "com.commons.config.chimera_system";
     private static final String HOST = "chimera.host";
     private static final String SOLR = "chimera.solr.server";
-    private static final String SOLR_CLOUD = "chimera.solr.cloud";
     private static final String MYSQL_HOST = "chimera.mysql.host";
-
-    public static SystemUtil getInstance() {
-        if (instance == null) {
-            try {
-                rb = ResourceBundle.getBundle(CONFIGURATION_PROPERTIES_FILE);
-            } catch (MissingResourceException e) {
-                logger.debug("SystemUtil:getInstance ", e);
-                logger.error("SystemUtil:getInstance " + e.getMessage());
-            }
-            instance = new SystemUtil();
-        }
-        return instance;
-    }
+    private static final String PORT = "chimera.port";
+    private static final String CONTEXT_PATH = "chimera.context";
+    @Autowired
+    private Environment environment;
 
     private String getProperty(String key) {
-        return rb.getString(key);
+        return environment.getProperty(key);
     }
 
     /**
-     * Return system/default property : chimera.host . Example : chimera.com
+     * Return system/default property : chimera.host . Example : http://localhost:8080/chimera_web
      *
      * @return host of chimera
      */
@@ -46,23 +39,31 @@ public class SystemUtil {
     }
 
     /**
-     * Return system/default property : chimera.solr.server . Example :
+     * Return system/default property : chimera.port . Example : 8080
+     *
+     * @return port of chimera
+     */
+    public String getPort() {
+        return (System.getProperty(PORT) != null) ? System.getProperty(PORT) : getProperty(PORT);
+    }
+
+    /**
+     * Return system/default property : chimera.context . Example : /chimera_web
+     *
+     * @return port of chimera
+     */
+    public String getContextPath() {
+        return (System.getProperty(CONTEXT_PATH) != null) ? System.getProperty(CONTEXT_PATH) : getProperty(CONTEXT_PATH);
+    }
+
+    /**
+     * Return system/default property : chimera.solr.server . Example : http://localhost:8983/solr
      * http://localhost:8983/solr
      *
      * @return url of solr server
      */
     public String getSolrServer() {
         return (System.getProperty(SOLR) != null) ? System.getProperty(SOLR) : getProperty(SOLR);
-    }
-
-    /**
-     * Return system/default property : chimera.solr.cloud . Example :
-     *
-     *
-     * @return host of solr cloud
-     */
-    public String getSolrCloud() {
-        return (System.getProperty(SOLR_CLOUD) != null) ? System.getProperty(SOLR_CLOUD) : getProperty(SOLR_CLOUD);
     }
 
     /**

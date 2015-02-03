@@ -17,4 +17,8 @@ public interface ISolorGenericDAO<T, ID extends Serializable> {
     public boolean delete(T entity);
 
     public boolean delete(ID entityId);
+
+    public boolean rollback();
+
+    public boolean commit();
 }
