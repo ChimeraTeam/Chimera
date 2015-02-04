@@ -1,5 +1,6 @@
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Created by gleb on 02.11.2014.
@@ -8,15 +9,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class Test {
 
     public static void main(String[] args) throws Exception {
-        AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext();
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SolrContext.class);
+        ProductService bean = context.getBean(ProductService.class);
+        bean.doSomething();
 
-        context.register(SolrContext.class);
-
-        context.refresh();
-
-        ServiceG bean = context.getBean(ServiceG.class);
-        bean.test();
+//        ClassPathXmlApplicationContext xmlApplicationContext = new ClassPathXmlApplicationContext("application-context.xml");
+//        ProductService productService = xmlApplicationContext.getBean(ProductService.class);
+//        productService.doSomething();
     }
 
 
