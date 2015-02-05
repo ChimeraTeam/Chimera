@@ -9,7 +9,12 @@
 *.ear
 .idea
 *.iml
-/target
+/chimera_data/target
+/chimera_web/target
+/chimera_common/target
+/chimera_core/target
+/chimera_dto/target
+
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

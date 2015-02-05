@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,9 @@ import java.io.IOException;
 public class Launcher {
     public static void main(String[] args) throws Exception {
 
-        AnnotationConfigApplicationContext context = ChimeraContext.getAnnotationConfigApplicationContext();
-        context.register(SystemUtil.class);
-        context.refresh();
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SolrContext.class);
 
-        SystemUtil config = context.getBean(SystemUtil.class);
+        ChimeraContext config = context.getBean(ChimeraContext.class);
 
         Server server = new Server();
 

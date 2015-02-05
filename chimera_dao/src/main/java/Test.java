@@ -1,22 +1,14 @@
-import org.springframework.context.ApplicationContext;
+import dtos.ChimeraDTO;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import services.SolrService;
 
 /**
- * Created by gleb on 02.11.2014.
+ * Created by gleb on 05.02.15.
  */
-
 public class Test {
-
-    public static void main(String[] args) throws Exception {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SolrContext.class);
-        ProductService bean = context.getBean(ProductService.class);
-        bean.doSomething();
-
-//        ClassPathXmlApplicationContext xmlApplicationContext = new ClassPathXmlApplicationContext("application-context.xml");
-//        ProductService productService = xmlApplicationContext.getBean(ProductService.class);
-//        productService.doSomething();
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationContext.class);
+        SolrService bean = context.getBean(SolrService.class);
+        bean.saveState(new ChimeraDTO("new"));
     }
-
-
 }

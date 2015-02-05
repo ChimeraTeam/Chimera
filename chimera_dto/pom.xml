@@ -9,7 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>chimera_core</artifactId>
+    <artifactId>chimera_dto</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>univ.kiev.ua</groupId>
+            <artifactId>chimera_data</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

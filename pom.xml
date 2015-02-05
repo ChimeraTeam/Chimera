@@ -14,6 +14,8 @@
         <module>chimera_common</module>
         <module>chimera_data</module>
         <module>chimera_web</module>
+        <module>chimera_dto</module>
+        <module>chimera_core</module>
     </modules>
 
     <properties>
