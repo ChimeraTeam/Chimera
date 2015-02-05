@@ -7,7 +7,7 @@ import services.SolrService;
  */
 public class Test {
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationContext.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DAOApplicationContext.class);
         SolrService bean = context.getBean(SolrService.class);
         bean.saveState(new ChimeraDTO("new"));
     }

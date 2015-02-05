@@ -13,7 +13,7 @@ public class SolrContext extends ChimeraContext{
 
     @Bean
     public SolrServer solrServer() {
-        return new HttpSolrServer(getSolr());
+        return new HttpSolrServer(systemUtil().getSolr());
     }
 
     @Bean

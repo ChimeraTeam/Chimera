@@ -8,7 +8,7 @@ import services.SolrService;
  * Created by gleb on 05.02.15.
  */
 @Configuration
-public class ApplicationContext extends SolrContext {
+public class DAOApplicationContext extends SolrContext {
 
     @Bean
     public ISolrRepository sorRepository() {
