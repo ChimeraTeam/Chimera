@@ -16,6 +16,7 @@
         <module>chimera_web</module>
         <module>chimera_dto</module>
         <module>chimera_core</module>
+        <module>chimera_hadoop</module>
     </modules>
 
     <properties>
