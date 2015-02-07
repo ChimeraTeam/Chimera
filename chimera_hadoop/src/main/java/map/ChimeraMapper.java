@@ -21,7 +21,8 @@ public class ChimeraMapper extends Mapper<LongWritable, Text, Text, Text> {
     private static final String IGNORE_LINES[] = {
             "; Solver config file = solver-config",
             "; Links matrix file = /dev/stdin",
-            "; Neurons state file = init_state"
+            "; Neurons state file = init_state",
+            "; computation successful"
     };
 
     private Pattern pattern;
