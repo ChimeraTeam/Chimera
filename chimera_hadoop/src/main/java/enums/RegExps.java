@@ -1,10 +1,12 @@
-/**
- * Created by gleb on 06.02.15.
- */
-public enum Types {
+package enums;
 
-    FREQUENCY("f"),
-    PHASE("p");
+/**
+ * Created by gleb on 07.02.15.
+ */
+public enum RegExps {
+
+    FREQUENCY("-*(?:\\d*\\.)?\\d+ ]"),
+    PHASE("\\[ \\d -*(?:\\d*\\.)?\\d+");
 
     private String value;
 
@@ -12,14 +14,15 @@ public enum Types {
         return value;
     }
 
-    Types(String value) {
+    RegExps(String value) {
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return "Types{" +
+        return "enums.RegExps{" +
                 "value='" + value + '\'' +
                 '}';
     }
+
 }
