@@ -6,7 +6,6 @@ import jobs.interfaces.IJob;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import tasks.impl.CheckFilesTask;
 import tasks.interfaces.ITask;
 
@@ -17,8 +16,7 @@ import tasks.interfaces.ITask;
  */
 @Configuration
 @EnableAutoConfiguration
-@Import(ChimeraContext.class)
-public class JobsContext  {
+public class JobsContext extends ChimeraContext  {
 
     @Bean
     public ITask checkFilesTask() {
