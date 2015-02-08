@@ -1,9 +1,12 @@
 package tasks.impl;
 
+import common.SystemUtil;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileChecksum;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tasks.interfaces.ITask;
 
@@ -14,15 +17,29 @@ import tasks.interfaces.ITask;
 @Component
 public class CheckFilesTask implements ITask {
 
+
+    @Autowired
+    private SystemUtil systemUtil;
+
     @Override
     public void doTask() {
         try {
-            Path path = new Path("/home/gleb/trajectory");
 
+            systemUtil = SystemUtil.getSystemUtil();
             Configuration configuration = new Configuration();
+            configuration.set("fs.defaultFS", systemUtil.getHdfs());
+
+            Path in = new Path(systemUtil.getMapreduceIn());
+
             FileSystem fileSystem = FileSystem.get(configuration);
-            FileChecksum fileChecksum = fileSystem.getFileChecksum(path);
-            System.out.println(new String(fileChecksum.getBytes()));
+
+            FileStatus[] fileStatuses = fileSystem.listStatus(in);
+
+            Path[] paths = FileUtil.stat2Paths(fileStatuses);
+
+            for (Path path : paths) {
+                System.out.println(path + " " + new String(fileSystem.getFileChecksum(path).getBytes()));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

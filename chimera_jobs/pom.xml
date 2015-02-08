@@ -25,10 +25,11 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!--Hadoop client, used for HDFS, don't add chimera_hadoop module !-->
         <dependency>
-            <groupId>univ.kiev.ua</groupId>
-            <artifactId>chimera_hadoop</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.6.0</version>
         </dependency>
 
         <!--Spring boot-->

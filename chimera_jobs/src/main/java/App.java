@@ -1,5 +1,6 @@
 
 import jobs.impl.FileCheckerJob;
+import jobs.interfaces.IJob;
 import org.springframework.boot.SpringApplication;
 
 /**
@@ -7,6 +8,6 @@ import org.springframework.boot.SpringApplication;
  */
 public class App {
     public static void main(String[] args) {
-        SpringApplication.run(FileCheckerJob.class);
+       SpringApplication.run(FileCheckerJob.class);
     }
 }
