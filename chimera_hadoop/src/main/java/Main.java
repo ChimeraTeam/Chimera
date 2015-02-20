@@ -15,12 +15,14 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Configuration configuration = new Configuration();
         configuration.set("type", Types.PHASE.getValue());
-        Job job = new Job(configuration);
+        Job job = Job.getInstance(configuration, "Chimera job");
         job.setJarByClass(Main.class);
-        job.setJobName("Chimera job");
+
+        configuration.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+        configuration.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
 
         Runtime.getRuntime().exec("/home/gleb/scripts/clearOut.sh");
-        FileInputFormat.addInputPath(job, new Path("/home/gleb/trajectory"));
+        FileInputFormat.addInputPath(job, new Path("hdfs://localhost:1111/in/trajectory"));
         FileOutputFormat.setOutputPath(job, new Path("/home/gleb/out"));
 
         job.setMapperClass(ChimeraMapper.class);
@@ -29,6 +31,6 @@ public class Main {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        job.submit();
     }
 }

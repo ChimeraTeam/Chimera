@@ -52,7 +52,7 @@ public class ChimeraMapper extends Mapper<LongWritable, Text, Text, Text> {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            data.append(matcher.group());
+            data.append(matcher.group()).append(",");
         }
         return StringUtils.remove(data.toString(), "]");
     }
@@ -61,7 +61,7 @@ public class ChimeraMapper extends Mapper<LongWritable, Text, Text, Text> {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            data.append(matcher.group().split(" ")[2]);
+            data.append(matcher.group().split(" ")[2]).append(",");
         }
         return StringUtils.remove(data.toString(), "[");
     }
