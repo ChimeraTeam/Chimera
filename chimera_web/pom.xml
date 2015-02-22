@@ -12,7 +12,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <jetty.verion>9.3.0.M1</jetty.verion>
+        <jetty.version>9.3.0.M1</jetty.version>
         <sping.web.version>4.1.4.RELEASE</sping.web.version>
     </properties>
 
@@ -34,17 +34,24 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>${jetty.verion}</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>${jetty.verion}</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.verion}</version>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <!-- Jetty Maven Plugin dependency -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>${jetty.version}</version>
         </dependency>
 
     </dependencies>
@@ -60,6 +67,13 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+
+            <!-- Jetty Maven Plugin -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
             </plugin>
 
             <plugin>
