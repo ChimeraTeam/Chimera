@@ -6,7 +6,7 @@ package enums;
 public enum RegExps {
 
     FREQUENCY("-*(?:\\d*\\.)?\\d+ ]"),
-    PHASE("\\[ \\d -*(?:\\d*\\.)?\\d+");
+    PHASE("\\[ \\d+ -*(?:\\d*\\.)?\\d+");
 
     private String value;
 

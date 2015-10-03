@@ -5,8 +5,8 @@ package enums;
  */
 public enum Types {
 
-    FREQUENCY("f"),
-    PHASE("p");
+    FREQUENCY("frequency"),
+    PHASE("phase");
 
     private String value;
 

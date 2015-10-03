@@ -2,7 +2,6 @@ package map;
 
 import enums.RegExps;
 import enums.Types;
-import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -52,9 +51,9 @@ public class ChimeraMapper extends Mapper<LongWritable, Text, Text, Text> {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            data.append(matcher.group()).append(",");
+            data.append(matcher.group().split(" ")[0]).append(",");
         }
-        return StringUtils.remove(data.toString(), "]");
+        return data.toString();
     }
 
     private String phaseProcess(String line) {
@@ -63,6 +62,6 @@ public class ChimeraMapper extends Mapper<LongWritable, Text, Text, Text> {
         while (matcher.find()) {
             data.append(matcher.group().split(" ")[2]).append(",");
         }
-        return StringUtils.remove(data.toString(), "[");
+        return data.toString();
     }
 }
