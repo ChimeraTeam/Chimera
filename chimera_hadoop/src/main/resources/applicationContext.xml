@@ -17,7 +17,7 @@
     <hdp:job id="chimera"
              input-path="${input.path}"
              output-path="${output.path}"
-             jar-by-class="Test"
+             jar-by-class="Main"
              mapper="map.ChimeraMapper"
              reducer="reduce.ChimeraReducer"
              combiner="reduce.ChimeraReducer"/>
