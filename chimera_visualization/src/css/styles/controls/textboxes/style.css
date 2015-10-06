@@ -1,0 +1,10 @@
+/*Chimera TextBoxes style*/
+
+.chimeraTextBox {
+    background-color:transparent;
+    text-align:center;
+    border-color:white;
+    color: white;
+    font-size:15px;
+    font-family:Arial;
+}

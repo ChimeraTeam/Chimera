@@ -533,17 +533,12 @@
 		function buildModel() {
 		    scene.remove(scene.children[0]);
 		    delete particleSystem;
-		    //renderer.setSize(container.offsetWidth, container.offsetHeight);
-		    //container.appendChild(renderer.domElement);
 		    delete colors;
 		    var H, Vm, a, Vi, Vd, R, G, B;
 		    min = arrayMin[timeMoment - 1];
 		    max = arrayMax[timeMoment - 1];
-		    //alert(min);
-		    //alert(max);
 		    var S = (1 - min/max)*100;
 		    var V = (max * 60) / 3.6;
-		    //var displacementValue = (timeMoment - 1) * settingContext.neuronsCount;
 		    var displacementValue = 2 * (timeMoment - 1) * settingContext.neuronsCount;
 		    if (config.typeModelling == 0)
 		    {
