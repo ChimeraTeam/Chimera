@@ -2,7 +2,7 @@
            uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="../css/content.css">
+    <link rel="stylesheet" type="text/css" href="/chimera_web/css/content.css">
     <title>Chimera visualization</title>
 </head>
 <body>
