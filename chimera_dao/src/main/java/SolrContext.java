@@ -8,8 +8,9 @@ import org.springframework.data.solr.core.SolrTemplate;
 /**
  * Created by gleb on 03.02.2015.
  */
+@Deprecated
 @Configuration
-public class SolrContext extends ChimeraContext{
+public class SolrContext extends ChimeraContext {
 
     @Bean
     public SolrServer solrServer() {

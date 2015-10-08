@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Created by gleb on 05.02.15.
  */
+@Deprecated
 public class ChimeraDTOConverter {
 
     private ChimeraDTOConverter() {

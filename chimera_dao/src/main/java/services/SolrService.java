@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Created by gleb on 05.02.15.
  */
+@Deprecated
 @Service
 public class SolrService {
 

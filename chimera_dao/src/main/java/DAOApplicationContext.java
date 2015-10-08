@@ -7,6 +7,7 @@ import services.SolrService;
 /**
  * Created by gleb on 05.02.15.
  */
+@Deprecated
 @Configuration
 public class DAOApplicationContext extends SolrContext {
 

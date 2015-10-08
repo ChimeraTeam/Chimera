@@ -20,6 +20,8 @@ public final class SystemUtil {
     public static final String MAPREDUCE_IN = "chimera.mapreduce.in";
     public static final String MAPREDUCE_OUT = "chimera.mapreduce.out";
 
+    public static final String INPUT = "chimera.input";
+
     private static final SystemUtil systemUtil = new SystemUtil();
 
     @Autowired
@@ -62,6 +64,10 @@ public final class SystemUtil {
 
     public String getMapreduceOut() {
         return environment.getRequiredProperty(SystemUtil.MAPREDUCE_OUT);
+    }
+
+    public String getInput() {
+        return environment.getRequiredProperty(SystemUtil.INPUT);
     }
 
 

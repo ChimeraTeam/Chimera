@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * Created by gleb on 05.02.15.
  */
+@Deprecated
 public class ChimeraDTO {
 
     private String id;
@@ -71,9 +72,8 @@ public class ChimeraDTO {
         if (frequencies != null ? !frequencies.equals(that.frequencies) : that.frequencies != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (oscillations != null ? !oscillations.equals(that.oscillations) : that.oscillations != null) return false;
-        if (phases != null ? !phases.equals(that.phases) : that.phases != null) return false;
+        return !(phases != null ? !phases.equals(that.phases) : that.phases != null);
 
-        return true;
     }
 
     @Override

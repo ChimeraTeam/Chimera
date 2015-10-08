@@ -14,7 +14,7 @@
 
 
         var container = document.getElementById('container');
-		var reader = new FileReader();
+		var t1.reader = new FileReader();
 		var textBox;
 
         var width, height;       //window size
@@ -246,7 +246,7 @@
 		    initialiseVideoComponents();
 		    setImage();
 
-		}
+		};
 		function loadVisualPage() {
 		    initControlsPosition();
 		    getButtonsInitialBackColor();
@@ -291,7 +291,7 @@
 		    alert(openFile.innerText);
 			setVisibleControlProperty(10, true);
 			if(that.files && that.files[0]){
-			    reader.onload = function (e) {
+			    t1.reader.onload = function (e) {
 			        line = e.target.result;
 					moments = line.length / (2 * settingContext.neuronsCount);
 					document.getElementById('textLabel').innerHTML = "Please input a time moment in the range [1 to "+ (moments - (moments%1)) + " ]";
@@ -304,7 +304,7 @@
 					setVisibleControlProperty(5, true);
 					setVisibleControlProperty(10, false);
 			    };
-			    reader.readAsText(that.files[0]);
+			    t1.reader.readAsText(that.files[0]);
 			}
 		}
 

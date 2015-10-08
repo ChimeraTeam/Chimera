@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Created by gleb on 08.11.2014.
  */
+@Deprecated
 public class ChimeraDomain {
 
     @Field
@@ -60,9 +61,8 @@ public class ChimeraDomain {
         if (frequencies != null ? !frequencies.equals(that.frequencies) : that.frequencies != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (oscillations != null ? !oscillations.equals(that.oscillations) : that.oscillations != null) return false;
-        if (phases != null ? !phases.equals(that.phases) : that.phases != null) return false;
+        return !(phases != null ? !phases.equals(that.phases) : that.phases != null);
 
-        return true;
     }
 
     @Override

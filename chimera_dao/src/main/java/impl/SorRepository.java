@@ -2,13 +2,13 @@ package impl;
 
 import domain.ChimeraDomain;
 import interfaces.ISolrRepository;
-import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.solr.repository.support.SimpleSolrRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by gleb on 03.02.2015.
  */
+@Deprecated
 @Repository
 public class SorRepository extends SimpleSolrRepository implements ISolrRepository {
 

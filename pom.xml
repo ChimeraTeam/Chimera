@@ -17,6 +17,7 @@
         <module>chimera_dto</module>
         <module>chimera_hadoop</module>
         <module>chimera_jobs</module>
+        <module>chimera_processing</module>
     </modules>
 
     <properties>

@@ -5,6 +5,7 @@ import services.SolrService;
 /**
  * Created by gleb on 05.02.15.
  */
+@Deprecated
 public class Test {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DAOApplicationContext.class);
