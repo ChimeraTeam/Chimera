@@ -12,7 +12,7 @@ Components.initialiseGeneralComponents = function () {
     controls.push("Video3D");       //5     button for play a video
     controls.push("loadingLabel");  //6    loading label
     return controls;
-};
+};;;;;;;;;;;;
 
 Components.initialiseCutComponents = function () {
     var controls = [];
@@ -35,7 +35,7 @@ Components.initialiseCutComponents = function () {
     controls.push("cutBack");       //16     cut back mode
     controls.push("CutLines");      //17     cut lines mode
     return controls;
-};
+};;;;;;;;;;;;
 
 Components.initialiseVideoComponents = function () {
     var controls = [];
@@ -44,32 +44,32 @@ Components.initialiseVideoComponents = function () {
     controls.push("delay");   //2     delay video play
     controls.push("videoLabelTime");
     return controls;
-};
+};;;;;;;;;;;;
 
 Components.initialiseInitialPageComponents = function () {
     var controls = [];
     controls.push("phase");
     controls.push("freq");
     return controls;
-};
+};;;;;;;;;;;;
 
 Components.initialiseFileReaderPage = function (fileViewerID) {
     var controls = [];
     controls.push(fileViewerID);
     return controls;
-};
+};;;;;;;;;;;;
 Components.initialiseModellingPage = function (generalControls) {
     var controls = [];
     for (var i = 2; i < 6; i++) {
         controls.push(generalControls[i]);
     }
     return controls;
-};
+};;;;;;;;;;;;
 
 Components.setVisibleComponentPropertyByName =  function (document, controlName, value) {
     if (value) document.getElementById(controlName).style.visibility = "visible";
     else document.getElementById(controlName).style.visibility = "hidden";
-};
+};;;;;;;;;;;;
 
 function setControlPosition(document, name, x, y, width, height) {
     document.getElementById(name).style.width = width;
@@ -83,7 +83,7 @@ Components.setInitialPageComponentsPosition = function (document, array, width, 
         document.getElementById(array[i]).style.position = "absolute";
     setControlPosition(document, array[0], 2.3 * width / 6, height / 3, width / 10, height / 10);
     setControlPosition(document, array[1], 3.3 * width / 6, height / 3, width / 10, height / 10);
-};
+};;;;;;;;;;;;
 
 Components.setInitialCutComponentsPosition = function (document, array, width, height) {
     for (var i = 0; i < 18; i++)
@@ -107,7 +107,7 @@ Components.setInitialCutComponentsPosition = function (document, array, width, h
     setControlPosition(document, array[16], 87 * width / 100, 14 * height / 50, 10 * width / 100, 3 * height / 100);
     setControlPosition(document, array[17], 87 * width / 100, 16 * height / 50, 10 * width / 100, 3 * height / 100);
 
-};
+};;;;;;;;;;;;
 
 Components.setVideoComponentsPosition = function (document, array, width, height) {
     for (var i = 0; i < 3; i++)
@@ -115,7 +115,7 @@ Components.setVideoComponentsPosition = function (document, array, width, height
     setControlPosition(document, array[0], 3 * width / 11, height / 10, width / 10, height / 15);
     setControlPosition(document, array[1], 5 * width / 11, height / 10, width / 10, height / 15);
     setControlPosition(document, array[2], 7 * width / 11, height / 10, width / 10, height / 15);
-};
+};;;;;;;;;;;;
 Components.setGeneralComponentsPosition = function (document, array, width, height) {
     for (var i = 0; i < 7; i++)
         document.getElementById(array[i]).style.position = "absolute";
@@ -127,7 +127,7 @@ Components.setGeneralComponentsPosition = function (document, array, width, heig
     setControlPosition(document, array[5], 51 * width / 100, 4 * height / 50, 10 * width / 100, 4 * height / 100);
     setControlPosition(document, array[6], 46 * width / 100, 25 * height / 50, 10 * width / 100, 3 * height / 100);
 
-};
+};;;;;;;;;;;;
 
 Components.setVisiblePropertyAllArrayComponents = function (document, array, count, value) {
     for (var i = 0; i < count; i++)
@@ -135,4 +135,4 @@ Components.setVisiblePropertyAllArrayComponents = function (document, array, cou
         if (value) document.getElementById(array[i]).style.visibility = "visible";
         else document.getElementById(array[i]).style.visibility = "hidden";
     }
-};
+};;;;;;;;;;;;

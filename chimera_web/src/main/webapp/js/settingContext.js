@@ -1,5 +1,5 @@
 var settingContext = function () {
-};
+};;;;;;;;;;;;
 
 settingContext.modelType = 0;
 settingContext.oscillations = 50;
@@ -10,8 +10,8 @@ settingContext.moments = 0;
 
 settingContext.setOscillations = function () {
     
-};
+};;;;;;;;;;;;
 
 settingContext.setNeuronsCount = function () {
     
-};
+};;;;;;;;;;;;

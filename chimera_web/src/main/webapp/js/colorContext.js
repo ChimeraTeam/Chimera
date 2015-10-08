@@ -1,5 +1,5 @@
 colorContext = function () {
-};
+};;;;;;;;;;;;
 
 colorContext.arrayR = [];
 colorContext.arrayG = [];
@@ -31,4 +31,4 @@ colorContext.setRGBdivArray = function () {
     //for (var i = 0; i < 30; i++) {
     //    addRGB(250/255, 44/255, (240 - i * 5)/255);
     //}
-};
+};;;;;;;;;;;;
