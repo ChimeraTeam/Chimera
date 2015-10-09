@@ -10,8 +10,8 @@ function init() {
     postToServer(file, type);
 }
 
-var ws = new WebSocket("ws://localhost:8080/chimera_service/websocket");
-//var ws = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
+//var ws = new WebSocket("ws://localhost:8080/chimera_service/websocket");
+var ws = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
 ws.onopen = function () {
 };
 ws.onmessage = function (message) {
@@ -41,7 +41,7 @@ function waitForSocketConnection(socket, callback) {
                 if (callback !== undefined) {
                     callback();
                 }
-                return;
+
             } else {
                 waitForSocketConnection(socket, callback);
             }
