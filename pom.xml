@@ -18,6 +18,7 @@
         <module>chimera_hadoop</module>
         <module>chimera_jobs</module>
         <module>chimera_processing</module>
+        <module>chimera_service</module>
     </modules>
 
     <properties>

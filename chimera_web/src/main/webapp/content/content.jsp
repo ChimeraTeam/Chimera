@@ -31,11 +31,11 @@
                     <c:out value="${file.getSize()}"/>
                 </td>
                 <td>
-                    <button type="submit" formtarget="_blank" name="file" value="${file.getName()}_F">Build frequency
+                    <button type="submit" formtarget="_blank" name="file" value="${file.getAbsoluteName()}_F">Build frequency
                     </button>
                 </td>
                 <td>
-                    <button type="submit" formtarget="_blank" name="file" value="${file.getName()}_P">Build phase
+                    <button type="submit" formtarget="_blank" name="file" value="${file.getAbsoluteName()}_P">Build phase
                     </button>
                 </td>
             </tr>

@@ -27,7 +27,8 @@ public class ChimeraServlet extends HttpServlet {
 
     private List<ChimeraFile> files;
     private static final String CONTENT_PATH = "content/content.jsp";
-    private static final String VISUALIZATION_PATH = "content/visualization.html";
+    private static String VISUALIZATION_PATH;
+    private static String SERVICE_HOST;
 
     @PostConstruct
     public void init() {
@@ -35,8 +36,12 @@ public class ChimeraServlet extends HttpServlet {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ChimeraContext.class);
         SystemUtil config = context.getBean(SystemUtil.class);
-        String input = config.getInput();
 
+        VISUALIZATION_PATH = config.getServiceContextVisualizer();
+        SERVICE_HOST = config.getServiceHost();
+        SERVICE_HOST += config.getServiceContextPath();
+
+        String input = config.getInput();
         File[] files = new File(input).listFiles();
         List<ChimeraFile> chimeraFiles = new ArrayList<>();
         if (files != null) {
@@ -44,6 +49,7 @@ public class ChimeraServlet extends HttpServlet {
                 if (file.getName().endsWith(".xz")) {
                     ChimeraFile chimeraFile = new ChimeraFile();
                     chimeraFile.setName(file.getName());
+                    chimeraFile.setAbsoluteName(file.getAbsolutePath());
                     chimeraFile.setLastUpdate(formatter.format(file.lastModified()));
                     chimeraFile.setSize(file.length() / (1024 * 1024));
                     chimeraFiles.add(chimeraFile);
@@ -68,7 +74,8 @@ public class ChimeraServlet extends HttpServlet {
             String type = file.split("_")[1];
             req.setAttribute("fileName", fileName);
             req.setAttribute("type", type);
-            req.getRequestDispatcher(VISUALIZATION_PATH).forward(req, resp);
+            String params = VISUALIZATION_PATH + "?" + "type=" + type + "&fileName=" + fileName;
+            resp.sendRedirect(SERVICE_HOST + params);
         }
     }
 }

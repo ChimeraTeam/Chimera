@@ -6,9 +6,18 @@ package model;
 public class ChimeraFile {
 
     private String name;
+    private String absoluteName;
     private String lastUpdate;
     private Long size;
 
+
+    public String getAbsoluteName() {
+        return absoluteName;
+    }
+
+    public void setAbsoluteName(String absoluteName) {
+        this.absoluteName = absoluteName;
+    }
 
     public String getName() {
         return name;
