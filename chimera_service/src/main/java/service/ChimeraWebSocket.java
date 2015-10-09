@@ -2,10 +2,10 @@ package service;
 
 
 import constants.Types;
+import org.apache.log4j.Logger;
 
-import javax.websocket.MessageHandler;
 import javax.websocket.OnClose;
-import javax.websocket.OnOpen;
+import javax.websocket.OnMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
@@ -16,36 +16,40 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/websocket")
 public class ChimeraWebSocket {
 
-    @OnOpen
-    public void onOpen(Session session) {
-        session.addMessageHandler(new MessageHandler.Whole<String>() {
+    private Logger logger = Logger.getLogger(ChimeraWebSocket.class);
+
+    @OnMessage
+    public void onMessage(String data, Session session) {
+        logger.info("Get message message=" + data + " session=" + session.getId());
+        new Thread(new Runnable() {
             @Override
-            public void onMessage(String data) {
-                try {
-                    Thread.sleep(2000);
-                    String fileName = data.split("_")[0];
-                    String type = data.split("_")[1];
-                    ChimeraReader reader = new ChimeraReader(fileName);
-                    ChimeraFilter filter = new ChimeraFilter(Types.getEnum(type));
-                    while (reader.hasNext()) {
-                        String value = filter.process(reader.next());
-                        if (value != null) {
+            public void run() {
+                String fileName = data.split("_")[0];
+                String type = data.split("_")[1];
+                logger.info("Starting processing file=" + fileName + " type=" + type + " session=" + session.getId());
+                ChimeraReader reader = new ChimeraReader(fileName);
+                ChimeraFilter filter = new ChimeraFilter(Types.getEnum(type));
+                while (reader.hasNext()) {
+                    String value = filter.process(reader.next());
+                    if (value != null) {
 //                            session.getAsyncRemote().sendBinary(ByteBuffer.wrap(LZW.compress(value)));
-                            session.getAsyncRemote().sendText(value);
-                        }
-//                        session.getAsyncRemote().sendBinary(ByteBuffer.allocate(2));
+                        if (!session.isOpen()) return;
+                        session.getAsyncRemote().sendText(value);
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
+                logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
             }
-        });
+        }).start();
     }
 
 
     @OnClose
-    public void onClose(Session peer) {
-        System.out.println("close");
+    public void onClose(Session session) {
+        try {
+            session.close();
+        } catch (Exception ignored) {
+        }
+        logger.info("Connection closed, session=" + session.getId());
     }
 
 }

@@ -1,7 +1,6 @@
 var cutContext = function () {
 
-};;;;;;;;
-
+};
 cutContext.initialControlColor = "";
 cutContext.cutType = "";
 cutContext.cutControlsArray = [];
@@ -22,8 +21,7 @@ cutContext.initCutArray = function () {
     cutContext.cutControlsArray.push("textZ2");        //11
     cutContext.cutControlsArray.push("btnApplyCut");   //12
     cutContext.cutControlsArray.push("btnCancel");     //13
-};;;;;;;;
-
+};
 function setCutControlPosition(document, controlID, left, top, wd, ht) {
     document.getElementById(cutContext.cutControlsArray[controlID]).style.width = wd;
     document.getElementById(cutContext.cutControlsArray[controlID]).style.height = ht;
@@ -52,8 +50,7 @@ cutContext.initCutComponentsPositions = function (document) {
     setCutControlPosition(document, 11, 96 * settingContext.width / 100, 23 * settingContext.height / 50, 2 * settingContext.width / 100, 3 * settingContext.height / 100);
     setCutControlPosition(document, 12, 83 * settingContext.width / 100, 26 * settingContext.height / 50, 5 * settingContext.width / 100, 3 * settingContext.height / 100);
     setCutControlPosition(document, 13, 90 * settingContext.width / 100, 26 * settingContext.height / 50, 5 * settingContext.width / 100, 3 * settingContext.height / 100);
-};;;;;;;;
-
+};
 cutContext.loadFrontBackCut = function (document) {
     setVisibleComponentCutProperty(document, 0, true);
     setVisibleComponentCutProperty(document, 1, true);
@@ -69,20 +66,17 @@ cutContext.loadFrontBackCut = function (document) {
     setVisibleComponentCutProperty(document, 11, false);
     setVisibleComponentCutProperty(document, 12, true);
     setVisibleComponentCutProperty(document, 13, true);
-};;;;;;;;
-
+};
 cutContext.loadSelectedCut = function (document) {
     for (var i = 0; i < cutContext.cutControlsArray.length; i++) {
         setVisibleComponentCutProperty(document, i, true);
     }
-};;;;;;;;
-
+};
 cutContext.unVisibleAll = function (document) {
     for (var i = 0; i < cutContext.cutControlsArray.length; i++) {
         setVisibleComponentCutProperty(document, i, false);
     }
-};;;;;;;;
-
+};
 cutContext.getCutValues = function (document) {
     cutContext.cutValues.push(document.getElementById(cutContext.cutControlsArray[1]).value);
     cutContext.cutValues.push(document.getElementById(cutContext.cutControlsArray[3]).value);
@@ -93,8 +87,12 @@ cutContext.getCutValues = function (document) {
         cutContext.cutValues.push(document.getElementById(cutContext.cutControlsArray[11]).value);
 
     }
-};;;;;;;;
-
+};
 cutContext.clearCutValues = function () {
     cutContext.cutValues = null;
-};;;;;;;;
+};
+
+
+
+
+

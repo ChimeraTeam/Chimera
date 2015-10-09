@@ -7,18 +7,25 @@ function getParameterByName(name) {
 function init() {
     var file = getParameterByName('fileName');
     var type = getParameterByName('type');
-    alert(file);
     postToServer(file, type);
 }
 
-var ws = new WebSocket("ws://localhost:8080/chimera_service/websocket");
+//var ws = new WebSocket("ws://localhost:8080/chimera_service/websocket");
+var ws = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
 ws.onopen = function () {
 };
 ws.onmessage = function (message) {
     document.getElementById("chatlog").textContent += message.data + "\n";
 };
+
+function sendMessage(msg) {
+    waitForSocketConnection(ws, function () {
+        ws.send(msg);
+    });
+}
+
 function postToServer(file, type) {
-    ws.send(file + '_' + type);
+    sendMessage(file + '_' + type);
 }
 function closeConnect() {
     ws.close();
@@ -26,3 +33,17 @@ function closeConnect() {
 window.onbeforeunload = function () {
     closeConnect();
 };
+
+function waitForSocketConnection(socket, callback) {
+    setTimeout(
+        function () {
+            if (socket.readyState === 1) {
+                if (callback !== undefined) {
+                    callback();
+                }
+
+            } else {
+                waitForSocketConnection(socket, callback);
+            }
+        }, 5);
+}
