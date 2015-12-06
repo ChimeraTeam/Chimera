@@ -1,0 +1,11 @@
+/*Chimera Labels style*/
+
+.chimeraLabel {
+    background-color:transparent;
+    text-align:right;
+    padding-right:10px;
+    border:none;
+    color: white;
+    font-size:15px;
+    font-family:Arial;
+}
