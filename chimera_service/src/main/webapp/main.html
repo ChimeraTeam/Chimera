@@ -14,7 +14,7 @@
         <script type="text/javascript" src="js/API/RGB.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PageGrid.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PositionReader.js"></script>
-        <script type="text/javascript" src="js/ComponentsLoader/PositionConfig.js"></script>
+        <script type="text/javascript" src="js/ComponentsLoader/positionConfig.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/ComponentsInitializerProcessor.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/BuildProcessor.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy.js"></script>
@@ -44,7 +44,7 @@
             function GetData()
             {
                 LoadLoadingScene();
-                var inspector = new DataInspector(Options.GetDataStrategy);;
+                var inspector = new DataInspector(Options.GetDataStrategy);
                 inspector.GetData();
 
                 WaitForDataReadyState(DataReadyCallback);
@@ -104,8 +104,7 @@
                 {
                     GetData();
                 }
-            };;
-
+            };
             function LoadSelectFileScene() {
                 currentScene = "selectFileScene";
                 initProcessor.SetSceneVisibility(selectFileSceneContainer, true);
