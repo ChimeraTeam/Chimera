@@ -1,7 +1,6 @@
 <html>
 	<head>
 		<title>Chimera visualization</title>
-        <link id="cutPage" href="html/pages/cut.html" />
         <link rel="stylesheet" type="text/css" href="css/styles/pages/main/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/buttons/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/textboxes/style.css" />
@@ -12,6 +11,7 @@
         <script type="text/javascript" src="js/API/NameList.js"></script>
         <script type="text/javascript" src="js/API/Point.js"></script>
         <script type="text/javascript" src="js/API/RGB.js"></script>
+        <script type="text/javascript" src="js/API/Cookies.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PageGrid.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PositionReader.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/positionConfig.js"></script>
@@ -62,6 +62,7 @@
             {
                 data = document.getElementById("hiddenLabel").innerText;
                 data = formatedProcessor.FormatData(data);
+                
                 CloseLoadingScene();
                 LoadOneFrameVisualizationScene();
             }
@@ -190,7 +191,7 @@
         <input id="video3D" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Video 3D" onclick="video()">
         <input id="cut" type="submit" style="position:absolute; visibility:hidden" class="chimeraButton" value="Cut" onclick="parent.location = 'html/pages/cut.html'">
         <input type="range" id="opacity" style="position:absolute; visibility:hidden" min="0" max="100">
-        <label id="hiddenLabel" style="visibility:visible; color:black" onchange="labelTextChanged()"></label>
+        <label id="hiddenLabel" style="display:none" onchange="labelTextChanged()"></label>
 
     </body>
 </html>
