@@ -10,6 +10,7 @@
     var particles = new THREE.Geometry();
     var max = -100, min = 100;
     var container = document.getElementById('container');
+    var cookies = new Cookies();
 
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(renderer.domElement);
@@ -24,7 +25,7 @@
         else {
             buildStrategyInstance = new FrequencyVisualizationStrategy();
         }
-
+        
         initialiasePositions();
     }
 
@@ -88,6 +89,11 @@
         buildStrategyInstance.max = max;
     }
 
+    function saveData()
+    {
+        cookies.setCookie('timemoment', '1');
+    }
+    
     this.build = function(data, frame)
     {
         scene.remove(scene.children[0]);
@@ -101,6 +107,9 @@
         var colors = buildStrategyInstance.ConvertToColorMap(currentFrameData);
 
         particles.colors = colors;
+
+        saveData();
+
         var pMaterial = new THREE.ParticleBasicMaterial({
             size: 0.8,
             shading: THREE.FlatShading,
