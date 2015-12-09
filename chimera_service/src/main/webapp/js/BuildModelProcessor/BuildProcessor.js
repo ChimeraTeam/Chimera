@@ -43,25 +43,6 @@
             particlesTemporary.vertices.push(particle);
             particles.vertices = particlesTemporary.vertices;
         }
-
-        /*var temp, mn = 1000, mx = 0, j = 0;
-
-        for (var i = 0 ; i < line.length; i += 2) {
-            if (j == Globals.OscillatorsNumber - 1) {
-                arrayMin.push(mn);
-                arrayMax.push(mx);
-                mn = 1000;
-                mx = 0;
-                j = 0;
-            }
-            if (!line[i] && line[i + 1]) {
-                temp = line[i].charCodeAt(0) + "." + line[i + 1].charCodeAt(0);
-                if (temp > mx) mx = temp;
-                if (temp < mn) mn = temp;
-                j++;
-            }
-        }*/
-
     }
 
     function selectDataForCurrentFrame(data, frame) {
@@ -94,11 +75,15 @@
         cookies.setCookie('timemoment', '1');
     }
     
-    this.build = function(data, frame)
-    {
+    this.clearScene = function() {
         scene.remove(scene.children[0]);
         delete particleSystem;
+        renderer.render(scene, camera);
+    }
 
+    this.build = function(data, frame)
+    {
+        this.clearScene();
         selectDataForCurrentFrame(data, frame);
 
         if (currentFrameData.length == 0)

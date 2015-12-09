@@ -1,7 +1,7 @@
 ﻿PositionConfig = function () {
     this.ArrayPositions = new Array(20);
 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 15; i++) {
         this.ArrayPositions[i] = new Array(5);
     }
 
@@ -47,16 +47,37 @@
     this.ArrayPositions[7][2] = 1;
     this.ArrayPositions[7][3] = 2;
     this.ArrayPositions[7][4] = 2;
-    this.ArrayPositions[8][0] = "cut";
-    this.ArrayPositions[8][1] = 27;
-    this.ArrayPositions[8][2] = 18;5;;
-    this.ArrayPositions[8][3] = 1;
-    this.ArrayPositions[8][4] = 3;
-    this.ArrayPositions[9][0] = "opacity";
-    this.ArrayPositions[9][1] = 26;
-    this.ArrayPositions[9][2] = 22;
-    this.ArrayPositions[9][3] = 3;
-    this.ArrayPositions[9][4] = 3;
+    this.ArrayPositions[8][0] = "videoBack";
+    this.ArrayPositions[8][1] = 5;
+    this.ArrayPositions[8][2] = 1;
+    this.ArrayPositions[8][3] = 2;
+    this.ArrayPositions[8][4] = 2;
+    this.ArrayPositions[9][0] = "videoPause";
+    this.ArrayPositions[9][1] = 11;
+    this.ArrayPositions[9][2] = 1;
+    this.ArrayPositions[9][3] = 2;
+    this.ArrayPositions[9][4] = 2;
+    this.ArrayPositions[10][0] = "videoNext";
+    this.ArrayPositions[10][1] = 17;
+    this.ArrayPositions[10][2] = 1;
+    this.ArrayPositions[10][3] = 2;
+    this.ArrayPositions[10][4] = 2;
+    this.ArrayPositions[11][0] = "videoClose";
+    this.ArrayPositions[11][1] = 23;
+    this.ArrayPositions[11][2] = 1;
+    this.ArrayPositions[11][3] = 2;
+    this.ArrayPositions[11][4] = 2;
+
+    this.ArrayPositions[12][0] = "cut";
+    this.ArrayPositions[12][1] = 27;
+    this.ArrayPositions[12][2] = 18;
+    this.ArrayPositions[12][3] = 1;
+    this.ArrayPositions[12][4] = 3;
+    this.ArrayPositions[13][0] = "opacity";
+    this.ArrayPositions[13][1] = 26;
+    this.ArrayPositions[13][2] = 22;
+    this.ArrayPositions[13][3] = 3;
+    this.ArrayPositions[13][4] = 3;
     /*this.ArrayPositions[10][0] = "opacityLabel";
     this.ArrayPositions[10][1] = 26;
     this.ArrayPositions[10][2] = 20;

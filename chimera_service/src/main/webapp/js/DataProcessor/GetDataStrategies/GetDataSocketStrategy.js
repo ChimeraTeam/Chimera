@@ -8,12 +8,12 @@
         init();
 
         return dataArray(socket, function () {
-            var label = document.getElementById("hiddenLabel");
-            var event = label["onchange"];
-            label.innerHTML = Data;
+            var container = document.getElementById("sockerDataTransferContainer");
+            var event = container["onchange"];
+            container.innerHTML = Data;
 
             if (typeof (event) == "function") {
-                event.call(label);
+                event.call(container);
             }
 
             return Data;
