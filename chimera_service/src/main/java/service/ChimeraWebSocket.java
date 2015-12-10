@@ -29,14 +29,16 @@ public class ChimeraWebSocket {
                 logger.info("Starting processing file=" + fileName + " type=" + type + " session=" + session.getId());
                 ChimeraReader reader = new ChimeraReader(fileName);
                 ChimeraFilter filter = new ChimeraFilter(Types.getEnum(type));
+                StringBuilder data = new StringBuilder();
                 while (reader.hasNext()) {
                     String value = filter.process(reader.next());
                     if (value != null) {
 //                            session.getAsyncRemote().sendBinary(ByteBuffer.wrap(LZW.compress(value)));
                         if (!session.isOpen()) return;
-                        session.getAsyncRemote().sendText(value);
+                        data.append(value);
                     }
                 }
+                session.getAsyncRemote().sendText(data.toString());
                 logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
             }
         }).start();
