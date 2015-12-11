@@ -9,7 +9,16 @@ public class ChimeraFile {
     private String absoluteName;
     private String lastUpdate;
     private Long size;
+    private int lineCount;
 
+
+    public int getLineCount() {
+        return lineCount;
+    }
+
+    public void setLineCount(int lineCount) {
+        this.lineCount = lineCount;
+    }
 
     public String getAbsoluteName() {
         return absoluteName;

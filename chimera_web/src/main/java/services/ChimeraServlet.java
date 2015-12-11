@@ -12,8 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,8 @@ public class ChimeraServlet extends HttpServlet {
                 if (file.getName().endsWith(".xz")) {
                     ChimeraFile chimeraFile = new ChimeraFile();
                     chimeraFile.setName(file.getName());
+                    int lineCount = getLineCount(file.getAbsolutePath());
+                    chimeraFile.setLineCount(lineCount);
                     chimeraFile.setAbsoluteName(file.getAbsolutePath());
                     chimeraFile.setLastUpdate(formatter.format(file.lastModified()));
                     chimeraFile.setSize(file.length() / (1024 * 1024));
@@ -57,6 +61,35 @@ public class ChimeraServlet extends HttpServlet {
             }
         }
         this.files = chimeraFiles;
+    }
+
+    private int getLineCount(String absolutePath) {
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        try {
+            Process myProcess = Runtime.getRuntime().exec("wc -l " + absolutePath);
+            isr = new InputStreamReader(myProcess.getInputStream());
+            br = new BufferedReader(isr);
+            return Integer.valueOf(br.readLine().split(" ")[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -72,9 +105,11 @@ public class ChimeraServlet extends HttpServlet {
         if (file != null) {
             String fileName = file.split("_")[0];
             String type = file.split("_")[1];
+            String frames = file.split("_")[2];
             req.setAttribute("fileName", fileName);
             req.setAttribute("type", type);
-            String params = VISUALIZATION_PATH + "?" + "type=" + type + "&fileName=" + fileName;
+            req.setAttribute("frames", frames);
+            String params = VISUALIZATION_PATH + "?" + "type=" + type + "&fileName=" + fileName + "&frames=" + frames;
             resp.sendRedirect(SERVICE_HOST + params);
         }
     }

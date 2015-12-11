@@ -15,6 +15,7 @@
             <th>Name</th>
             <th>Last modified</th>
             <th>Size, mb</th>
+            <th>Frames</th>
             <th></th>
             <th></th>
         </tr>
@@ -31,11 +32,14 @@
                     <c:out value="${file.getSize()}"/>
                 </td>
                 <td>
-                    <button type="submit" formtarget="_blank" name="file" value="${file.getAbsoluteName()}_F">Build frequency
+                    <c:out value="${file.getLineCount()}"/>
+                </td>
+                <td>
+                    <button type="submit" formtarget="_blank" name="file" value="${file.getAbsoluteName()}_F_${file.getLineCount()}">Build frequency
                     </button>
                 </td>
                 <td>
-                    <button type="submit" formtarget="_blank" name="file" value="${file.getAbsoluteName()}_P">Build phase
+                    <button type="submit" formtarget="_blank" name="file" value="${file.getAbsoluteName()}_P_${file.getLineCount()}">Build phase
                     </button>
                 </td>
             </tr>
