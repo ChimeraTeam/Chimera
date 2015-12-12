@@ -36,8 +36,6 @@ public class ChimeraServlet extends HttpServlet {
 
     @PostConstruct
     public void init() {
-        logger.info("Starting ... ");
-
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ChimeraContext.class);
         SystemUtil config = context.getBean(SystemUtil.class);
 
@@ -50,6 +48,7 @@ public class ChimeraServlet extends HttpServlet {
 
     private void processFiles(String input) {
         if (!isProcessedFiles) {
+            logger.info("Starting ... ");
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             int filesLeft;
             File[] files = new File(input).listFiles();
@@ -59,7 +58,7 @@ public class ChimeraServlet extends HttpServlet {
                 logger.info("Files to be checked " + files.length);
                 for (File file : files) {
                     if (file.getName().endsWith(".xz")) {
-                        logger.info("Starting file " + file.getAbsolutePath());
+                        logger.info("Starting file " + file.getAbsolutePath() + " size " + file.length() / (1024 * 1024));
                         ChimeraReader reader = new ChimeraReader(file.getAbsolutePath());
                         ChimeraFile chimeraFile = new ChimeraFile();
                         chimeraFile.setName(file.getName());
