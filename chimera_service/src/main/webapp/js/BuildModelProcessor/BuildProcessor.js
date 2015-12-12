@@ -1,15 +1,15 @@
 ﻿BuildProcessor = function (strategy) {
     
-    var buildStrategyInstance;
-    var currentFrameData = [];
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     var particleSystem;
     var particlesTemporary = new THREE.Geometry();
     var particles = new THREE.Geometry();
-    var max = -100, min = 100;
     var container = document.getElementById('container');
+    var buildStrategyInstance;
+    var currentFrameData = [];
+    var max = -100, min = 100;
     var cookies = new Cookies();
 
     renderer.setSize(container.offsetWidth, container.offsetHeight);
@@ -30,7 +30,6 @@
     }
 
     function initialiasePositions() {
-
         var value = Math.pow(Globals.OscillatorsNumber, 1 / 3);
         
         for (var p = 0; p < Globals.OscillatorsNumber; p++) {
@@ -40,8 +39,7 @@
                 particle = new THREE.Vertex(
                 new THREE.Vector3(pX, pY, pZ)
                 );
-            particlesTemporary.vertices.push(particle);
-            particles.vertices = particlesTemporary.vertices;
+            particles.vertices.push(particle);
         }
     }
 
@@ -78,10 +76,11 @@
     this.clearScene = function() {
         scene.remove(scene.children[0]);
         delete particleSystem;
+        currentFrameData.length = 0;
         renderer.render(scene, camera);
     }
 
-    this.build = function(data, frame)
+    this.build = function(data, frame, isVideo)
     {
         this.clearScene();
         selectDataForCurrentFrame(data, frame);
@@ -91,6 +90,7 @@
 
         var colors = buildStrategyInstance.ConvertToColorMap(currentFrameData);
 
+        particles.colorsNeedUpdate = true;
         particles.colors = colors;
 
         saveData();
@@ -113,37 +113,42 @@
         particleSystem.rotation.x += 0.6;
         particleSystem.rotation.y -= 0.6;
 
-        renderer.render(scene, camera);
-    };;
+        if (!isVideo)
+            renderer.render(scene, camera);
+    }
+
+    this.getCurrentFrameData = function() {
+        return currentFrameData;
+    }
 
     this.rotate_left = function () {
         particleSystem.rotation.y -= 0.05;
         renderer.render(scene, camera);
-    };;
+    }
 
     this.rotate_right = function () {
         particleSystem.rotation.y += 0.05;
         renderer.render(scene, camera);
-    };;
+    }
 
     this.rotate_down = function () {
         particleSystem.rotation.x += 0.05;
         renderer.render(scene, camera);
-    };;
+    }
 
     this.rotate_up = function () {
         particleSystem.rotation.x -= 0.05;
         renderer.render(scene, camera);
-    };;
+    }
 
     this.zoom = function () {
         camera.position.z -= 5;
         renderer.render(scene, camera);
-    };;
+    }
 
     this.unzoom = function () {
         camera.position.z += 5;
         renderer.render(scene, camera);
     }
 
-};;
+}

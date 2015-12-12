@@ -1,16 +1,16 @@
 ﻿GetDataSocketStrategy = function () {
 
-    var isMessageReady = false;
     var Data = "";
+    var currentFrame = 0;
+    var frames = -1;
     var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
-
     this.GetData = function () {
         init();
 
         return dataArray(socket, function () {
             var container = document.getElementById("sockerDataTransferContainer");
             var event = container["onchange"];
-            container.innerHTML = Data;
+            container.innerHTML += Data;
 
             if (typeof (event) == "function") {
                 event.call(container);
@@ -19,12 +19,12 @@
             return Data;
         });
         
-    };;
+    }
 
     function dataArray(socket, callback) {
         setTimeout(
             function () {
-                if (isMessageReady) {
+                if (currentFrame == frames) {
                     if (callback !== undefined) {
                         callback();
                     }
@@ -48,20 +48,23 @@
     {
         var file = getParameterByName('fileName');
         var type = getParameterByName('type');
+        frames = getParameterByName('frames');
+        
         postToWServer(file, type);
 
         Globals.FilePath = file;
         Globals.VisualizationType = type;
+        Globals.MaxTimeFrame = frames;
     }
 
     socket.onopen = function () {
 
-    };;
+    }
 
     socket.onmessage = function (message) {
         Data += message.data;
-        isMessageReady = true;
-    };;
+        currentFrame++;
+    }
 
     function waitForSocketConnection(socket, callback) {
         setTimeout(
@@ -94,4 +97,4 @@
     window.onbeforeunload = function () {
         closeConnect();
     }
-};;
+}

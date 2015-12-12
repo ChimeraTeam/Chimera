@@ -4,14 +4,14 @@
         for (var i = 0; i < container.length; i++) {
             this.SetVisibilityControlProperty(container[i], value);
         }
-    };;
+    }
 
     this.SetVisibilityControlProperty = function (name, value) {
         if (value == true)
             document.getElementById(name).style.visibility = "visible";
         else
             document.getElementById(name).style.visibility = "hidden";
-    };;
+    }
 
     this.SetPosition  = function(container, grid)
     {
@@ -26,4 +26,4 @@
             document.getElementById(container[i]).style.height = grid.GetFrameY(1) * values[3];
         }
     }
-};;
+}

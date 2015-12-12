@@ -1,22 +1,33 @@
-﻿VideoProcessor = function (strategy) {
+﻿VideoProcessor = function () {
     var processor;
-    var currentFrame;
+    var currentFrame = 0;
+    var chimeraData;
+
+    function delay() {
+        setTimeout(function () {
+        }, 1000);
+    }
+
+    function animate() {
+        currentFrame++;
+        if (currentFrame > Globals.MaxTimeFrame) return;
+        processor.build(chimeraData, currentFrame, true);
+        requestAnimationFrame(animate);
+    }
 
     this.init = function (buildProcessor) {
         processor = buildProcessor;
-        processor.clearScene();
     }
 
     this.play = function (data) {
-        for (var i = 0; i < Globals.MaxTimeFrame; i++) {
-            currentFrame = i + 1;
-            processor.build(data, currentFrame);
-        }
+        timeMoment = 0;
+        chimeraData = data;
+        animate();
     }
 
     this.close = function () {
         processor.clearScene();
-        processor = null;
         currentFrame = 0;
+        chimeraData = [];
     }
-};;
+}

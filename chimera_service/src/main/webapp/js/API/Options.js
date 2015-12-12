@@ -1,6 +1,6 @@
 ﻿Options = function () {
 
-};;
+}
 
 Options.GetDataStrategy = "Server";
 Options.DefaultTimeMoment = 1;
