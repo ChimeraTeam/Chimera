@@ -10,6 +10,7 @@
     var particles = new THREE.Geometry();
     var max = -100, min = 100;
     var container = document.getElementById('container');
+    var cookies = new Cookies();
 
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(renderer.domElement);
@@ -24,7 +25,7 @@
         else {
             buildStrategyInstance = new FrequencyVisualizationStrategy();
         }
-
+        
         initialiasePositions();
     }
 
@@ -42,25 +43,6 @@
             particlesTemporary.vertices.push(particle);
             particles.vertices = particlesTemporary.vertices;
         }
-
-        /*var temp, mn = 1000, mx = 0, j = 0;
-
-        for (var i = 0 ; i < line.length; i += 2) {
-            if (j == Globals.OscillatorsNumber - 1) {
-                arrayMin.push(mn);
-                arrayMax.push(mx);
-                mn = 1000;
-                mx = 0;
-                j = 0;
-            }
-            if (!line[i] && line[i + 1]) {
-                temp = line[i].charCodeAt(0) + "." + line[i + 1].charCodeAt(0);
-                if (temp > mx) mx = temp;
-                if (temp < mn) mn = temp;
-                j++;
-            }
-        }*/
-
     }
 
     function selectDataForCurrentFrame(data, frame) {
@@ -88,11 +70,20 @@
         buildStrategyInstance.max = max;
     }
 
-    this.build = function(data, frame)
+    function saveData()
     {
+        cookies.setCookie('timemoment', '1');
+    }
+    
+    this.clearScene = function() {
         scene.remove(scene.children[0]);
         delete particleSystem;
+        renderer.render(scene, camera);
+    }
 
+    this.build = function(data, frame)
+    {
+        this.clearScene();
         selectDataForCurrentFrame(data, frame);
 
         if (currentFrameData.length == 0)
@@ -101,6 +92,9 @@
         var colors = buildStrategyInstance.ConvertToColorMap(currentFrameData);
 
         particles.colors = colors;
+
+        saveData();
+
         var pMaterial = new THREE.ParticleBasicMaterial({
             size: 0.8,
             shading: THREE.FlatShading,
