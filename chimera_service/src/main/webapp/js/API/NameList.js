@@ -1,6 +1,6 @@
 ﻿NameList = function() {
 
-};;
+}
 
 NameList.LoadingLabel = "loadingLabel";
 

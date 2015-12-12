@@ -11,6 +11,8 @@
         <script type="text/javascript" src="js/API/NameList.js"></script>
         <script type="text/javascript" src="js/API/RGB.js"></script>
         <script type="text/javascript" src="js/API/Cookies.js"></script>
+        <script type="text/javascript" src="js/API/DiagnosticTools.js"></script>
+        <script type="text/javascript" src="js/API/DataTransfer.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PageGrid.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PositionReader.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/positionConfig.js"></script>
@@ -40,6 +42,7 @@
             var isDataReady;
             var buildProcessor;
             var videoProcessor = new VideoProcessor();
+            var diagnosticTools = new DiagnosticTools();
 
             function GetData()
             {
@@ -78,15 +81,11 @@
                        } else {
                            WaitForDataReadyState(callback);
                        }
-                   }, 5);
+                   }, 50);
             }
 
             function labelTextChanged() {
                 isDataReady = true;
-            }
-
-            function InitBuildParameters() {
-                Globals.MaxTimeFrame = (data.length - 1) / oscilatorsCount;
             }
 
             window.onload = function onload() {
@@ -148,14 +147,11 @@
 
             function StartVisualization()
             {
-                InitBuildParameters();
-
                 var currentFrame = document.getElementById(NameList.SelectTimeMomentTextBox).value;
                 buildProcessor.build(data, currentFrame);
             }
 
             function video() {
-                InitBuildParameters();
 
                 CloseOneFrameVisualizationScene();
                 LoadVideoVisualizationScene();
@@ -167,8 +163,16 @@
             function videoClose() {
                 CloseVideoVisualizationScene();
                 LoadOneFrameVisualizationScene();
-
+                
                 videoProcessor.close();
+            }
+
+            function cut() {
+                //var dataTransfer = new DataTransfer();
+                //dataTransfer.SendData(buildProcessor.getCurrentFrameData());
+
+                var win = window.open('html/pages/cut.html', '_blank');
+                win.focus();
             }
 
             function readText(that) {
@@ -214,7 +218,7 @@
         <input id="videoNext" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Next" onclick="videoNext()">
         <input id="videoBack" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Back" onclick="videoBack()">
         <input id="videoClose" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Close" onclick="videoClose()">
-        <input id="cut" type="submit" style="position:absolute; visibility:hidden" class="chimeraButton" value="Cut" onclick="parent.location = 'html/pages/cut.html'">
+        <input id="cut" type="submit" style="position:absolute; visibility:hidden" class="chimeraButton" value="Cut" onclick="cut()">
         <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" max="100">
         <label id="sockerDataTransferContainer" style="display:none" onchange="labelTextChanged()"></label>
 

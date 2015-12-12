@@ -8,7 +8,7 @@
 
     this.ShowModel = function() {
 
-    };;
+    }
 
     this.ConvertToColorMap = function (data) {
 
@@ -28,7 +28,7 @@
         }
 
         return colors;
-    };;
+    }
 
     function Round(value)
     {
@@ -48,4 +48,4 @@
 
         return index;
     }
-};;
+}

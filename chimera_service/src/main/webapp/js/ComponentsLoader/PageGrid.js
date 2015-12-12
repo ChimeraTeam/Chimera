@@ -18,14 +18,14 @@
             this.FramesArrayY.push(i);
         }
 
-    };;
+    }
 
     this.GetFrameX = function(x)
     {
         return this.FramesArrayX[x];
-    };;
+    }
 
     this.GetFrameY = function (y) {
         return this.FramesArrayY[y];
     }
-};;
+}
