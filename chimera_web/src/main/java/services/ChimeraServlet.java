@@ -3,6 +3,7 @@ package services;
 import common.ChimeraContext;
 import common.SystemUtil;
 import model.ChimeraFile;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import service.ChimeraReader;
 
@@ -25,6 +26,7 @@ import java.util.List;
 @WebServlet(value = "/visualization", loadOnStartup = 1)
 public class ChimeraServlet extends HttpServlet {
 
+    private Logger logger = Logger.getLogger(ChimeraServlet.class);
 
     private List<ChimeraFile> files;
     private static final String CONTENT_PATH = "content/content.jsp";
@@ -33,6 +35,7 @@ public class ChimeraServlet extends HttpServlet {
 
     @PostConstruct
     public void init() {
+        logger.info("Starting ... ");
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ChimeraContext.class);
@@ -42,12 +45,16 @@ public class ChimeraServlet extends HttpServlet {
         SERVICE_HOST = config.getServiceHost();
         SERVICE_HOST += config.getServiceContextPath();
 
+        int filesLeft = 0;
         String input = config.getInput();
         File[] files = new File(input).listFiles();
         List<ChimeraFile> chimeraFiles = new ArrayList<>();
         if (files != null) {
+            filesLeft = files.length;
+            logger.info("Files to be checked " + files.length);
             for (File file : files) {
                 if (file.getName().endsWith(".xz")) {
+                    logger.info("Starting file " + file.getAbsolutePath());
                     ChimeraReader reader = new ChimeraReader(file.getAbsolutePath());
                     ChimeraFile chimeraFile = new ChimeraFile();
                     chimeraFile.setName(file.getName());
@@ -57,9 +64,12 @@ public class ChimeraServlet extends HttpServlet {
                     chimeraFile.setLastUpdate(formatter.format(file.lastModified()));
                     chimeraFile.setSize(file.length() / (1024 * 1024));
                     chimeraFiles.add(chimeraFile);
+                    filesLeft--;
+                    logger.info("Finished file " + file.getAbsolutePath() + " lines " + lineCount + " left " + filesLeft);
                 }
             }
         }
+        logger.info("Finished all files");
         this.files = chimeraFiles;
     }
 
