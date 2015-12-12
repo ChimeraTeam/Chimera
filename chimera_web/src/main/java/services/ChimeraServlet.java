@@ -4,6 +4,7 @@ import common.ChimeraContext;
 import common.SystemUtil;
 import model.ChimeraFile;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import service.ChimeraReader;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.RequestDispatcher;
@@ -12,10 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +48,10 @@ public class ChimeraServlet extends HttpServlet {
         if (files != null) {
             for (File file : files) {
                 if (file.getName().endsWith(".xz")) {
+                    ChimeraReader reader = new ChimeraReader(file.getAbsolutePath());
                     ChimeraFile chimeraFile = new ChimeraFile();
                     chimeraFile.setName(file.getName());
-                    int lineCount = getLineCount(file.getAbsolutePath());
+                    int lineCount = getLineCount(reader);
                     chimeraFile.setLineCount(lineCount);
                     chimeraFile.setAbsoluteName(file.getAbsolutePath());
                     chimeraFile.setLastUpdate(formatter.format(file.lastModified()));
@@ -63,33 +63,13 @@ public class ChimeraServlet extends HttpServlet {
         this.files = chimeraFiles;
     }
 
-    private int getLineCount(String absolutePath) {
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-        try {
-            Process myProcess = Runtime.getRuntime().exec("wc -l " + absolutePath);
-            isr = new InputStreamReader(myProcess.getInputStream());
-            br = new BufferedReader(isr);
-            return Integer.valueOf(br.readLine().split(" ")[0]);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (isr != null) {
-                try {
-                    isr.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    private int getLineCount(ChimeraReader reader) {
+        int count = 0;
+        while (reader.hasNext()) {
+            reader.next();
+            count++;
         }
-        return 0;
+        return count;
     }
 
     @Override
