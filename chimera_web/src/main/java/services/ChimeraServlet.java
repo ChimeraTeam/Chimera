@@ -32,11 +32,11 @@ public class ChimeraServlet extends HttpServlet {
     private static final String CONTENT_PATH = "content/content.jsp";
     private static String VISUALIZATION_PATH;
     private static String SERVICE_HOST;
+    private boolean isProcessedFiles;
 
     @PostConstruct
     public void init() {
         logger.info("Starting ... ");
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ChimeraContext.class);
         SystemUtil config = context.getBean(SystemUtil.class);
@@ -45,32 +45,39 @@ public class ChimeraServlet extends HttpServlet {
         SERVICE_HOST = config.getServiceHost();
         SERVICE_HOST += config.getServiceContextPath();
 
-        int filesLeft = 0;
-        String input = config.getInput();
-        File[] files = new File(input).listFiles();
-        List<ChimeraFile> chimeraFiles = new ArrayList<>();
-        if (files != null) {
-            filesLeft = files.length;
-            logger.info("Files to be checked " + files.length);
-            for (File file : files) {
-                if (file.getName().endsWith(".xz")) {
-                    logger.info("Starting file " + file.getAbsolutePath());
-                    ChimeraReader reader = new ChimeraReader(file.getAbsolutePath());
-                    ChimeraFile chimeraFile = new ChimeraFile();
-                    chimeraFile.setName(file.getName());
-                    int lineCount = getLineCount(reader);
-                    chimeraFile.setLineCount(lineCount);
-                    chimeraFile.setAbsoluteName(file.getAbsolutePath());
-                    chimeraFile.setLastUpdate(formatter.format(file.lastModified()));
-                    chimeraFile.setSize(file.length() / (1024 * 1024));
-                    chimeraFiles.add(chimeraFile);
-                    filesLeft--;
-                    logger.info("Finished file " + file.getAbsolutePath() + " lines " + lineCount + " left " + filesLeft);
+        processFiles(config.getInput());
+    }
+
+    private void processFiles(String input) {
+        if (!isProcessedFiles) {
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            int filesLeft;
+            File[] files = new File(input).listFiles();
+            List<ChimeraFile> chimeraFiles = new ArrayList<>();
+            if (files != null) {
+                filesLeft = files.length;
+                logger.info("Files to be checked " + files.length);
+                for (File file : files) {
+                    if (file.getName().endsWith(".xz")) {
+                        logger.info("Starting file " + file.getAbsolutePath());
+                        ChimeraReader reader = new ChimeraReader(file.getAbsolutePath());
+                        ChimeraFile chimeraFile = new ChimeraFile();
+                        chimeraFile.setName(file.getName());
+                        int lineCount = getLineCount(reader);
+                        chimeraFile.setLineCount(lineCount);
+                        chimeraFile.setAbsoluteName(file.getAbsolutePath());
+                        chimeraFile.setLastUpdate(formatter.format(file.lastModified()));
+                        chimeraFile.setSize(file.length() / (1024 * 1024));
+                        chimeraFiles.add(chimeraFile);
+                        filesLeft--;
+                        logger.info("Finished file " + file.getAbsolutePath() + " lines " + lineCount + " left " + filesLeft);
+                    }
                 }
             }
+            logger.info("Finished all files");
+            this.files = chimeraFiles;
         }
-        logger.info("Finished all files");
-        this.files = chimeraFiles;
+        this.isProcessedFiles = true;
     }
 
     private int getLineCount(ChimeraReader reader) {
