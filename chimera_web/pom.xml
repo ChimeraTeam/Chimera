@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>univ.kiev.ua</groupId>
-            <artifactId>chimera_service</artifactId>
+            <artifactId>chimera_processing</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
