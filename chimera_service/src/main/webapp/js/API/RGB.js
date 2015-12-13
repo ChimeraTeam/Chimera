@@ -94,17 +94,17 @@
 
     this.GetColorsCount = function () {
         return colorsCount;
-    };;
+    }
 
     this.GetR = function (index) {
         return this.colors[index][0];
-    };;
+    }
 
     this.GetG = function (index) {
         return this.colors[index][1];
-    };;
+    }
 
     this.GetB = function (index) {
         return this.colors[index][2];
     }
-};;
+}

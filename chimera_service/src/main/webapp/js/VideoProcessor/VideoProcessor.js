@@ -1,14 +1,8 @@
 ﻿VideoProcessor = function () {
     var processor;
     var currentFrame = 0;
-    var chimeraData;
     var pause;
     var end = false;
-
-    function delay() {
-        setTimeout(function () {
-        }, 1000);
-    }
 
     function animate() {
         if (pause)
@@ -22,8 +16,7 @@
             return;
         }
 
-        processor.build(chimeraData, currentFrame, true);
-
+        processor.build(currentFrame, true);
         requestAnimationFrame(animate);
     }
 
@@ -33,9 +26,8 @@
         end = false;
     }
 
-    this.play = function (data) {
+    this.play = function () {
         timeMoment = 0;
-        chimeraData = data;
         animate();
     }
 
@@ -54,18 +46,21 @@
 
         processor.clearScene();
         currentFrame = 0;
-        chimeraData = [];
     }
 
     this.next = function () {
         currentFrame++;
-        if (!processor.build(chimeraData, currentFrame, true))
+        if (!processor.build(currentFrame, true)) {
+            Messaging.ShowMessage(Messaging.Warning, Messaging.LastTimeMomentWarning);
             currentFrame--;
+        }
     }
 
     this.back = function () {
         currentFrame--;
-        if (!processor.build(chimeraData, currentFrame, true))
+        if (!processor.build(currentFrame, true)) {
+            Messaging.ShowMessage(Messaging.Warning, Messaging.FirstTimeMomentWarning);
             currentFrame++;
+        }
     }
 }

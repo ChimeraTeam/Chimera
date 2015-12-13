@@ -91,8 +91,7 @@
     this.ArrayPositions[15][4] = 3;
 
 
-    this.GetByName = function(name)
-    {
+    this.GetByName = function(name) {
         for (var i = 0; i < this.ArrayPositions.length; i++) {
             if (name == this.ArrayPositions[i][0])
             {

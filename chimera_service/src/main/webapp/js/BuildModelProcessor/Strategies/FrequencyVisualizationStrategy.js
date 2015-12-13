@@ -6,10 +6,6 @@
     this.min;
     this.max;
 
-    this.ShowModel = function() {
-
-    }
-
     this.ConvertToColorMap = function (data) {
 
         var rgbColors = new RGB();
@@ -29,20 +25,16 @@
         return colors;
     }
 
-    function Round(value)
-    {
-        var array = [];
-
-        for (var i = 0; i < divideArray.length; i++) {
-            array[i] = value - divideArray[i];
-        }
+    function Round(value) {
 
         var index = 0;
-        var min = array[0];
+        var min = 100;
 
-        for (var i = 0; i < array.length; i++) {
-            if (Math.abs(array[i]) < Math.abs(min)) {
-                min = array[i];
+        for (var i = 0; i < divideArray.length; i++) {
+            var diff = value - divideArray[i];
+
+            if (Math.abs(diff) < Math.abs(min)) {
+                min = diff;
                 index = i;
             }
         }

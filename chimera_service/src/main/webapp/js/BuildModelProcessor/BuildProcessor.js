@@ -10,15 +10,13 @@
     var buildStrategyInstance;
     var currentFrameData = [];
     var max = -100, min = 100;
-    var cookies = new Cookies();
 
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(renderer.domElement);
 
     init(strategy);
 
-    function init(st)
-    {
+    function init(st) {
         if (st == "Phase") {
             buildStrategyInstance = new PhaseVisualizationStrategy();
         }
@@ -43,13 +41,13 @@
         }
     }
 
-    function selectDataForCurrentFrame(data, frame) {
+    function selectDataForCurrentFrame(frame) {
 
         var begin = (frame - 1) * Globals.OscillatorsNumber;
         var end = begin + Globals.OscillatorsNumber;
 
         for (var i = begin; i < end; i++) {
-            var value = data[i];
+            var value = chimeraData[i];
 
             if (value > max)
                 max = value;
@@ -63,9 +61,27 @@
         buildStrategyInstance.max = max;
     }
 
-    function saveData()
-    {
-        cookies.setCookie('timemoment', '1');
+    function renderModel(opacity) {
+
+        var pMaterial = new THREE.ParticleBasicMaterial({
+            size: 0.8,
+            shading: THREE.FlatShading,
+            wireframe: true,
+            transparent: true,
+            opacity: opacity,
+            vertexColors: true
+        });
+
+        particleSystem = new THREE.ParticleSystem(
+                    particles,
+                    pMaterial);
+        scene.add(particleSystem);
+        camera.position.z = 40;
+
+        particleSystem.rotation.x += 0.6;
+        particleSystem.rotation.y -= 0.6;
+
+        renderer.render(scene, camera);
     }
     
     this.clearScene = function() {
@@ -78,18 +94,16 @@
         renderer.render(scene, camera);
     }
 
-    this.build = function(data, frame, isVideo)
-    {
+    this.build = function(frame, isVideo) {
         if (frame < 1 || frame > Globals.MaxTimeFrame) {
-            alert("unexpected time moment");
+            Messaging.ShowMessage(Messaging.Error, Messaging.TimeMomentRangeError);
             return false;
         }
 
         this.clearScene();
-
         LoadAdditionalFunctionalityScene();
 
-        selectDataForCurrentFrame(data, frame);
+        selectDataForCurrentFrame(frame);
 
         if (currentFrameData.length == 0)
             return;
@@ -99,27 +113,7 @@
         particles.colorsNeedUpdate = true;
         particles.colors = colors;
 
-        saveData();
-
-        var pMaterial = new THREE.ParticleBasicMaterial({
-            size: 0.8,
-            shading: THREE.FlatShading,
-            wireframe: true,
-            transparent: true,
-            opacity: Options.DefaultOpacity,
-            vertexColors: true
-        });
-
-        particleSystem = new THREE.ParticleSystem(
-                    particles,
-                    pMaterial);
-        scene.add(particleSystem);
-        camera.position.z = 40;
-
-        particleSystem.rotation.x += 0.6;
-        particleSystem.rotation.y -= 0.6;
-
-        renderer.render(scene, camera);
+        renderModel(Options.DefaultOpacity);
 
         LoadCurrentFrameInfoScene();
         SetCurrentFrameValue(frame);
@@ -127,28 +121,10 @@
         return true;
     }
 
-    this.updateOpacity = function (value) {
+    this.updateOpacity = function (opacity) {
         scene.remove(scene.children[0]);
 
-        var pMaterial = new THREE.ParticleBasicMaterial({
-            size: 0.8,
-            shading: THREE.FlatShading,
-            wireframe: true,
-            transparent: true,
-            opacity: value,
-            vertexColors: true
-        });
-
-        particleSystem = new THREE.ParticleSystem(
-                    particles,
-                    pMaterial);
-        scene.add(particleSystem);
-        camera.position.z = 40;
-
-        particleSystem.rotation.x += 0.6;
-        particleSystem.rotation.y -= 0.6;
-
-        renderer.render(scene, camera);
+        renderModel(opacity);
     }
 
     this.getCurrentFrameData = function() {

@@ -7,14 +7,13 @@
     }
 
     this.SetVisibilityControlProperty = function (name, value) {
-        if (value == true)
+        if (value)
             document.getElementById(name).style.visibility = "visible";
         else
             document.getElementById(name).style.visibility = "hidden";
     }
 
-    this.SetPosition  = function(container, grid)
-    {
+    this.SetPosition  = function(container, grid) {
         var config = new PositionConfig();
 
         for (var i = 0; i < container.length; i++) {
@@ -27,13 +26,11 @@
         }
     }
 
-    this.SetDisabledButtonProperty = function(id, isDisabled)
-    {
+    this.SetDisabledButtonProperty = function(id, isDisabled) {
         document.getElementById(id).disabled = isDisabled;
     }
 
-    this.SetControlValue = function(id, value)
-    {
+    this.SetControlValue = function(id, value) {
         document.getElementById(id).value = value;
     }
 }

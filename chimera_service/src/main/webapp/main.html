@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Chimera visualization</title>
+		<title>Chimera Visualization Service</title>
         <link rel="stylesheet" type="text/css" href="css/styles/pages/main/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/buttons/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/textboxes/style.css" />
@@ -13,6 +13,7 @@
         <script type="text/javascript" src="js/API/Cookies.js"></script>
         <script type="text/javascript" src="js/API/DiagnosticTools.js"></script>
         <script type="text/javascript" src="js/API/DataTransfer.js"></script>
+        <script type="text/javascript" src="js/API/Messaging.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PageGrid.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PositionReader.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/positionConfig.js"></script>
@@ -29,14 +30,13 @@
 	<body onKeyDown="keyEvent()">
         <div id="container" class="container"></div>
         <script type="text/javascript">
-            var formatedProcessor = new DataFormatedProcessor();
             var loadingSceneContainer = [NameList.LoadingLabel];
             var selectFileSceneContainer = [NameList.InformLabel, NameList.OpenFileDialog, NameList.SelectedFileName];
             var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
             var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel];
             var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
             var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
-            var data = [];
+            var chimeraData = [];
             var initProcessor;
             var pageGrid;
             var visualizationType;
@@ -44,7 +44,6 @@
             var isDataReady;
             var buildProcessor;
             var videoProcessor = new VideoProcessor();
-            var diagnosticTools = new DiagnosticTools();
 
             function GetData()
             {
@@ -65,8 +64,9 @@
 
             function DataReadyCallback()
             {
-                data = document.getElementById("sockerDataTransferContainer").innerText;
-                data = formatedProcessor.FormatData(data);
+                var formatedProcessor = new DataFormatedProcessor();
+                chimeraData = document.getElementById("sockerDataTransferContainer").innerText;
+                chimeraData = formatedProcessor.FormatData(chimeraData);
                 
                 CloseLoadingScene();
                 LoadOneFrameVisualizationScene();
@@ -149,7 +149,6 @@
             }
 
             function LoadLoadingScene() {
-                initProcessor.SetPosition(loadingSceneContainer, pageGrid);
                 initProcessor.SetSceneVisibility(loadingSceneContainer, true);
             }
 
@@ -159,6 +158,7 @@
 
             function CalculatePositions()
             {
+                initProcessor.SetPosition(loadingSceneContainer, pageGrid);
                 initProcessor.SetPosition(oneFrameVisualizationSceneContainer, pageGrid);
                 initProcessor.SetPosition(additionalFunctionalityContainer, pageGrid);
                 initProcessor.SetPosition(videoVisualizationSceneContainer, pageGrid);
@@ -173,7 +173,7 @@
             function StartVisualization()
             {
                 var currentFrame = document.getElementById(NameList.SelectTimeMomentTextBox).value;
-                buildProcessor.build(data, currentFrame);
+                buildProcessor.build(currentFrame, false);
             }
 
             function video() {
@@ -183,7 +183,7 @@
                 LoadVideoVisualizationScene();
 
                 videoProcessor.init(buildProcessor);
-                videoProcessor.play(data);
+                videoProcessor.play();
             }
 
             function videoClose() {

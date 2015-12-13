@@ -1,6 +1,6 @@
 ﻿Globals = function () {
 
-};;
+}
 
 Globals.SmallOsillatorsCount = 125000;
 Globals.MediumOsillatorsCount = 1000000;

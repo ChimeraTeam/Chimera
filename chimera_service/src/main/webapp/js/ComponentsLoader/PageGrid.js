@@ -20,8 +20,7 @@
 
     }
 
-    this.GetFrameX = function(x)
-    {
+    this.GetFrameX = function(x) {
         return this.FramesArrayX[x];
     }
 

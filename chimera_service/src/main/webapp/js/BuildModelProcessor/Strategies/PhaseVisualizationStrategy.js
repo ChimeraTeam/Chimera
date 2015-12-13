@@ -5,15 +5,10 @@
     this.min;
     this.max;
 
-    this.ShowModel = function()
-    {
-        
-    }
-
     this.ConvertToColorMap = function (data) {
         colors = [];
 
-        var H, Vm, a, Vi, Vd, R, G, B;
+        var H, Vm, a, Vi, Vd;
         var S = (1 - this.min / this.max) * 100;
         var V = (this.max * 60) / 3.6;
 
