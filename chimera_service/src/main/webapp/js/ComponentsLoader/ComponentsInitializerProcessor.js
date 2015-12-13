@@ -26,4 +26,14 @@
             document.getElementById(container[i]).style.height = grid.GetFrameY(1) * values[3];
         }
     }
+
+    this.SetDisabledButtonProperty = function(id, isDisabled)
+    {
+        document.getElementById(id).disabled = isDisabled;
+    }
+
+    this.SetControlValue = function(id, value)
+    {
+        document.getElementById(id).value = value;
+    }
 }

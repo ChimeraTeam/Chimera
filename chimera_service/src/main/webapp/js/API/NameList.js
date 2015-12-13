@@ -17,6 +17,8 @@ NameList.VideoPause = "videoPause";
 NameList.VideoNext = "videoNext";
 NameList.VideoBack = "videoBack";
 NameList.VideoClose = "videoClose";
+NameList.CurrentFrameLabel = "currentFrame";
 
 NameList.CutButton = "cut";
 NameList.OpacitySlider = "opacity";
+NameList.OpacityLabel = "opacityLabel";

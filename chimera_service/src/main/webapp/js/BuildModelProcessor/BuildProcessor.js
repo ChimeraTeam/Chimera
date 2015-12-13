@@ -47,11 +47,6 @@
 
         var begin = (frame - 1) * Globals.OscillatorsNumber;
         var end = begin + Globals.OscillatorsNumber;
-        
-        if (data.length < end) {
-            alert("unexpected time moment");
-            return;
-        }
 
         for (var i = begin; i < end; i++) {
             var value = data[i];
@@ -77,17 +72,28 @@
         scene.remove(scene.children[0]);
         delete particleSystem;
         currentFrameData.length = 0;
+        CloseCurrentFrameInfoScene();
+        CloseAdditionalFunctionalityScene();
+
         renderer.render(scene, camera);
     }
 
     this.build = function(data, frame, isVideo)
     {
+        if (frame < 1 || frame > Globals.MaxTimeFrame) {
+            alert("unexpected time moment");
+            return false;
+        }
+
         this.clearScene();
+
+        LoadAdditionalFunctionalityScene();
+
         selectDataForCurrentFrame(data, frame);
 
         if (currentFrameData.length == 0)
             return;
-
+        
         var colors = buildStrategyInstance.ConvertToColorMap(currentFrameData);
 
         particles.colorsNeedUpdate = true;
@@ -100,7 +106,7 @@
             shading: THREE.FlatShading,
             wireframe: true,
             transparent: true,
-            opacity: 0.12,
+            opacity: Options.DefaultOpacity,
             vertexColors: true
         });
 
@@ -113,8 +119,36 @@
         particleSystem.rotation.x += 0.6;
         particleSystem.rotation.y -= 0.6;
 
-        if (!isVideo)
-            renderer.render(scene, camera);
+        renderer.render(scene, camera);
+
+        LoadCurrentFrameInfoScene();
+        SetCurrentFrameValue(frame);
+
+        return true;
+    }
+
+    this.updateOpacity = function (value) {
+        scene.remove(scene.children[0]);
+
+        var pMaterial = new THREE.ParticleBasicMaterial({
+            size: 0.8,
+            shading: THREE.FlatShading,
+            wireframe: true,
+            transparent: true,
+            opacity: value,
+            vertexColors: true
+        });
+
+        particleSystem = new THREE.ParticleSystem(
+                    particles,
+                    pMaterial);
+        scene.add(particleSystem);
+        camera.position.z = 40;
+
+        particleSystem.rotation.x += 0.6;
+        particleSystem.rotation.y -= 0.6;
+
+        renderer.render(scene, camera);
     }
 
     this.getCurrentFrameData = function() {

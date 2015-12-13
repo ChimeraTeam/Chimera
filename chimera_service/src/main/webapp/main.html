@@ -32,8 +32,10 @@
             var formatedProcessor = new DataFormatedProcessor();
             var loadingSceneContainer = [NameList.LoadingLabel];
             var selectFileSceneContainer = [NameList.InformLabel, NameList.OpenFileDialog, NameList.SelectedFileName];
-            var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton, NameList.CutButton, NameList.OpacitySlider];
+            var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
+            var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel];
             var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
+            var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
             var data = [];
             var initProcessor;
             var pageGrid;
@@ -112,8 +114,6 @@
                 initProcessor.SetSceneVisibility(selectFileSceneContainer, false);
             }
 
-            //file:///D:/Chimera/chimera_visualization/src/html/main.html?type=F&fileName=/root/gleb/data/trajectory2.xz
-
             function LoadOneFrameVisualizationScene() {
                 initProcessor.SetSceneVisibility(oneFrameVisualizationSceneContainer, true);
             }
@@ -122,12 +122,30 @@
                 initProcessor.SetSceneVisibility(oneFrameVisualizationSceneContainer, false);
             }
 
+            function LoadAdditionalFunctionalityScene() {
+                initProcessor.SetSceneVisibility(additionalFunctionalityContainer, true);
+                document.getElementById(NameList.OpacitySlider).value = Options.DefaultOpacity;
+                document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + Options.DefaultOpacity;
+            }
+
+            function CloseAdditionalFunctionalityScene() {
+                initProcessor.SetSceneVisibility(additionalFunctionalityContainer, false);
+            }
+
             function LoadVideoVisualizationScene() {
                 initProcessor.SetSceneVisibility(videoVisualizationSceneContainer, true);
             }
 
             function CloseVideoVisualizationScene() {
                 initProcessor.SetSceneVisibility(videoVisualizationSceneContainer, false);
+            }
+
+            function LoadCurrentFrameInfoScene() {
+                initProcessor.SetSceneVisibility(currentFrameInfoSceneContainer, true);
+            }
+
+            function CloseCurrentFrameInfoScene() {
+                initProcessor.SetSceneVisibility(currentFrameInfoSceneContainer, false);
             }
 
             function LoadLoadingScene() {
@@ -142,7 +160,14 @@
             function CalculatePositions()
             {
                 initProcessor.SetPosition(oneFrameVisualizationSceneContainer, pageGrid);
+                initProcessor.SetPosition(additionalFunctionalityContainer, pageGrid);
                 initProcessor.SetPosition(videoVisualizationSceneContainer, pageGrid);
+                initProcessor.SetPosition(currentFrameInfoSceneContainer, pageGrid);
+            }
+
+            function SetCurrentFrameValue(value)
+            {
+                initProcessor.SetControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
             }
 
             function StartVisualization()
@@ -152,6 +177,7 @@
             }
 
             function video() {
+                initProcessor.SetControlValue(NameList.VideoPause, "Pause");
 
                 CloseOneFrameVisualizationScene();
                 LoadVideoVisualizationScene();
@@ -167,12 +193,43 @@
                 videoProcessor.close();
             }
 
+            function videoPause() {
+                var value = document.getElementById(NameList.VideoPause).value;
+
+                if (value == "Pause") {
+                    videoProcessor.pause();
+                    initProcessor.SetControlValue(NameList.VideoPause, "Resume");
+                    initProcessor.SetDisabledButtonProperty(NameList.VideoBack, false);
+                    initProcessor.SetDisabledButtonProperty(NameList.VideoNext, false);
+                }
+                else {
+                    videoProcessor.resume();
+                    initProcessor.SetControlValue(NameList.VideoPause, "Pause");
+                    initProcessor.SetDisabledButtonProperty(NameList.VideoBack, true);
+                    initProcessor.SetDisabledButtonProperty(NameList.VideoNext, true);
+                }
+            }
+
+            function videoBack() {
+                videoProcessor.back();
+            }
+
+            function videoNext() {
+                videoProcessor.next();
+            }
+
             function cut() {
                 //var dataTransfer = new DataTransfer();
                 //dataTransfer.SendData(buildProcessor.getCurrentFrameData());
 
                 var win = window.open('html/pages/cut.html', '_blank');
                 win.focus();
+            }
+
+            function opacityChange() {
+                var value = document.getElementById(NameList.OpacitySlider).value;
+                buildProcessor.updateOpacity(value);
+                document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + value;
             }
 
             function readText(that) {
@@ -215,11 +272,13 @@
         <input id="build" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Build" onclick="StartVisualization()">
         <input id="video3D" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Video 3D" onclick="video()">
         <input id="videoPause" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Pause" onclick="videoPause()">
-        <input id="videoNext" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Next" onclick="videoNext()">
-        <input id="videoBack" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Back" onclick="videoBack()">
+        <input id="videoNext" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Next" onclick="videoNext()" disabled>
+        <input id="videoBack" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Back" onclick="videoBack()" disabled>
         <input id="videoClose" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Close" onclick="videoClose()">
+        <input id="currentFrame" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Current Frame:" disabled />
         <input id="cut" type="submit" style="position:absolute; visibility:hidden" class="chimeraButton" value="Cut" onclick="cut()">
-        <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" max="100">
+        <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" step="0.01" max="1" value="0.12" onchange="opacityChange()">
+        <input id="opacityLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Opacity" disabled />
         <label id="sockerDataTransferContainer" style="display:none" onchange="labelTextChanged()"></label>
 
     </body>
