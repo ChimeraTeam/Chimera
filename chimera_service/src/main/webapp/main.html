@@ -24,6 +24,7 @@
         <script type="text/javascript" src="js/DataProcessor/SocketDataInspector.js"></script>
         <script type="text/javascript" src="js/DataProcessor/DataFormatedProcessor/DataFormatedProcessor.js"></script>
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
+        <script type="text/javascript" src="js/CutProcessor/CutProcessor.js"></script>
 	</head>
 	<body onKeyDown="keyEvent()">
         <div id="container" class="container"></div>
@@ -34,14 +35,17 @@
             var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel];
             var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
             var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
+            var cutSceneContainer = [NameList.HorizontalCut, NameList.VerticalCut, NameList.CloseCut, NameList.CurrentCutType];
             var chimeraData = [];
             var initProcessor;
             var pageGrid;
             var visualizationType;
             var oscilatorsCount;
             var buildProcessor;
+            var cutProcessor;
+            var currentScene = "";
             var videoProcessor = new VideoProcessor();
-
+            
             function init()
             {
                 var inspector = new SocketDataInspector();
@@ -75,6 +79,11 @@
                 pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
                 CalculatePositions();
             };
+
+            window.onoffline = function () {
+                Messaging.ShowMessage(Messaging.Warning, 'Please check internet connection!');
+            }
+
             function LoadSelectFileScene() {
                 initProcessor.SetSceneVisibility(selectFileSceneContainer, true);
             }
@@ -117,8 +126,22 @@
                 initProcessor.SetSceneVisibility(currentFrameInfoSceneContainer, false);
             }
 
+            function LoadCutScene() {
+                initProcessor.SetVisibilityControlProperty(NameList.CutButton, false);
+                initProcessor.SetSceneVisibility(cutSceneContainer, true);
+                CloseOneFrameVisualizationScene();
+                currentScene = "CutScene";
+            }
+
+            function CloseCutScene() {
+                initProcessor.SetVisibilityControlProperty(NameList.CutButton, true);
+                initProcessor.SetSceneVisibility(cutSceneContainer, false);
+                LoadOneFrameVisualizationScene();
+                currentScene = "";
+            }
+            
             function LoadLoadingScene(value) {
-                initProcessor.SetControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value);
+                initProcessor.SetControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value + ' from ' + Globals.MaxTimeFrame);
                 initProcessor.SetSceneVisibility(loadingSceneContainer, true);
             }
 
@@ -133,6 +156,7 @@
                 initProcessor.SetPosition(additionalFunctionalityContainer, pageGrid);
                 initProcessor.SetPosition(videoVisualizationSceneContainer, pageGrid);
                 initProcessor.SetPosition(currentFrameInfoSceneContainer, pageGrid);
+                initProcessor.SetPosition(cutSceneContainer, pageGrid);
             }
 
             function SetCurrentFrameValue(value)
@@ -189,18 +213,53 @@
             }
 
             function cut() {
-                //var dataTransfer = new DataTransfer();
-                //dataTransfer.SendData(buildProcessor.getCurrentFrameData());
+                /*var dataTransfer = new DataTransfer(); 
+                var url = 'html/pages/cut.html';
 
-                var win = window.open('html/pages/cut.html', '_blank');
-                win.focus();
+                dataTransfer.SendData(buildProcessor.getCurrentFrameData(), url);
+
+                var win = window.open(url, '_blank');
+                win.focus(); - TODO: in next version cut functionality should be on new html page*/
+
+                cutProcessor = new CutProcessor(buildProcessor);
+                LoadCutScene();
+
+            }
+
+            function horizontalCut() {
+                cutProcessor.setCurrentType('Current Cut type: horizontal');
+                cutProcessor.onHorizontalCutButtonClick();
+            }
+
+            function verticalCut() {
+                cutProcessor.setCurrentType('Current Cut type: vertical');
+                cutProcessor.onVerticalCutButtonClick();
+            }
+
+            function closeCut() {
+                cutProcessor.exit();
+                cutProcessor = null;
+                CloseCutScene();
+                buildProcessor.rebuild();
+            }
+
+            function getOpacityValue() {
+                return document.getElementById(NameList.OpacitySlider).value;
             }
 
             function opacityChange() {
-                var value = document.getElementById(NameList.OpacitySlider).value;
-                buildProcessor.updateOpacity(value);
+                var value = getOpacityValue();
+
+                if (currentScene == 'CutScene'){
+                    buildProcessor.customParticlesBuild(value, cutProcessor.getCutParticles());
+                }
+                else {
+                    buildProcessor.updateOpacity(value);
+                }
+
                 document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + value;
-            }
+                Options.DefaultOpacity = value;
+            }          
 
             function readText(that) {
             }
@@ -225,12 +284,17 @@
                     case 109:
                         buildProcessor.unzoom();
                         break;
+                    case 27:
+                        if (cutProcessor != null) {
+                            initProcessor.SetControlValue(NameList.CurrentCutType, 'Current Cut type: none');
+                            cutProcessor.exit();
+                        }
+                        break;
                     default:
                         break;
                 }
 
             }
-
 
         </script>
         <input id="loadingLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Loading...Please wait..."/>
@@ -247,6 +311,10 @@
         <input id="videoClose" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Close" onclick="videoClose()">
         <input id="currentFrame" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Current Frame:" disabled />
         <input id="cut" type="submit" style="position:absolute; visibility:hidden" class="chimeraButton" value="Cut" onclick="cut()">
+        <input id="horizontalCut" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="H" onclick="horizontalCut()"/>
+        <input id="verticalCut" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="V" onclick="verticalCut()"/>
+        <input id="currentCutType" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Current Cut type: none" disabled />
+        <input id="closeCut" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Exit from the Cut mode" onclick="closeCut()" />
         <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" step="0.01" max="1" value="0.12" onchange="opacityChange()">
         <input id="opacityLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Opacity" disabled />
         <label id="sockerDataTransferContainer" style="display:none"></label>

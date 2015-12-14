@@ -1,7 +1,7 @@
 ﻿PositionConfig = function () {
-    this.ArrayPositions = new Array(20);
+    this.ArrayPositions = new Array(30);
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 30; i++) {
         this.ArrayPositions[i] = new Array(5);
     }
 
@@ -38,12 +38,12 @@
     this.ArrayPositions[5][3] = 1;
     this.ArrayPositions[5][4] = 2;
     this.ArrayPositions[6][0] = "build";
-    this.ArrayPositions[6][1] = 11;
+    this.ArrayPositions[6][1] = 12;
     this.ArrayPositions[6][2] = 1;
     this.ArrayPositions[6][3] = 2;
     this.ArrayPositions[6][4] = 2;
     this.ArrayPositions[7][0] = "video3D";
-    this.ArrayPositions[7][1] = 15;
+    this.ArrayPositions[7][1] = 16;
     this.ArrayPositions[7][2] = 1;
     this.ArrayPositions[7][3] = 2;
     this.ArrayPositions[7][4] = 2;
@@ -76,19 +76,40 @@
 
     this.ArrayPositions[13][0] = "cut";
     this.ArrayPositions[13][1] = 27;
-    this.ArrayPositions[13][2] = 18;
+    this.ArrayPositions[13][2] = 15;
     this.ArrayPositions[13][3] = 1;
     this.ArrayPositions[13][4] = 3;
-    this.ArrayPositions[14][0] = "opacity";
-    this.ArrayPositions[14][1] = 26;
-    this.ArrayPositions[14][2] = 22;
-    this.ArrayPositions[14][3] = 3;
-    this.ArrayPositions[14][4] = 3;
-    this.ArrayPositions[15][0] = "opacityLabel";
-    this.ArrayPositions[15][1] = 26;
-    this.ArrayPositions[15][2] = 24;
-    this.ArrayPositions[15][3] = 3;
-    this.ArrayPositions[15][4] = 3;
+    this.ArrayPositions[14][0] = "horizontalCut";
+    this.ArrayPositions[14][1] = 1;
+    this.ArrayPositions[14][2] = 15;
+    this.ArrayPositions[14][3] = 1;
+    this.ArrayPositions[14][4] = 2;
+    this.ArrayPositions[15][0] = "verticalCut";
+    this.ArrayPositions[15][1] = 1;
+    this.ArrayPositions[15][2] = 18;
+    this.ArrayPositions[15][3] = 1;
+    this.ArrayPositions[15][4] = 2;
+    this.ArrayPositions[16][0] = "currentCutType";
+    this.ArrayPositions[16][1] = 1;
+    this.ArrayPositions[16][2] = 1;
+    this.ArrayPositions[16][3] = 4;
+    this.ArrayPositions[16][4] = 2;
+    this.ArrayPositions[17][0] = "closeCut";
+    this.ArrayPositions[17][1] = 13;
+    this.ArrayPositions[17][2] = 1;
+    this.ArrayPositions[17][3] = 4;
+    this.ArrayPositions[17][4] = 2;
+    
+    this.ArrayPositions[18][0] = "opacity";
+    this.ArrayPositions[18][1] = 26;
+    this.ArrayPositions[18][2] = 18;
+    this.ArrayPositions[18][3] = 3;
+    this.ArrayPositions[18][4] = 3;
+    this.ArrayPositions[19][0] = "opacityLabel";
+    this.ArrayPositions[19][1] = 26;
+    this.ArrayPositions[19][2] = 20;
+    this.ArrayPositions[19][3] = 3;
+    this.ArrayPositions[19][4] = 3;
 
 
     this.GetByName = function(name) {

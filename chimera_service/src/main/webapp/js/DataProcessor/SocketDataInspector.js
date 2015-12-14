@@ -14,11 +14,12 @@
         progress = showProgressMethod;
 
         postToWServer(file, type);
-        progress(0);
 
         Globals.FilePath = file;
         Globals.VisualizationType = type;
         Globals.MaxTimeFrame = frames;
+
+        progress(0);
     }
 
     this.getType = function (configLine) {
