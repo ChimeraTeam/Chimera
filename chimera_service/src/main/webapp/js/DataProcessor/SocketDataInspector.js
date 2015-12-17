@@ -1,38 +1,39 @@
-﻿GetDataSocketStrategy = function () {
+﻿SocketDataInspector = function () {
 
     var Data = "";
     var currentFrame = 0;
     var frames = -1;
+    var callback;
     var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
-    this.GetData = function () {
-        init();
+    this.init = function (callbackMethod) {
+        var file = getParameterByName('fileName');
+        var type = getParameterByName('type');
+        frames = getParameterByName('frames');
+        callback = callbackMethod;
 
-        return dataArray(socket, function () {
-            var container = document.getElementById("sockerDataTransferContainer");
-            var event = container["onchange"];
-            container.innerHTML += Data;
+        postToWServer(file, type);
 
-            if (typeof (event) == "function") {
-                event.call(container);
-            }
-
-            return Data;
-        });
-        
+        Globals.FilePath = file;
+        Globals.VisualizationType = type;
+        Globals.MaxTimeFrame = frames;
     }
 
-    function dataArray(socket, callback) {
-        setTimeout(
-            function () {
-                if (currentFrame == frames) {
-                    if (callback !== undefined) {
-                        callback();
-                    }
+    this.getType = function (configLine) {
+        if (configLine == "P")
+            return "Phase";
+        if (configLine == "F")
+            return "Frequency";
+    }
 
-                } else {
-                    dataArray(socket, callback);
-                }
-            }, 5);
+    this.getOscillatorNumber = function (configLine) {
+        if (configLine.indexOf("50x50x50") > -1)
+            return Globals.SmallOsillatorsCount;
+        else if (configLine.indexOf("100x100x100") > -1)
+            return Globals.MediumOsillatorsCount;
+        else if (configLine.indexOf("200x200x200") > -1)
+            return Globals.LargeOsillatorsCount;
+        else
+            return Options.DefaultOscilatorsNumber;
     }
 
     function getParameterByName(name)
@@ -44,26 +45,20 @@
         return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
-    function init()
-    {
-        var file = getParameterByName('fileName');
-        var type = getParameterByName('type');
-        frames = getParameterByName('frames');
-        
-        postToWServer(file, type);
-
-        Globals.FilePath = file;
-        Globals.VisualizationType = type;
-        Globals.MaxTimeFrame = frames;
-    }
-
     socket.onopen = function () {
 
     }
 
     socket.onmessage = function (message) {
-        Data += message.data;
-        currentFrame++;
+        if (currentFrame == frames) {
+            var container = document.getElementById("sockerDataTransferContainer");
+            container.innerHTML = Data;
+            callback();
+        }
+        else {
+            Data += message.data;
+            currentFrame++;
+        }
     }
 
     function waitForSocketConnection(socket, callback) {

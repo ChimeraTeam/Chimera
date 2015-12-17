@@ -21,10 +21,8 @@
         <script type="text/javascript" src="js/BuildModelProcessor/BuildProcessor.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/FrequencyVisualizationStrategy.js"></script>
-        <script type="text/javascript" src="js/DataProcessor/Inspectors/DataInspector.js"></script>
+        <script type="text/javascript" src="js/DataProcessor/SocketDataInspector.js"></script>
         <script type="text/javascript" src="js/DataProcessor/DataFormatedProcessor/DataFormatedProcessor.js"></script>
-        <script type="text/javascript" src="js/DataProcessor/GetDataStrategies/GetDataSocketStrategy.js"></script>
-        <script type="text/javascript" src="js/DataProcessor/GetDataStrategies/GetDataLocalStrategy.js"></script>
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
 	</head>
 	<body onKeyDown="keyEvent()">
@@ -41,20 +39,17 @@
             var pageGrid;
             var visualizationType;
             var oscilatorsCount;
-            var isDataReady;
             var buildProcessor;
             var videoProcessor = new VideoProcessor();
 
             function GetData()
             {
                 LoadLoadingScene();
-                var inspector = new DataInspector(Options.GetDataStrategy);
-                inspector.GetData();
+                var inspector = new SocketDataInspector();
+                inspector.init(DataReadyCallback);
 
-                WaitForDataReadyState(DataReadyCallback);
-
-                visualizationType = inspector.GetType(Globals.VisualizationType);
-                oscilatorsCount = inspector.GetOscillatorNumber(Globals.FilePath);
+                visualizationType = inspector.getType(Globals.VisualizationType);
+                oscilatorsCount = inspector.getOscillatorNumber(Globals.FilePath);
 
                 Globals.OscillatorsNumber = oscilatorsCount;
 
@@ -70,24 +65,6 @@
                 
                 CloseLoadingScene();
                 LoadOneFrameVisualizationScene();
-            }
-
-            function WaitForDataReadyState(callback) {
-                setTimeout(
-                   function () {
-                       if (isDataReady) {
-                           if (callback !== undefined) {
-                               callback();
-                           }
-
-                       } else {
-                           WaitForDataReadyState(callback);
-                       }
-                   }, 50);
-            }
-
-            function labelTextChanged() {
-                isDataReady = true;
             }
 
             window.onload = function onload() {
@@ -279,7 +256,7 @@
         <input id="cut" type="submit" style="position:absolute; visibility:hidden" class="chimeraButton" value="Cut" onclick="cut()">
         <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" step="0.01" max="1" value="0.12" onchange="opacityChange()">
         <input id="opacityLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Opacity" disabled />
-        <label id="sockerDataTransferContainer" style="display:none" onchange="labelTextChanged()"></label>
+        <label id="sockerDataTransferContainer" style="display:none"></label>
 
     </body>
 </html>
