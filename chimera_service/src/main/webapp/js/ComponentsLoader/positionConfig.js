@@ -6,8 +6,8 @@
     }
 
     this.ArrayPositions[0][0] = "loadingLabel";
-    this.ArrayPositions[0][1] = 14;     //x
-    this.ArrayPositions[0][2] = 20;     //y
+    this.ArrayPositions[0][1] = 13;     //x
+    this.ArrayPositions[0][2] = 21;     //y
     this.ArrayPositions[0][3] = 6;      //cell width
     this.ArrayPositions[0][4] = 2;      //cell height
 

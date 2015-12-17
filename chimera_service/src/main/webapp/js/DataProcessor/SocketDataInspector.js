@@ -4,14 +4,17 @@
     var currentFrame = 0;
     var frames = -1;
     var callback;
+    var progress;
     var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
-    this.init = function (callbackMethod) {
+    this.init = function (callbackMethod, showProgressMethod) {
         var file = getParameterByName('fileName');
         var type = getParameterByName('type');
         frames = getParameterByName('frames');
         callback = callbackMethod;
+        progress = showProgressMethod;
 
         postToWServer(file, type);
+        progress(0);
 
         Globals.FilePath = file;
         Globals.VisualizationType = type;
@@ -58,6 +61,7 @@
         else {
             Data += message.data;
             currentFrame++;
+            progress(currentFrame);
         }
     }
 

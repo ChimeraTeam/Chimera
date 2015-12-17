@@ -45,7 +45,7 @@
             function init()
             {
                 var inspector = new SocketDataInspector();
-                inspector.init(DataReadyCallback);
+                inspector.init(DataReadyCallback, LoadLoadingScene);
 
                 visualizationType = inspector.getType(Globals.VisualizationType);
                 oscilatorsCount = inspector.getOscillatorNumber(Globals.FilePath);
@@ -66,13 +66,14 @@
             }
 
             window.onload = function onload() {
-                pageGrid = new PageGrid();
                 initProcessor = new ComponentsInitializerProcessor();
+
+                init();
+
+                pageGrid = new PageGrid();
 
                 pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
                 CalculatePositions();
-
-                init();
             };
             function LoadSelectFileScene() {
                 initProcessor.SetSceneVisibility(selectFileSceneContainer, true);
@@ -116,7 +117,8 @@
                 initProcessor.SetSceneVisibility(currentFrameInfoSceneContainer, false);
             }
 
-            function LoadLoadingScene() {
+            function LoadLoadingScene(value) {
+                initProcessor.SetControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value);
                 initProcessor.SetSceneVisibility(loadingSceneContainer, true);
             }
 
@@ -231,7 +233,7 @@
 
 
         </script>
-        <label id="loadingLabel" style="position:absolute; visibility:hidden">Loading...Please wait...</label>
+        <input id="loadingLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Loading...Please wait..."/>
         <label id="informLabel" style="position:absolute; visibility:hidden">Data file: </label>
         <input id="openFile" type="file" style="position:absolute; visibility:hidden" onchange='readText(this)' multiple />
         <label id="selectedFileName"style="position:absolute; visibility:hidden"/>
