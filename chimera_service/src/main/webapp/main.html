@@ -42,9 +42,8 @@
             var buildProcessor;
             var videoProcessor = new VideoProcessor();
 
-            function GetData()
+            function init()
             {
-                LoadLoadingScene();
                 var inspector = new SocketDataInspector();
                 inspector.init(DataReadyCallback);
 
@@ -54,7 +53,6 @@
                 Globals.OscillatorsNumber = oscilatorsCount;
 
                 buildProcessor = new BuildProcessor(visualizationType);
-                CloseLoadingScene();
             }
 
             function DataReadyCallback()
@@ -74,14 +72,7 @@
                 pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
                 CalculatePositions();
 
-                if (Options.GetDataStrategy == "Local")
-                {
-                    LoadSelectFileScene();
-                }
-                else if (Options.GetDataStrategy == "Server")
-                {
-                    GetData();
-                }
+                init();
             };
             function LoadSelectFileScene() {
                 initProcessor.SetSceneVisibility(selectFileSceneContainer, true);
