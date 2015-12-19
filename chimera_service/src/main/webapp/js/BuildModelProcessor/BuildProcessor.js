@@ -61,9 +61,8 @@
         buildStrategyInstance.max = max;
     }
 
-    function renderModel(opacity) {
-
-        var pMaterial = new THREE.PointCloudMaterial({
+    function createMaterial(opacity) {
+        var material = new THREE.PointCloudMaterial({
             size: 3,
             blending: THREE.FlatShading,
             wireframe: true,
@@ -73,6 +72,13 @@
             sizeAttenuation: false,
             vertexColors: true
         });
+
+        return material;
+    }
+
+    function renderModel(opacity) {
+
+        var pMaterial = createMaterial(opacity);
 
         particleSystem = new THREE.PointCloud(
                     particles,
@@ -90,16 +96,7 @@
     this.customParticlesBuild = function (opacity, particlesArray) {
         scene.remove(scene.children[0]);
 
-        var pMaterial = new THREE.PointCloudMaterial({
-            size: 3,
-            blending: THREE.FlatShading,
-            wireframe: true,
-            transparent: true,
-            depthWrite: false,
-            opacity: opacity,
-            sizeAttenuation: false,
-            vertexColors: true
-        });
+        var pMaterial = createMaterial(opacity);
 
         particleSystem = new THREE.PointCloud(
                     particlesArray,
