@@ -79,7 +79,7 @@
                 pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
                 CalculatePositions();
             };
-
+            
             window.onoffline = function () {
                 Messaging.ShowMessage(Messaging.Warning, 'Please check internet connection!');
             }
@@ -130,6 +130,7 @@
                 initProcessor.SetVisibilityControlProperty(NameList.CutButton, false);
                 initProcessor.SetSceneVisibility(cutSceneContainer, true);
                 CloseOneFrameVisualizationScene();
+                CloseVideoVisualizationScene();
                 currentScene = "CutScene";
             }
 

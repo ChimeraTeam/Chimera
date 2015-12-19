@@ -36,9 +36,7 @@
             var pX = ((p) % Math.pow(value, 2)) % value / 3 - 8.3,
                     pY = ((p) % Math.pow(value, 2)) / value / 3 - 8.3,
                     pZ = p / Math.pow(value, 2) / 3 - 8.3,
-                particle = new THREE.Vertex(
-                new THREE.Vector3(pX, pY, pZ)
-                );
+                particle = new THREE.Vector3(pX, pY, pZ);
             particles.vertices.push(particle);
         }
     }
@@ -65,16 +63,18 @@
 
     function renderModel(opacity) {
 
-        var pMaterial = new THREE.ParticleBasicMaterial({
-            size: 0.8,
-            shading: THREE.FlatShading,
+        var pMaterial = new THREE.PointCloudMaterial({
+            size: 3,
+            blending: THREE.FlatShading,
             wireframe: true,
             transparent: true,
+            depthWrite: false,
             opacity: opacity,
+            sizeAttenuation: false,
             vertexColors: true
         });
 
-        particleSystem = new THREE.ParticleSystem(
+        particleSystem = new THREE.PointCloud(
                     particles,
                     pMaterial);
         scene.add(particleSystem);
@@ -90,16 +90,18 @@
     this.customParticlesBuild = function (opacity, particlesArray) {
         scene.remove(scene.children[0]);
 
-        var pMaterial = new THREE.ParticleBasicMaterial({
-            size: 0.8,
-            shading: THREE.FlatShading,
+        var pMaterial = new THREE.PointCloudMaterial({
+            size: 3,
+            blending: THREE.FlatShading,
             wireframe: true,
             transparent: true,
+            depthWrite: false,
             opacity: opacity,
+            sizeAttenuation: false,
             vertexColors: true
         });
 
-        particleSystem = new THREE.ParticleSystem(
+        particleSystem = new THREE.PointCloud(
                     particlesArray,
                     pMaterial);
         scene.add(particleSystem);

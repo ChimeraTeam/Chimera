@@ -7,6 +7,8 @@
     this.max;
 
     this.ConvertToColorMap = function (data) {
+        colors = [];
+        divideArray = [];
 
         var rgbColors = new RGB();
         var colorsCount = rgbColors.GetColorsCount();
@@ -20,7 +22,8 @@
             colors[i] = new THREE.Color();
 
             var colorIndex = Round(data[i]);
-            colors[i].setRGB(rgbColors.GetR(colorIndex), rgbColors.GetG(colorIndex), rgbColors.GetB(colorIndex));
+            var color = rgbColors.GetColors(colorIndex);
+            colors[i].setRGB(color.r, color.g, color.b);
         }
         return colors;
     }
