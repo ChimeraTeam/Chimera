@@ -9,11 +9,13 @@
     var container = document.getElementById('container');
     var buildStrategyInstance;
     var currentFrameData = [];
+    var currentFrame;
     var max = -100, min = 100;
-
+    var cutInProgress = false;
+    
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(renderer.domElement);
-
+    
     init(strategy);
 
     function init(st) {
@@ -78,10 +80,51 @@
         scene.add(particleSystem);
         camera.position.z = 40;
 
+        particleSystem.rotationAutoUpdate = true;
         particleSystem.rotation.x += 0.6;
         particleSystem.rotation.y -= 0.6;
 
         renderer.render(scene, camera);
+    }
+
+    this.customParticlesBuild = function (opacity, particlesArray) {
+        scene.remove(scene.children[0]);
+
+        var pMaterial = new THREE.ParticleBasicMaterial({
+            size: 0.8,
+            shading: THREE.FlatShading,
+            wireframe: true,
+            transparent: true,
+            opacity: opacity,
+            vertexColors: true
+        });
+
+        particleSystem = new THREE.ParticleSystem(
+                    particlesArray,
+                    pMaterial);
+        scene.add(particleSystem);
+        camera.position.z = 40;
+
+        particleSystem.rotationAutoUpdate = true;
+        particleSystem.rotation.x += 0.6;
+        particleSystem.rotation.y -= 0.6;
+
+        renderer.render(scene, camera);
+    }
+
+    this.translateCoordinatesFromEvent = function (event) {
+        var elem = renderer.domElement,
+            boundingRect = elem.getBoundingClientRect(),
+            x = (event.clientX - boundingRect.left) * (elem.width / boundingRect.width),
+            y = (event.clientY - boundingRect.top) * (elem.height / boundingRect.height);
+
+        var vector = new THREE.Vector3(
+            ((x / window.innerWidth) * 2 - 1) * 24,
+            (-(y / window.innerHeight) * 2 + 1) * 24,
+            0.5
+        );
+
+        return vector;
     }
     
     this.clearScene = function() {
@@ -94,8 +137,13 @@
         renderer.render(scene, camera);
     }
 
-    this.build = function(frame, isVideo) {
-        if (frame < 1 || frame > Globals.MaxTimeFrame) {
+    this.rebuild = function () {
+        this.build(currentFrame, false);
+    }
+
+    this.build = function (frame, isVideo) {
+
+        if (parseInt(frame) < 1 || parseInt(frame) > Globals.MaxTimeFrame) {
             Messaging.ShowMessage(Messaging.Error, Messaging.TimeMomentRangeError);
             return false;
         }
@@ -117,8 +165,29 @@
 
         LoadCurrentFrameInfoScene();
         SetCurrentFrameValue(frame);
+        currentFrame = frame;
 
         return true;
+    }
+
+    this.addCustomObject = function (object) {
+        this.removeCustomObjects();
+        object.name = 'customLine';
+
+        scene.add(object);
+        renderer.render(scene, camera);
+    }
+
+    this.removeCustomObjects = function () {
+        
+        for (var i = 0; i < scene.children.length; i++) {
+            if (scene.children[i].name == 'customLine') {
+                scene.remove(scene.children[i]);
+                break;
+            }
+        }
+
+        renderer.render(scene, camera);
     }
 
     this.updateOpacity = function (opacity) {
@@ -131,34 +200,61 @@
         return currentFrameData;
     }
 
-    this.rotate_left = function () {
-        particleSystem.rotation.y -= 0.05;
+    this.getParticles = function () {
+        return particles;
+    }
+
+    this.setCutInProgress = function(value) {
+        cutInProgress = value;
+    }
+
+    this.rotate_none = function () {
+        particleSystem.rotation.x = 0;
+        particleSystem.rotation.y = 0;
+        particleSystem.rotation.z = 0;
         renderer.render(scene, camera);
+    }
+
+    this.rotate_left = function () {
+        if (!cutInProgress) {
+            particleSystem.rotation.y -= 0.05;
+            renderer.render(scene, camera);
+        }
     }
 
     this.rotate_right = function () {
-        particleSystem.rotation.y += 0.05;
-        renderer.render(scene, camera);
+        if (!cutInProgress) {
+            particleSystem.rotation.y += 0.05;
+            renderer.render(scene, camera);
+        }
     }
 
     this.rotate_down = function () {
-        particleSystem.rotation.x += 0.05;
-        renderer.render(scene, camera);
+        if (!cutInProgress) {
+            particleSystem.rotation.x += 0.05;
+            renderer.render(scene, camera);
+        }
     }
 
     this.rotate_up = function () {
-        particleSystem.rotation.x -= 0.05;
-        renderer.render(scene, camera);
+        if (!cutInProgress) {
+            particleSystem.rotation.x -= 0.05;
+            renderer.render(scene, camera);
+        }
     }
 
     this.zoom = function () {
-        camera.position.z -= 5;
-        renderer.render(scene, camera);
+        if (!cutInProgress) {
+            camera.position.z -= 5;
+            renderer.render(scene, camera);
+        }
     }
 
     this.unzoom = function () {
-        camera.position.z += 5;
-        renderer.render(scene, camera);
+        if (!cutInProgress) {
+            camera.position.z += 5;
+            renderer.render(scene, camera);
+        }
     }
 
 }

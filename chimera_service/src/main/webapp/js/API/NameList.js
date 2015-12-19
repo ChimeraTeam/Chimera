@@ -20,5 +20,10 @@ NameList.VideoClose = "videoClose";
 NameList.CurrentFrameLabel = "currentFrame";
 
 NameList.CutButton = "cut";
+NameList.HorizontalCut = "horizontalCut";
+NameList.VerticalCut = "verticalCut";
+NameList.CurrentCutType = "currentCutType";
+NameList.CloseCut = "closeCut";
+
 NameList.OpacitySlider = "opacity";
 NameList.OpacityLabel = "opacityLabel";
