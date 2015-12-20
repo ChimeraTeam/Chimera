@@ -5,6 +5,7 @@
         <link rel="stylesheet" type="text/css" href="css/styles/controls/buttons/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/textboxes/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/labels/style.css" />
+        <link rel="stylesheet" type="text/css" href="css/styles/controls/progress/style.css" />
 		<script type="text/javascript" src="js/ThirdParty/three.js"></script>
         <script type="text/javascript" src="js/API/Globals.js"></script>
         <script type="text/javascript" src="js/API/Options.js"></script>
@@ -29,7 +30,7 @@
 	<body onKeyDown="keyEvent()">
         <div id="container" class="container"></div>
         <script type="text/javascript">
-            var loadingSceneContainer = [NameList.LoadingLabel];
+            var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
             var selectFileSceneContainer = [NameList.InformLabel, NameList.OpenFileDialog, NameList.SelectedFileName];
             var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
             var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel];
@@ -143,6 +144,7 @@
             
             function LoadLoadingScene(value) {
                 initProcessor.SetControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value + ' from ' + Globals.MaxTimeFrame);
+                initProcessor.SetControlValue(NameList.LoadingProgressBar, 100 * value / Globals.MaxTimeFrame);
                 initProcessor.SetSceneVisibility(loadingSceneContainer, true);
             }
 
@@ -298,7 +300,9 @@
             }
 
         </script>
-        <input id="loadingLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Loading...Please wait..."/>
+        
+        <progress id="loadingProgressBar" style="position:absolute; visibility:hidden" class="chimeraProgressBar" max="100" value="0"></progress>
+        <input id="loadingLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraProgressLabel" value="Loading...Please wait..." />
         <label id="informLabel" style="position:absolute; visibility:hidden">Data file: </label>
         <input id="openFile" type="file" style="position:absolute; visibility:hidden" onchange='readText(this)' multiple />
         <label id="selectedFileName"style="position:absolute; visibility:hidden"/>

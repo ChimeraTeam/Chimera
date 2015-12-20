@@ -3,6 +3,7 @@
 }
 
 NameList.LoadingLabel = "loadingLabel";
+NameList.LoadingProgressBar = "loadingProgressBar";
 
 NameList.InformLabel = "informLabel";
 NameList.OpenFileDialog = "openFile";

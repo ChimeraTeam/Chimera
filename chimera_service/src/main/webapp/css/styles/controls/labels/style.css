@@ -5,7 +5,17 @@
     text-align:center;
     padding-right:10px;
     border:none;
-    color: white;
+    color:white;
+    font-size:15px;
+    font-family:Arial;
+}
+
+.chimeraProgressLabel {
+    background-color:transparent;
+    text-align:center;
+    padding-right:10px;
+    border:none;
+    color:black;
     font-size:15px;
     font-family:Arial;
 }
