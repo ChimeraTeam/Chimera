@@ -1,5 +1,6 @@
 <html>
 	<head>
+        <meta charset="UTF-8">
 		<title>Chimera Visualization Service</title>
         <link rel="stylesheet" type="text/css" href="css/styles/pages/main/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/buttons/style.css" />
@@ -27,7 +28,7 @@
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
         <script type="text/javascript" src="js/CutProcessor/CutProcessor.js"></script>
 	</head>
-	<body onKeyDown="keyEvent()">
+	<body onKeyDown="keyEvent(event)">
         <div id="container" class="container"></div>
         <script type="text/javascript">
             var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
@@ -62,7 +63,9 @@
             function DataReadyCallback()
             {
                 var formatedProcessor = new DataFormatedProcessor();
-                chimeraData = document.getElementById("sockerDataTransferContainer").innerText;
+                var container = document.getElementById("sockerDataTransferContainer");
+
+                chimeraData = container.innerHTML;
                 chimeraData = formatedProcessor.FormatData(chimeraData);
                 
                 CloseLoadingScene();
@@ -278,7 +281,7 @@
             function readText(that) {
             }
 
-            function keyEvent() {
+            function keyEvent(event) {
                 switch (event.keyCode) {
                     case 37:
                         buildProcessor.rotate_left();
