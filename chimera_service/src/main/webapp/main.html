@@ -1,5 +1,6 @@
 <html>
 	<head>
+        <meta charset="UTF-8">
 		<title>Chimera Visualization Service</title>
         <link rel="stylesheet" type="text/css" href="css/styles/pages/main/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/buttons/style.css" />
@@ -27,12 +28,12 @@
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
         <script type="text/javascript" src="js/CutProcessor/CutProcessor.js"></script>
 	</head>
-	<body onKeyDown="keyEvent()">
+	<body onKeyDown="keyEvent(event)">
         <div id="container" class="container"></div>
         <script type="text/javascript">
             var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
             var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
-            var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel];
+            var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel];
             var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
             var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
             var cutSceneContainer = [NameList.HorizontalCut, NameList.VerticalCut, NameList.CloseCut, NameList.CurrentCutType];
@@ -62,7 +63,9 @@
             function DataReadyCallback()
             {
                 var formatedProcessor = new DataFormatedProcessor();
-                chimeraData = document.getElementById("sockerDataTransferContainer").innerText;
+                var container = document.getElementById("sockerDataTransferContainer");
+
+                chimeraData = container.innerHTML;
                 chimeraData = formatedProcessor.FormatData(chimeraData);
                 
                 CloseLoadingScene();
@@ -96,6 +99,8 @@
                 initProcessor.SetSceneVisibility(additionalFunctionalityContainer, true);
                 document.getElementById(NameList.OpacitySlider).value = Options.DefaultOpacity;
                 document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + Options.DefaultOpacity;
+                document.getElementById(NameList.PointSizeSlider).value = Options.DefaultPointSize;
+                document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + Options.DefaultPointSize;
             }
 
             function CloseAdditionalFunctionalityScene() {
@@ -237,15 +242,19 @@
                 buildProcessor.rebuild();
             }
 
-            function getOpacityValue() {
+            function getOpacitySliderValue() {
                 return document.getElementById(NameList.OpacitySlider).value;
             }
 
+            function getPointSizeSliderValue() {
+                return document.getElementById(NameList.PointSizeSlider).value;
+            }
+
             function opacityChange() {
-                var value = getOpacityValue();
+                var value = getOpacitySliderValue();
 
                 if (currentScene == 'CutScene'){
-                    buildProcessor.customParticlesBuild(value, cutProcessor.getCutParticles());
+                    buildProcessor.customParticlesBuild(value, Options.DefaultPointSize, cutProcessor.getCutParticles());
                 }
                 else {
                     buildProcessor.updateOpacity(value);
@@ -253,12 +262,26 @@
 
                 document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + value;
                 Options.DefaultOpacity = value;
-            }          
+            }
+
+            function pointSizeChange() {
+                var value = getPointSizeSliderValue();
+
+                if (currentScene == 'CutScene') {
+                    buildProcessor.customParticlesBuild(Options.DefaultOpacity, value, cutProcessor.getCutParticles());
+                }
+                else {
+                    buildProcessor.updatePointSize(value);
+                }
+
+                document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + value;
+                Options.DefaultPointSize = value;
+            }
 
             function readText(that) {
             }
 
-            function keyEvent() {
+            function keyEvent(event) {
                 switch (event.keyCode) {
                     case 37:
                         buildProcessor.rotate_left();
@@ -310,6 +333,8 @@
         <input id="closeCut" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Exit from the Cut mode" onclick="closeCut()" />
         <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" step="0.01" max="1" value="0.12" onchange="opacityChange()">
         <input id="opacityLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Opacity" disabled />
+        <input id="pointSize" type="range" style="position:absolute; visibility:hidden" min="0.5" step="0.1" max="10" value="3.5" onchange="pointSizeChange()">
+        <input id="pointSizeLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Particle Size" disabled />
         <label id="sockerDataTransferContainer" style="display:none"></label>
 
     </body>

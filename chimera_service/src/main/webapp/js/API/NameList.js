@@ -24,3 +24,5 @@ NameList.CloseCut = "closeCut";
 
 NameList.OpacitySlider = "opacity";
 NameList.OpacityLabel = "opacityLabel";
+NameList.PointSizeSlider = "pointSize";
+NameList.PointSizeLabel = "pointSizeLabel";

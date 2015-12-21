@@ -1,18 +1,11 @@
 /*Chimera Buttons style*/
 
 .chimeraButton {
-	-moz-box-shadow:inset 0px 0px 2px 0px #a1b891;
 	-webkit-box-shadow:inset 0px 0px 2px 0px #a1b891;
 	box-shadow:inset 0px 0px 2px 0px #a1b891;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #242927), color-stop(1, #4c5757));
 	background:-moz-linear-gradient(top, #242927 5%, #4c5757 100%);
-	background:-webkit-linear-gradient(top, #242927 5%, #4c5757 100%);
-	background:-o-linear-gradient(top, #242927 5%, #4c5757 100%);
-	background:-ms-linear-gradient(top, #242927 5%, #4c5757 100%);
 	background:linear-gradient(to bottom, #242927 5%, #4c5757 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#242927', endColorstr='#4c5757',GradientType=0);
 	background-color:#242927;
-	-moz-border-radius:7px;
 	-webkit-border-radius:7px;
 	border-radius:6px;
 	border:1px solid #565d69;
@@ -28,13 +21,8 @@
 }
 
 .chimeraButton:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4c5757), color-stop(1, #242927));
 	background:-moz-linear-gradient(top, #4c5757 5%, #242927 100%);
-	background:-webkit-linear-gradient(top, #4c5757 5%, #242927 100%);
-	background:-o-linear-gradient(top, #4c5757 5%, #242927 100%);
-	background:-ms-linear-gradient(top, #4c5757 5%, #242927 100%);
 	background:linear-gradient(to bottom, #4c5757 5%, #242927 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c5757', endColorstr='#242927',GradientType=0);
 	background-color:#4c5757;
 }
 .chimeraButton:active {

@@ -54,15 +54,18 @@
     }
 
     socket.onmessage = function (message) {
+        currentFrame++;
+
+        if (currentFrame > frames)
+            return;
+
+        Data += message.data;
+        progress(currentFrame);
+
         if (currentFrame == frames) {
             var container = document.getElementById("sockerDataTransferContainer");
             container.innerHTML = Data;
             callback();
-        }
-        else {
-            Data += message.data;
-            currentFrame++;
-            progress(currentFrame);
         }
     }
 
