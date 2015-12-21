@@ -14,8 +14,8 @@
 
     //ffffcc
     this.colors[1][0] = 255;
-    this.colors[1][1] = 255;
-    this.colors[1][2] = 204;
+    this.colors[1][1] = 0;
+    this.colors[1][2] = 0;
 
     //ffff99
     this.colors[2][0] = 255;
@@ -96,15 +96,11 @@
         return colorsCount;
     }
 
-    this.GetR = function (index) {
-        return this.colors[index][0];
-    }
-
-    this.GetG = function (index) {
-        return this.colors[index][1];
-    }
-
-    this.GetB = function (index) {
-        return this.colors[index][2];
+    this.GetColors = function (index) {
+        return {
+            r: this.colors[index][0],
+            g: this.colors[index][1],
+            b: this.colors[index][2]
+        };
     }
 }
