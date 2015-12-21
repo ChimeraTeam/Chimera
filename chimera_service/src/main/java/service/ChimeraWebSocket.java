@@ -35,7 +35,6 @@ public class ChimeraWebSocket {
 //                            session.getAsyncRemote().sendBinary(ByteBuffer.wrap(LZW.compress(value)));
                         if (!session.isOpen()) return;
                         session.getAsyncRemote().sendText(value);
-                        logger.info("processing ... " + value);
                     }
                 }
                 logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
