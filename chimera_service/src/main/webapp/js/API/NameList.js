@@ -5,10 +5,6 @@
 NameList.LoadingLabel = "loadingLabel";
 NameList.LoadingProgressBar = "loadingProgressBar";
 
-NameList.InformLabel = "informLabel";
-NameList.OpenFileDialog = "openFile";
-NameList.SelectedFileName = "selectedFileName";
-
 NameList.TimeMomentsLabel = "textLabel";
 NameList.SelectTimeMomentTextBox = "time";
 NameList.BuildFrameButton = "build";

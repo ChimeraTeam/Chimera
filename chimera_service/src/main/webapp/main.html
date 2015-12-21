@@ -31,7 +31,6 @@
         <div id="container" class="container"></div>
         <script type="text/javascript">
             var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
-            var selectFileSceneContainer = [NameList.InformLabel, NameList.OpenFileDialog, NameList.SelectedFileName];
             var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
             var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel];
             var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
@@ -83,14 +82,6 @@
             
             window.onoffline = function () {
                 Messaging.ShowMessage(Messaging.Warning, 'Please check internet connection!');
-            }
-
-            function LoadSelectFileScene() {
-                initProcessor.SetSceneVisibility(selectFileSceneContainer, true);
-            }
-
-            function CloseSelectFileScene() {
-                initProcessor.SetSceneVisibility(selectFileSceneContainer, false);
             }
 
             function LoadOneFrameVisualizationScene() {
@@ -303,9 +294,6 @@
         
         <progress id="loadingProgressBar" style="position:absolute; visibility:hidden" class="chimeraProgressBar" max="100" value="0"></progress>
         <input id="loadingLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraProgressLabel" value="Loading...Please wait..." />
-        <label id="informLabel" style="position:absolute; visibility:hidden">Data file: </label>
-        <input id="openFile" type="file" style="position:absolute; visibility:hidden" onchange='readText(this)' multiple />
-        <label id="selectedFileName"style="position:absolute; visibility:hidden"/>
         <input id="textLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Time moment:" disabled />
         <input id="time" type="text" style="position:absolute; visibility:hidden" class="chimeraTextBox" value="1" />
         <input id="build" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Build" onclick="StartVisualization()">
