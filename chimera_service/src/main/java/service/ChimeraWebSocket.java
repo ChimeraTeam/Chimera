@@ -1,7 +1,6 @@
 package service;
 
 
-import constants.LZW;
 import constants.Types;
 import org.apache.log4j.Logger;
 
@@ -33,8 +32,9 @@ public class ChimeraWebSocket {
                 while (reader.hasNext()) {
                     String value = filter.process(reader.next());
                     if (value != null) {
+//                            session.getAsyncRemote().sendBinary(ByteBuffer.wrap(LZW.compress(value)));
                         if (!session.isOpen()) return;
-                        session.getAsyncRemote().sendText(LZW.compress(value));
+                        session.getAsyncRemote().sendText(value);
                     }
                 }
                 logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());

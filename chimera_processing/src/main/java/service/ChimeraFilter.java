@@ -11,6 +11,13 @@ import java.util.regex.Pattern;
  */
 public class ChimeraFilter {
 
+    private static final String IGNORE_LINES[] = {
+            "; Solver config file = solver-config",
+            "; Links matrix file = /dev/stdin",
+            "; Neurons state file = init_state",
+            "; computation successful"
+    };
+
     private Types type;
     private Pattern pattern;
 
@@ -21,6 +28,7 @@ public class ChimeraFilter {
     public String process(String input) {
         String out = null;
         if(input.startsWith(";")) return null;
+//        if (Arrays.asList(IGNORE_LINES).contains(input)) return null;
         if (Types.FREQUENCY.equals(type)) {
             pattern = Pattern.compile(RegExps.FREQUENCY.getValue());
             out = frequencyProcess(input);
