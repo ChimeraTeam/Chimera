@@ -7,4 +7,6 @@
     color: white;
     font-size:15px;
     font-family:Arial;
+    visibility:hidden;
+    position:absolute;
 }

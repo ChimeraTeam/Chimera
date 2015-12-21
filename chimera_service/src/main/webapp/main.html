@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 	<head>
         <meta charset="UTF-8">
 		<title>Chimera Visualization Service</title>
@@ -7,19 +7,18 @@
         <link rel="stylesheet" type="text/css" href="css/styles/controls/textboxes/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/labels/style.css" />
         <link rel="stylesheet" type="text/css" href="css/styles/controls/progress/style.css" />
-		<script type="text/javascript" src="js/ThirdParty/three.js"></script>
+        <script type="text/javascript" src="js/ChimeraVisualizationManager.js"></script>
+        <script type="text/javascript" src="js/ThirdParty/three.js"></script>
         <script type="text/javascript" src="js/API/Globals.js"></script>
         <script type="text/javascript" src="js/API/Options.js"></script>
         <script type="text/javascript" src="js/API/NameList.js"></script>
         <script type="text/javascript" src="js/API/RGB.js"></script>
-        <script type="text/javascript" src="js/API/Cookies.js"></script>
-        <script type="text/javascript" src="js/API/DiagnosticTools.js"></script>
-        <script type="text/javascript" src="js/API/DataTransfer.js"></script>
         <script type="text/javascript" src="js/API/Messaging.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PageGrid.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PositionReader.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/positionConfig.js"></script>
-        <script type="text/javascript" src="js/ComponentsLoader/ComponentsInitializerProcessor.js"></script>
+        <script type="text/javascript" src="js/ComponentsLoader/UIManager.js"></script>
+        <script type="text/javascript" src="js/ComponentsLoader/UICreator.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/BuildProcessor.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/FrequencyVisualizationStrategy.js"></script>
@@ -31,26 +30,22 @@
 	<body onKeyDown="keyEvent(event)">
         <div id="container" class="container"></div>
         <script type="text/javascript">
-            var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
-            var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
-            var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel];
-            var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
-            var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
-            var cutSceneContainer = [NameList.HorizontalCut, NameList.VerticalCut, NameList.CloseCut, NameList.CurrentCutType];
             var chimeraData = [];
-            var initProcessor;
             var pageGrid;
             var visualizationType;
             var oscilatorsCount;
             var buildProcessor;
             var cutProcessor;
-            var currentScene = "";
-            var videoProcessor = new VideoProcessor();
+            var videoProcessor;
+            var uiManager;
+            var chimeraManager = new ChimeraVisualizationManager();
             
             function init()
             {
                 var inspector = new SocketDataInspector();
-                inspector.init(DataReadyCallback, LoadLoadingScene);
+                uiManager = new UIManager();
+
+                inspector.init(DataReadyCallback, uiManager.loadLoadingScene);
 
                 visualizationType = inspector.getType(Globals.VisualizationType);
                 oscilatorsCount = inspector.getOscillatorNumber(Globals.FilePath);
@@ -68,217 +63,21 @@
                 chimeraData = container.innerHTML;
                 chimeraData = formatedProcessor.FormatData(chimeraData);
                 
-                CloseLoadingScene();
-                LoadOneFrameVisualizationScene();
+                uiManager.closeLoadingScene();
+                uiManager.loadOneFrameVisualizationScene();
             }
 
             window.onload = function onload() {
-                initProcessor = new ComponentsInitializerProcessor();
-
                 init();
 
                 pageGrid = new PageGrid();
 
                 pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
-                CalculatePositions();
+                uiManager.calculatePositions(pageGrid);
             };
             
             window.onoffline = function () {
                 Messaging.ShowMessage(Messaging.Warning, 'Please check internet connection!');
-            }
-
-            function LoadOneFrameVisualizationScene() {
-                initProcessor.SetSceneVisibility(oneFrameVisualizationSceneContainer, true);
-            }
-
-            function CloseOneFrameVisualizationScene() {
-                initProcessor.SetSceneVisibility(oneFrameVisualizationSceneContainer, false);
-            }
-
-            function LoadAdditionalFunctionalityScene() {
-                initProcessor.SetSceneVisibility(additionalFunctionalityContainer, true);
-                document.getElementById(NameList.OpacitySlider).value = Options.DefaultOpacity;
-                document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + Options.DefaultOpacity;
-                document.getElementById(NameList.PointSizeSlider).value = Options.DefaultPointSize;
-                document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + Options.DefaultPointSize;
-            }
-
-            function CloseAdditionalFunctionalityScene() {
-                initProcessor.SetSceneVisibility(additionalFunctionalityContainer, false);
-            }
-
-            function LoadVideoVisualizationScene() {
-                initProcessor.SetSceneVisibility(videoVisualizationSceneContainer, true);
-            }
-
-            function CloseVideoVisualizationScene() {
-                initProcessor.SetSceneVisibility(videoVisualizationSceneContainer, false);
-            }
-
-            function LoadCurrentFrameInfoScene() {
-                initProcessor.SetSceneVisibility(currentFrameInfoSceneContainer, true);
-            }
-
-            function CloseCurrentFrameInfoScene() {
-                initProcessor.SetSceneVisibility(currentFrameInfoSceneContainer, false);
-            }
-
-            function LoadCutScene() {
-                initProcessor.SetVisibilityControlProperty(NameList.CutButton, false);
-                initProcessor.SetSceneVisibility(cutSceneContainer, true);
-                CloseOneFrameVisualizationScene();
-                CloseVideoVisualizationScene();
-                currentScene = "CutScene";
-            }
-
-            function CloseCutScene() {
-                initProcessor.SetVisibilityControlProperty(NameList.CutButton, true);
-                initProcessor.SetSceneVisibility(cutSceneContainer, false);
-                LoadOneFrameVisualizationScene();
-                currentScene = "";
-            }
-            
-            function LoadLoadingScene(value) {
-                initProcessor.SetControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value + ' from ' + Globals.MaxTimeFrame);
-                initProcessor.SetControlValue(NameList.LoadingProgressBar, 100 * value / Globals.MaxTimeFrame);
-                initProcessor.SetSceneVisibility(loadingSceneContainer, true);
-            }
-
-            function CloseLoadingScene() {
-                initProcessor.SetSceneVisibility(loadingSceneContainer, false);
-            }
-
-            function CalculatePositions()
-            {
-                initProcessor.SetPosition(loadingSceneContainer, pageGrid);
-                initProcessor.SetPosition(oneFrameVisualizationSceneContainer, pageGrid);
-                initProcessor.SetPosition(additionalFunctionalityContainer, pageGrid);
-                initProcessor.SetPosition(videoVisualizationSceneContainer, pageGrid);
-                initProcessor.SetPosition(currentFrameInfoSceneContainer, pageGrid);
-                initProcessor.SetPosition(cutSceneContainer, pageGrid);
-            }
-
-            function SetCurrentFrameValue(value)
-            {
-                initProcessor.SetControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
-            }
-
-            function StartVisualization()
-            {
-                var currentFrame = document.getElementById(NameList.SelectTimeMomentTextBox).value;
-                buildProcessor.build(currentFrame, false);
-            }
-
-            function video() {
-                initProcessor.SetControlValue(NameList.VideoPause, "Pause");
-
-                CloseOneFrameVisualizationScene();
-                LoadVideoVisualizationScene();
-
-                videoProcessor.init(buildProcessor);
-                videoProcessor.play();
-            }
-
-            function videoClose() {
-                CloseVideoVisualizationScene();
-                LoadOneFrameVisualizationScene();
-                
-                videoProcessor.close();
-            }
-
-            function videoPause() {
-                var value = document.getElementById(NameList.VideoPause).value;
-
-                if (value == "Pause") {
-                    videoProcessor.pause();
-                    initProcessor.SetControlValue(NameList.VideoPause, "Resume");
-                    initProcessor.SetDisabledButtonProperty(NameList.VideoBack, false);
-                    initProcessor.SetDisabledButtonProperty(NameList.VideoNext, false);
-                }
-                else {
-                    videoProcessor.resume();
-                    initProcessor.SetControlValue(NameList.VideoPause, "Pause");
-                    initProcessor.SetDisabledButtonProperty(NameList.VideoBack, true);
-                    initProcessor.SetDisabledButtonProperty(NameList.VideoNext, true);
-                }
-            }
-
-            function videoBack() {
-                videoProcessor.back();
-            }
-
-            function videoNext() {
-                videoProcessor.next();
-            }
-
-            function cut() {
-                /*var dataTransfer = new DataTransfer(); 
-                var url = 'html/pages/cut.html';
-
-                dataTransfer.SendData(buildProcessor.getCurrentFrameData(), url);
-
-                var win = window.open(url, '_blank');
-                win.focus(); - TODO: in next version cut functionality should be on new html page*/
-
-                cutProcessor = new CutProcessor(buildProcessor);
-                LoadCutScene();
-
-            }
-
-            function horizontalCut() {
-                cutProcessor.setCurrentType('Current Cut type: horizontal');
-                cutProcessor.onHorizontalCutButtonClick();
-            }
-
-            function verticalCut() {
-                cutProcessor.setCurrentType('Current Cut type: vertical');
-                cutProcessor.onVerticalCutButtonClick();
-            }
-
-            function closeCut() {
-                cutProcessor.exit();
-                cutProcessor = null;
-                CloseCutScene();
-                buildProcessor.rebuild();
-            }
-
-            function getOpacitySliderValue() {
-                return document.getElementById(NameList.OpacitySlider).value;
-            }
-
-            function getPointSizeSliderValue() {
-                return document.getElementById(NameList.PointSizeSlider).value;
-            }
-
-            function opacityChange() {
-                var value = getOpacitySliderValue();
-
-                if (currentScene == 'CutScene'){
-                    buildProcessor.customParticlesBuild(value, Options.DefaultPointSize, cutProcessor.getCutParticles());
-                }
-                else {
-                    buildProcessor.updateOpacity(value);
-                }
-
-                document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + value;
-                Options.DefaultOpacity = value;
-            }
-
-            function pointSizeChange() {
-                var value = getPointSizeSliderValue();
-
-                if (currentScene == 'CutScene') {
-                    buildProcessor.customParticlesBuild(Options.DefaultOpacity, value, cutProcessor.getCutParticles());
-                }
-                else {
-                    buildProcessor.updatePointSize(value);
-                }
-
-                document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + value;
-                Options.DefaultPointSize = value;
-            }
-
-            function readText(that) {
             }
 
             function keyEvent(event) {
@@ -303,7 +102,7 @@
                         break;
                     case 27:
                         if (cutProcessor != null) {
-                            initProcessor.SetControlValue(NameList.CurrentCutType, 'Current Cut type: none');
+                            uiManager.getUICreator().SetControlValue(NameList.CurrentCutType, 'Current Cut type: none');
                             cutProcessor.exit();
                         }
                         break;
@@ -315,26 +114,26 @@
 
         </script>
         
-        <progress id="loadingProgressBar" style="position:absolute; visibility:hidden" class="chimeraProgressBar" max="100" value="0"></progress>
-        <input id="loadingLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraProgressLabel" value="Loading...Please wait..." />
-        <input id="textLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Time moment:" disabled />
+        <progress id="loadingProgressBar" class="chimeraProgressBar" max="100" value="0"></progress>
+        <input id="loadingLabel" type="text" class="chimeraProgressLabel" value="Loading...Please wait..." />
+        <input id="textLabel" type="text" class="chimeraLabel" value="Time moment:" disabled />
         <input id="time" type="text" style="position:absolute; visibility:hidden" class="chimeraTextBox" value="1" />
-        <input id="build" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Build" onclick="StartVisualization()">
-        <input id="video3D" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Video 3D" onclick="video()">
-        <input id="videoPause" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Pause" onclick="videoPause()">
-        <input id="videoNext" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Next" onclick="videoNext()" disabled>
-        <input id="videoBack" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Back" onclick="videoBack()" disabled>
-        <input id="videoClose" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Close" onclick="videoClose()">
-        <input id="currentFrame" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Current Frame:" disabled />
-        <input id="cut" type="submit" style="position:absolute; visibility:hidden" class="chimeraButton" value="Cut" onclick="cut()">
-        <input id="horizontalCut" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="H" onclick="horizontalCut()"/>
-        <input id="verticalCut" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="V" onclick="verticalCut()"/>
-        <input id="currentCutType" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Current Cut type: none" disabled />
-        <input id="closeCut" type="button" style="position:absolute; visibility:hidden" class="chimeraButton" value="Exit from the Cut mode" onclick="closeCut()" />
-        <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" step="0.01" max="1" value="0.12" onchange="opacityChange()">
-        <input id="opacityLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Opacity" disabled />
-        <input id="pointSize" type="range" style="position:absolute; visibility:hidden" min="0.5" step="0.1" max="10" value="3.5" onchange="pointSizeChange()">
-        <input id="pointSizeLabel" type="text" style="position:absolute; visibility:hidden" class="chimeraLabel" value="Particle Size" disabled />
+        <input id="build" type="button" class="chimeraButton" value="Build" onclick="chimeraManager.startVisualization()">
+        <input id="video3D" type="button" class="chimeraButton" value="Video 3D" onclick="chimeraManager.playVideo()">
+        <input id="videoPause" type="button" class="chimeraButton" value="Pause" onclick="chimeraManager.videoPause()">
+        <input id="videoNext" type="button" class="chimeraButton" value="Next" onclick="chimeraManager.videoNext()" disabled>
+        <input id="videoBack" type="button" class="chimeraButton" value="Back" onclick="chimeraManager.videoBack()" disabled>
+        <input id="videoClose" type="button"class="chimeraButton" value="Close" onclick="chimeraManager.videoClose()">
+        <input id="currentFrame" type="text" class="chimeraLabel" value="Current Frame:" disabled />
+        <input id="cut" type="submit" class="chimeraButton" value="Cut" onclick="chimeraManager.cut()">
+        <input id="horizontalCut" type="button" class="chimeraButton" value="H" onclick="chimeraManager.horizontalCut()"/>
+        <input id="verticalCut" type="button" class="chimeraButton" value="V" onclick="chimeraManager.verticalCut()"/>
+        <input id="currentCutType" type="text" class="chimeraLabel" value="Current Cut type: none" disabled />
+        <input id="closeCut" type="button" class="chimeraButton" value="Exit from the Cut mode" onclick="chimeraManager.closeCut()" />
+        <input id="opacity" type="range" style="position:absolute; visibility:hidden" min="0" step="0.01" max="1" value="0.12" onchange="chimeraManager.onOpacityChanged()">
+        <input id="opacityLabel" type="text" class="chimeraLabel" value="Opacity" disabled />
+        <input id="pointSize" type="range" style="position:absolute; visibility:hidden" min="0.5" step="0.1" max="10" value="3.5" onchange="chimeraManager.onPointSizeChanged()">
+        <input id="pointSizeLabel" type="text" class="chimeraLabel" value="Particle Size" disabled />
         <label id="sockerDataTransferContainer" style="display:none"></label>
 
     </body>

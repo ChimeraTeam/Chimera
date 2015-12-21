@@ -93,6 +93,10 @@
         renderer.render(scene, camera);
     }
 
+    function setCurrentFrameValue(value) {
+        uiManager.getUICreator().SetControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
+    }
+
     this.customParticlesBuild = function (opacity, size, particlesArray) {
         scene.remove(scene.children[0]);
 
@@ -130,8 +134,8 @@
         scene.remove(scene.children[0]);
         delete particleSystem;
         currentFrameData.length = 0;
-        CloseCurrentFrameInfoScene();
-        CloseAdditionalFunctionalityScene();
+        uiManager.closeCurrentFrameInfoScene();
+        uiManager.closeAdditionalFunctionalityScene();
 
         renderer.render(scene, camera);
     }
@@ -148,7 +152,7 @@
         }
 
         this.clearScene();
-        LoadAdditionalFunctionalityScene();
+        uiManager.loadAdditionalFunctionalityScene();
 
         selectDataForCurrentFrame(frame);
 
@@ -162,8 +166,8 @@
 
         renderModel(Options.DefaultOpacity, Options.DefaultPointSize);
 
-        LoadCurrentFrameInfoScene();
-        SetCurrentFrameValue(frame);
+        uiManager.loadCurrentFrameInfoScene();
+        setCurrentFrameValue(frame);
         currentFrame = frame;
 
         return true;

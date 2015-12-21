@@ -18,6 +18,8 @@
     text-align:center;
 	text-decoration:none;
 	text-shadow:0px -1px 0px #2c3f66;
+    visibility:hidden;
+    position:absolute;
 }
 
 .chimeraButton:hover {

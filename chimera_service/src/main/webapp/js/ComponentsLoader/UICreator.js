@@ -1,4 +1,4 @@
-﻿ComponentsInitializerProcessor = function () {
+﻿UICreator = function () {
 
     this.SetSceneVisibility = function (container, value) {
         for (var i = 0; i < container.length; i++) {
