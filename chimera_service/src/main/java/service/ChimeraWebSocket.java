@@ -33,7 +33,7 @@ public class ChimeraWebSocket {
                     String value = filter.process(reader.next());
                     if (value != null) {
                         if (!session.isOpen()) return;
-                        session.getAsyncRemote().sendText(LZW.compress(value));
+                        session.getAsyncRemote().sendText(LZW.compress(value).toString());
                     }
                 }
                 logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
