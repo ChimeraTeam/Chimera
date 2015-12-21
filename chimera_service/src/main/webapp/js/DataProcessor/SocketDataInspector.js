@@ -20,14 +20,14 @@
         Globals.MaxTimeFrame = frames;
 
         progress(0);
-    }
+    };
 
     this.getType = function (configLine) {
         if (configLine == "P")
             return "Phase";
         if (configLine == "F")
             return "Frequency";
-    }
+    };
 
     this.getOscillatorNumber = function (configLine) {
         if (configLine.indexOf("50x50x50") > -1)
@@ -38,7 +38,7 @@
             return Globals.LargeOsillatorsCount;
         else
             return Options.DefaultOscilatorsNumber;
-    }
+    };
 
     function getParameterByName(name)
     {
@@ -51,7 +51,7 @@
 
     socket.onopen = function () {
 
-    }
+    };
 
     socket.onmessage = function (message) {
         if (currentFrame == frames) {
@@ -60,11 +60,13 @@
             callback();
         }
         else {
-            Data += message.data;
+            Data += LZW.decompress(message.data);
+            alert(Data);
+            console.info(Data);
             currentFrame++;
             progress(currentFrame);
         }
-    }
+    };
 
     function waitForSocketConnection(socket, callback) {
         setTimeout(
@@ -97,4 +99,4 @@
     window.onbeforeunload = function () {
         closeConnect();
     }
-}
+};
