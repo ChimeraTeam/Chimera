@@ -3,7 +3,6 @@ package service;
 import constants.RegExps;
 import constants.Types;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +27,8 @@ public class ChimeraFilter {
 
     public String process(String input) {
         String out = null;
-        if (Arrays.asList(IGNORE_LINES).contains(input)) return null;
+        if(input.startsWith(";")) return null;
+//        if (Arrays.asList(IGNORE_LINES).contains(input)) return null;
         if (Types.FREQUENCY.equals(type)) {
             pattern = Pattern.compile(RegExps.FREQUENCY.getValue());
             out = frequencyProcess(input);
