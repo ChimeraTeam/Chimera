@@ -63,7 +63,7 @@
 
         undoOperationsStack.push(cutParticles);
         cutParticles = newParticles;
-        buildProcessor.customParticlesBuild(getOpacityValue(), cutParticles);
+        buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, cutParticles);
     }
 
     function cutVerticalPart(event, cutVector) {
@@ -90,7 +90,7 @@
 
         undoOperationsStack.push(cutParticles);
         cutParticles = newParticles;
-        buildProcessor.customParticlesBuild(getOpacityValue(), cutParticles);
+        buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, cutParticles);
     }
 
     function drawHorizontalHelpLine(event) {
@@ -133,7 +133,7 @@
 
         var particles = undoOperationsStack.pop();
         cutParticles = particles;
-        buildProcessor.customParticlesBuild(getOpacityValue(), particles);
+        buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, particles);
     }
 
     window.onmousemove = function (event) {

@@ -82,7 +82,7 @@
 
     this.ArrayPositions[14][0] = "cut";
     this.ArrayPositions[14][1] = 27;
-    this.ArrayPositions[14][2] = 15;
+    this.ArrayPositions[14][2] = 12;
     this.ArrayPositions[14][3] = 1;
     this.ArrayPositions[14][4] = 3;
     this.ArrayPositions[15][0] = "horizontalCut";
@@ -108,14 +108,24 @@
     
     this.ArrayPositions[19][0] = "opacity";
     this.ArrayPositions[19][1] = 26;
-    this.ArrayPositions[19][2] = 18;
+    this.ArrayPositions[19][2] = 15;
     this.ArrayPositions[19][3] = 3;
     this.ArrayPositions[19][4] = 3;
     this.ArrayPositions[20][0] = "opacityLabel";
     this.ArrayPositions[20][1] = 26;
-    this.ArrayPositions[20][2] = 20;
+    this.ArrayPositions[20][2] = 17;
     this.ArrayPositions[20][3] = 3;
     this.ArrayPositions[20][4] = 3;
+    this.ArrayPositions[21][0] = "pointSize";
+    this.ArrayPositions[21][1] = 26;
+    this.ArrayPositions[21][2] = 19;
+    this.ArrayPositions[21][3] = 3;
+    this.ArrayPositions[21][4] = 3;
+    this.ArrayPositions[22][0] = "pointSizeLabel";
+    this.ArrayPositions[22][1] = 26;
+    this.ArrayPositions[22][2] = 21;
+    this.ArrayPositions[22][3] = 3;
+    this.ArrayPositions[22][4] = 3;
 
 
     this.GetByName = function(name) {

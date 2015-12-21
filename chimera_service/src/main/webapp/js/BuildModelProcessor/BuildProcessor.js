@@ -61,9 +61,9 @@
         buildStrategyInstance.max = max;
     }
 
-    function createMaterial(opacity) {
+    function createMaterial(opacity, size) {
         var material = new THREE.PointCloudMaterial({
-            size: 3,
+            size: size,
             blending: THREE.FlatShading,
             wireframe: true,
             transparent: true,
@@ -76,9 +76,9 @@
         return material;
     }
 
-    function renderModel(opacity) {
+    function renderModel(opacity, size) {
 
-        var pMaterial = createMaterial(opacity);
+        var pMaterial = createMaterial(opacity, size);
 
         particleSystem = new THREE.PointCloud(
                     particles,
@@ -93,10 +93,10 @@
         renderer.render(scene, camera);
     }
 
-    this.customParticlesBuild = function (opacity, particlesArray) {
+    this.customParticlesBuild = function (opacity, size, particlesArray) {
         scene.remove(scene.children[0]);
 
-        var pMaterial = createMaterial(opacity);
+        var pMaterial = createMaterial(opacity, size);
 
         particleSystem = new THREE.PointCloud(
                     particlesArray,
@@ -160,7 +160,7 @@
         particles.colorsNeedUpdate = true;
         particles.colors = colors;
 
-        renderModel(Options.DefaultOpacity);
+        renderModel(Options.DefaultOpacity, Options.DefaultPointSize);
 
         LoadCurrentFrameInfoScene();
         SetCurrentFrameValue(frame);
@@ -192,7 +192,13 @@
     this.updateOpacity = function (opacity) {
         scene.remove(scene.children[0]);
 
-        renderModel(opacity);
+        renderModel(opacity, Options.DefaultPointSize);
+    }
+
+    this.updatePointSize = function (size) {
+        scene.remove(scene.children[0]);
+
+        renderModel(Options.DefaultOpacity, size);
     }
 
     this.getCurrentFrameData = function() {
