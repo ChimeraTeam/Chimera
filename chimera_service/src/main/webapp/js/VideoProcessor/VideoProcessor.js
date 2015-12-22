@@ -12,7 +12,7 @@
 
         if (currentFrame > Globals.MaxTimeFrame) {
             end = true;
-            videoPause();
+            chimeraManager.videoPause();
             return;
         }
 
