@@ -14,9 +14,7 @@
 
         for (var i = 0; i < data.length; i++) {
             colors[i] = new THREE.Color();
-			var phase = Math.abs(data[i]);
-			var newPhase = phase - parseInt(phase / (2 * Math.PI)) * 2 * Math.PI;
-            H = 3 * newPhase / 3.1427;
+            H = 3 * data[i] / 3.1427;
             Vm = V * (100 - S) / 100;
             a = (V - Vm) * (H % 1) / 60;
             Vi = Vm + a;
