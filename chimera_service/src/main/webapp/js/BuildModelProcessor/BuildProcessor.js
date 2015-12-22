@@ -47,7 +47,7 @@
         var end = begin + Globals.OscillatorsNumber;
 
         for (var i = begin; i < end; i++) {
-            var value = chimeraData[i];
+            var value = parseFloat(chimeraData[i]);
 
             if (value > max)
                 max = value;
