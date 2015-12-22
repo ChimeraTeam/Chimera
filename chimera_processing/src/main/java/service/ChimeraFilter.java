@@ -44,7 +44,7 @@ public class ChimeraFilter {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            data.append(frequencyCompress(Double.valueOf(matcher.group().split(" ")[0]))).append(",");
+            data.append(frequencyCompress(Double.valueOf(matcher.group().split(" ")[0])));
         }
         return data.toString();
     }
@@ -53,7 +53,7 @@ public class ChimeraFilter {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            data.append(phaseCompress(Double.valueOf(matcher.group().split(" ")[2]))).append(",");
+            data.append(phaseCompress(Double.valueOf(matcher.group().split(" ")[2])));
         }
         return data.toString();
     }
