@@ -53,7 +53,9 @@ public class ChimeraFilter {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            data.append(matcher.group().split(" ")[2]).append(",");
+            String value = matcher.group().split(" ")[2];
+            Double phase = Math.abs(Double.valueOf(value));
+            data.append(phase - ((int)(phase / (2 * Math.PI))) * 2 * Math.PI).append(",");
         }
         return data.toString();
     }
