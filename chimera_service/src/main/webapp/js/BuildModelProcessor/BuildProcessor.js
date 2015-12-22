@@ -12,6 +12,8 @@
     var currentFrame;
     var max = -100, min = 100;
     var cutInProgress = false;
+	var dataProcessor = new DataFormatedProcessor();
+	var dataFormatMethod;
     
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(renderer.domElement);
@@ -21,9 +23,11 @@
     function init(st) {
         if (st == "Phase") {
             buildStrategyInstance = new PhaseVisualizationStrategy();
+			dataFormatMethod = dataProcessor.FormatPhase;
         }
         else {
             buildStrategyInstance = new FrequencyVisualizationStrategy();
+			dataFormatMethod = dataProcessor.FormatFrequency;
         }
         
         initialiasePositions();
@@ -47,7 +51,7 @@
         var end = begin + Globals.OscillatorsNumber;
 
         for (var i = begin; i < end; i++) {
-            var value = parseFloat(chimeraData[i]);
+            var value = dataFormatMethod(chimeraData[i]);
 
             if (value > max)
                 max = value;
