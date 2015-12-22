@@ -69,7 +69,7 @@ public class ChimeraFilter {
         double degree = 180 * phase / Math.PI;
         int newPhase = ((int) degree) - displacement;
         if (newPhase >= 0) {
-            return ((char) newPhase) + "";
+            return "+" + ((char) newPhase);
         }
         return "-" + ((char) Math.abs(newPhase));
     }
