@@ -4,7 +4,7 @@
     var inProgress = false;
     var currentStrategy = "";
     var cutParticles = buildProcessor.getParticles();
-    var undoOperationsStack = [];
+    var previouslyStatesStack = [];
     buildProcessor.setCutInProgress(true);
 
     this.onHorizontalCutButtonClick = function () {
@@ -61,7 +61,7 @@
             }
         }
 
-        undoOperationsStack.push(cutParticles);
+        saveCurrentState();
         cutParticles = newParticles;
         buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, cutParticles);
     }
@@ -88,9 +88,13 @@
             }
         }
 
-        undoOperationsStack.push(cutParticles);
+        saveCurrentState();
         cutParticles = newParticles;
         buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, cutParticles);
+    }
+
+    function saveCurrentState() {
+        previouslyStatesStack.push(cutParticles);
     }
 
     function drawHorizontalHelpLine(event) {
@@ -128,10 +132,10 @@
     }
 
     function undo() {
-        if (undoOperationsStack.length == 0)
+        if (previouslyStatesStack.length == 0)
             return;
 
-        var particles = undoOperationsStack.pop();
+        var particles = previouslyStatesStack.pop();
         cutParticles = particles;
         buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, particles);
     }

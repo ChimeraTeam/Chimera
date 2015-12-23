@@ -14,15 +14,15 @@
     }
 
     this.loadOneFrameVisualizationScene = function () {
-        _uiCreator.SetSceneVisibility(oneFrameVisualizationSceneContainer, true);
+        _uiCreator.setSceneVisibility(oneFrameVisualizationSceneContainer, true);
     }
 
     this.closeOneFrameVisualizationScene = function() {
-        _uiCreator.SetSceneVisibility(oneFrameVisualizationSceneContainer, false);
+        _uiCreator.setSceneVisibility(oneFrameVisualizationSceneContainer, false);
     }
 
     this.loadAdditionalFunctionalityScene = function () {
-        _uiCreator.SetSceneVisibility(additionalFunctionalityContainer, true);
+        _uiCreator.setSceneVisibility(additionalFunctionalityContainer, true);
         document.getElementById(NameList.OpacitySlider).value = Options.DefaultOpacity;
         document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + Options.DefaultOpacity;
         document.getElementById(NameList.PointSizeSlider).value = Options.DefaultPointSize;
@@ -30,57 +30,57 @@
     }
 
     this.closeAdditionalFunctionalityScene = function () {
-        _uiCreator.SetSceneVisibility(additionalFunctionalityContainer, false);
+        _uiCreator.setSceneVisibility(additionalFunctionalityContainer, false);
     }
 
     this.loadVideoVisualizationScene = function () {
-        _uiCreator.SetSceneVisibility(videoVisualizationSceneContainer, true);
+        _uiCreator.setSceneVisibility(videoVisualizationSceneContainer, true);
     }
 
     this.closeVideoVisualizationScene = function () {
-        _uiCreator.SetSceneVisibility(videoVisualizationSceneContainer, false);
+        _uiCreator.setSceneVisibility(videoVisualizationSceneContainer, false);
     }
 
     this.loadCurrentFrameInfoScene = function () {
-        _uiCreator.SetSceneVisibility(currentFrameInfoSceneContainer, true);
+        _uiCreator.setSceneVisibility(currentFrameInfoSceneContainer, true);
     }
 
     this.closeCurrentFrameInfoScene = function () {
-        _uiCreator.SetSceneVisibility(currentFrameInfoSceneContainer, false);
+        _uiCreator.setSceneVisibility(currentFrameInfoSceneContainer, false);
     }
 
     this.loadCutScene = function () {
-        _uiCreator.SetVisibilityControlProperty(NameList.CutButton, false);
-        _uiCreator.SetSceneVisibility(cutSceneContainer, true);
+        _uiCreator.setVisibilityControlProperty(NameList.CutButton, false);
+        _uiCreator.setSceneVisibility(cutSceneContainer, true);
         this.closeOneFrameVisualizationScene();
         this.closeVideoVisualizationScene();
         currentScene = "CutScene";
     }
 
     this.closeCutScene = function () {
-        _uiCreator.SetVisibilityControlProperty(NameList.CutButton, true);
-        _uiCreator.SetSceneVisibility(cutSceneContainer, false);
+        _uiCreator.setVisibilityControlProperty(NameList.CutButton, true);
+        _uiCreator.setSceneVisibility(cutSceneContainer, false);
         this.loadOneFrameVisualizationScene();
         currentScene = "";
     }
 
     this.loadLoadingScene = function (value) {
-        _uiCreator.SetControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value + ' from ' + Globals.MaxTimeFrame);
-        _uiCreator.SetControlValue(NameList.LoadingProgressBar, 100 * value / Globals.MaxTimeFrame);
-        _uiCreator.SetSceneVisibility(loadingSceneContainer, true);
+        _uiCreator.setControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value + ' from ' + Globals.MaxTimeFrame);
+        _uiCreator.setControlValue(NameList.LoadingProgressBar, 100 * value / Globals.MaxTimeFrame);
+        _uiCreator.setSceneVisibility(loadingSceneContainer, true);
     }
 
     this.closeLoadingScene = function () {
-        _uiCreator.SetSceneVisibility(loadingSceneContainer, false);
+        _uiCreator.setSceneVisibility(loadingSceneContainer, false);
     }
 
     this.calculatePositions = function (pageGrid) {
-        _uiCreator.SetPosition(loadingSceneContainer, pageGrid);
-        _uiCreator.SetPosition(oneFrameVisualizationSceneContainer, pageGrid);
-        _uiCreator.SetPosition(additionalFunctionalityContainer, pageGrid);
-        _uiCreator.SetPosition(videoVisualizationSceneContainer, pageGrid);
-        _uiCreator.SetPosition(currentFrameInfoSceneContainer, pageGrid);
-        _uiCreator.SetPosition(cutSceneContainer, pageGrid);
+        _uiCreator.setPosition(loadingSceneContainer, pageGrid);
+        _uiCreator.setPosition(oneFrameVisualizationSceneContainer, pageGrid);
+        _uiCreator.setPosition(additionalFunctionalityContainer, pageGrid);
+        _uiCreator.setPosition(videoVisualizationSceneContainer, pageGrid);
+        _uiCreator.setPosition(currentFrameInfoSceneContainer, pageGrid);
+        _uiCreator.setPosition(cutSceneContainer, pageGrid);
     }
 
     this.getUICreator = function () {

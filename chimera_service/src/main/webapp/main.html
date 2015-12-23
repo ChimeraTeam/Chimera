@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="css/styles/controls/progress/style.css" />
         <script type="text/javascript" src="js/ChimeraVisualizationManager.js"></script>
         <script type="text/javascript" src="js/ThirdParty/three.js"></script>
+        <script type="text/javascript" src="js/API/ColorConverter.js"></script>
         <script type="text/javascript" src="js/API/Globals.js"></script>
         <script type="text/javascript" src="js/API/Options.js"></script>
         <script type="text/javascript" src="js/API/NameList.js"></script>
@@ -23,7 +24,7 @@
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/FrequencyVisualizationStrategy.js"></script>
         <script type="text/javascript" src="js/DataProcessor/SocketDataInspector.js"></script>
-        <script type="text/javascript" src="js/DataProcessor/DataFormatedProcessor/DataFormatedProcessor.js"></script>
+        <script type="text/javascript" src="js/DataProcessor/DataDecryptedService/DataDecryptedService.js"></script>
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
         <script type="text/javascript" src="js/CutProcessor/CutProcessor.js"></script>
 	</head>
@@ -52,16 +53,27 @@
 
                 Globals.OscillatorsNumber = oscilatorsCount;
 
+                switch (oscilatorsCount) {
+                    case Globals.MediumOsillatorsCount:
+                        Options.DefaultCameraPosition = Globals.CameraPositionMedium;
+                        break;
+                    case Globals.LargeOsillatorsCount:
+                        Options.DefaultCameraPosition = Globals.CameraPositionLarge;
+                        break;
+                    default:
+                        break;
+                }
+
                 buildProcessor = new BuildProcessor(visualizationType);
             }
 
             function DataReadyCallback()
             {
-                var formatedProcessor = new DataFormatedProcessor();
+                var dataDecryptService = new DataDecryptedService();
                 var container = document.getElementById("sockerDataTransferContainer");
 
                 chimeraData = container.innerHTML;
-                chimeraData = formatedProcessor.FormatData(chimeraData);
+                chimeraData = dataDecryptService.decryptData(chimeraData);
                 
                 uiManager.closeLoadingScene();
                 uiManager.loadOneFrameVisualizationScene();
@@ -77,7 +89,7 @@
             };
             
             window.onoffline = function () {
-                Messaging.ShowMessage(Messaging.Warning, 'Please check internet connection!');
+                Messaging.ShowMessage(Messaging.Warning, Messaging.OnOfflineWarning);
             }
 
             function keyEvent(event) {
@@ -102,7 +114,7 @@
                         break;
                     case 27:
                         if (cutProcessor != null) {
-                            uiManager.getUICreator().SetControlValue(NameList.CurrentCutType, 'Current Cut type: none');
+                            uiManager.getUICreator().setControlValue(NameList.CurrentCutType, 'Current Cut type: none');
                             cutProcessor.exit();
                         }
                         break;

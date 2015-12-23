@@ -9,7 +9,7 @@
     }
 
     this.playVideo = function () {
-        uiManager.getUICreator().SetControlValue(NameList.VideoPause, "Pause");
+        uiManager.getUICreator().setControlValue(NameList.VideoPause, "Pause");
 
         uiManager.closeOneFrameVisualizationScene();
         uiManager.loadVideoVisualizationScene();
@@ -31,15 +31,15 @@
 
         if (value == "Pause") {
             videoProcessor.pause();
-            uiManager.getUICreator().SetControlValue(NameList.VideoPause, "Resume");
-            uiManager.getUICreator().SetDisabledButtonProperty(NameList.VideoBack, false);
-            uiManager.getUICreator().SetDisabledButtonProperty(NameList.VideoNext, false);
+            uiManager.getUICreator().setControlValue(NameList.VideoPause, "Resume");
+            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBack, false);
+            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNext, false);
         }
         else {
             videoProcessor.resume();
-            uiManager.getUICreator().SetControlValue(NameList.VideoPause, "Pause");
-            uiManager.getUICreator().SetDisabledButtonProperty(NameList.VideoBack, true);
-            uiManager.getUICreator().SetDisabledButtonProperty(NameList.VideoNext, true);
+            uiManager.getUICreator().setControlValue(NameList.VideoPause, "Pause");
+            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBack, true);
+            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNext, true);
         }
     }
 
@@ -54,7 +54,6 @@
     this.cut = function () {
         cutProcessor = new CutProcessor(buildProcessor);
         uiManager.loadCutScene();
-
     }
 
     this.horizontalCut = function () {

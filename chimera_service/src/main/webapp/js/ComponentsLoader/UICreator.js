@@ -1,19 +1,19 @@
 ﻿UICreator = function () {
 
-    this.SetSceneVisibility = function (container, value) {
+    this.setSceneVisibility = function (container, value) {
         for (var i = 0; i < container.length; i++) {
-            this.SetVisibilityControlProperty(container[i], value);
+            this.setVisibilityControlProperty(container[i], value);
         }
     }
 
-    this.SetVisibilityControlProperty = function (name, value) {
+    this.setVisibilityControlProperty = function (name, value) {
         if (value)
             document.getElementById(name).style.visibility = "visible";
         else
             document.getElementById(name).style.visibility = "hidden";
     }
 
-    this.SetPosition  = function(container, grid) {
+    this.setPosition  = function(container, grid) {
         var config = new PositionConfig();
 
         for (var i = 0; i < container.length; i++) {
@@ -26,11 +26,11 @@
         }
     }
 
-    this.SetDisabledButtonProperty = function(id, isDisabled) {
+    this.setDisabledButtonProperty = function(id, isDisabled) {
         document.getElementById(id).disabled = isDisabled;
     }
 
-    this.SetControlValue = function(id, value) {
+    this.setControlValue = function(id, value) {
         document.getElementById(id).value = value;
     }
 }

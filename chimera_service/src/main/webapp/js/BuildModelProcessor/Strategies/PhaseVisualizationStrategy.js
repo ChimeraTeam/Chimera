@@ -14,7 +14,7 @@
 
         for (var i = 0; i < data.length; i++) {
             colors[i] = new THREE.Color();
-            H = 3 * data[i] / 3.1427;
+            H = 3 * data[i] / Math.PI;
             Vm = V * (100 - S) / 100;
             a = (V - Vm) * (H % 1) / 60;
             Vi = Vm + a;

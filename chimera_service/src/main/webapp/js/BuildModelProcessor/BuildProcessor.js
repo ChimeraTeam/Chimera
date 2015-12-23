@@ -26,10 +26,10 @@
             buildStrategyInstance = new FrequencyVisualizationStrategy();
         }
         
-        initialiasePositions();
+        initPositions();
     }
 
-    function initialiasePositions() {
+    function initPositions() {
         var value = Math.pow(Globals.OscillatorsNumber, 1 / 3);
         
         for (var p = 0; p < Globals.OscillatorsNumber; p++) {
@@ -76,14 +76,14 @@
         return material;
     }
 
-    function renderModel(opacity, size) {
-
+    function renderModel(opacity, size, particlesForRendering) {
         var pMaterial = createMaterial(opacity, size);
 
         particleSystem = new THREE.PointCloud(
-                    particles,
+                    particlesForRendering,
                     pMaterial);
         scene.add(particleSystem);
+
         camera.position.z = Options.DefaultCameraPosition;
 
         particleSystem.rotationAutoUpdate = true;
@@ -93,26 +93,19 @@
         renderer.render(scene, camera);
     }
 
-    function setCurrentFrameValue(value) {
-        uiManager.getUICreator().SetControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
+    function particlesBuild(opacity, size) {
+
+        renderModel(opacity, size, particles);
     }
 
     this.customParticlesBuild = function (opacity, size, particlesArray) {
         scene.remove(scene.children[0]);
 
-        var pMaterial = createMaterial(opacity, size);
+        renderModel(opacity, size, particlesArray);
+    }
 
-        particleSystem = new THREE.PointCloud(
-                    particlesArray,
-                    pMaterial);
-        scene.add(particleSystem);
-        camera.position.z = Options.DefaultCameraPosition;
-
-        particleSystem.rotationAutoUpdate = true;
-        particleSystem.rotation.x += 0.6;
-        particleSystem.rotation.y -= 0.6;
-
-        renderer.render(scene, camera);
+    function setCurrentFrameValue(value) {
+        uiManager.getUICreator().setControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
     }
 
     this.translateCoordinatesFromEvent = function (event) {
@@ -164,7 +157,7 @@
         particles.colorsNeedUpdate = true;
         particles.colors = colors;
 
-        renderModel(Options.DefaultOpacity, Options.DefaultPointSize);
+        particlesBuild(Options.DefaultOpacity, Options.DefaultPointSize);
 
         uiManager.loadCurrentFrameInfoScene();
         setCurrentFrameValue(frame);
@@ -196,13 +189,13 @@
     this.updateOpacity = function (opacity) {
         scene.remove(scene.children[0]);
 
-        renderModel(opacity, Options.DefaultPointSize);
+        particlesBuild(opacity, Options.DefaultPointSize);
     }
 
     this.updatePointSize = function (size) {
         scene.remove(scene.children[0]);
 
-        renderModel(Options.DefaultOpacity, size);
+        particlesBuild(Options.DefaultOpacity, size);
     }
 
     this.getCurrentFrameData = function() {

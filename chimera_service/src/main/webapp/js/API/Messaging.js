@@ -9,6 +9,7 @@ Messaging.Warning = 2;
 Messaging.TimeMomentRangeError = "unexpected time moment";
 Messaging.LastTimeMomentWarning = "this is last time moment, can't load next frame";
 Messaging.FirstTimeMomentWarning = "this is first time moment, can't load previously frame";
+Messaging.OnOfflineWarning = "Please check internet connection!";
 
 Messaging.ShowMessage = function(type, message) {
     switch (type) {
