@@ -7,6 +7,11 @@ Globals.MediumOsillatorsCount = 1000000;
 Globals.LargeOsillatorsCount = 8000000;
 Globals.VeryLargeOsillatorsCount = 64000000;
 
+Globals.CameraPositionSmall = 40;
+Globals.CameraPositionMedium = 80;
+Globals.CameraPositionLarge = 120;
+Globals.CameraPositionVeryLarge = 160;
+
 Globals.VisualizationType = "P";
 Globals.FilePath = "";
 Globals.OscillatorsNumber = 0;

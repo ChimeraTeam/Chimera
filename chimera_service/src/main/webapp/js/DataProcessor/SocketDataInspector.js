@@ -30,13 +30,16 @@
     }
 
     this.getOscillatorNumber = function (configLine) {
-        if (configLine.indexOf("50x50x50") > -1)
+        if (configLine.indexOf("50x50x50") > -1) {
+            Options.DefaultCameraPosition = Globals.CameraPositionSmall;
             return Globals.SmallOsillatorsCount;
-        else if (configLine.indexOf("100x100x100") > -1)
+        } else if (configLine.indexOf("100x100x100") > -1) {
+            Options.DefaultCameraPosition = Globals.CameraPositionMedium;
             return Globals.MediumOsillatorsCount;
-        else if (configLine.indexOf("200x200x200") > -1)
+        } else if (configLine.indexOf("200x200x200") > -1) {
+            Options.DefaultCameraPosition = Globals.CameraPositionLarge;
             return Globals.LargeOsillatorsCount;
-        else
+        } else
             return Options.DefaultOscilatorsNumber;
     }
 

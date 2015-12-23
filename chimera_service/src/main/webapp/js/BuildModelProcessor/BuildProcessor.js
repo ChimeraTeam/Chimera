@@ -84,7 +84,7 @@
                     particles,
                     pMaterial);
         scene.add(particleSystem);
-        camera.position.z = 40;
+        camera.position.z = Options.DefaultCameraPosition;
 
         particleSystem.rotationAutoUpdate = true;
         particleSystem.rotation.x += 0.6;
@@ -106,7 +106,7 @@
                     particlesArray,
                     pMaterial);
         scene.add(particleSystem);
-        camera.position.z = 40;
+        camera.position.z = Options.DefaultCameraPosition;
 
         particleSystem.rotationAutoUpdate = true;
         particleSystem.rotation.x += 0.6;
