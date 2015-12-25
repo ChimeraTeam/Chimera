@@ -47,18 +47,8 @@
         var end = begin + Globals.OscillatorsNumber;
 
         for (var i = begin; i < end; i++) {
-            var value = parseFloat(chimeraData[i]);
-
-            if (value > max)
-                max = value;
-            if (value < min)
-                min = value;
-
-            currentFrameData.push(value);
+            currentFrameData.push(parseFloat(chimeraData[i]));
         }
-
-        buildStrategyInstance.min = min;
-        buildStrategyInstance.max = max;
     }
 
     function createMaterial(opacity, size) {

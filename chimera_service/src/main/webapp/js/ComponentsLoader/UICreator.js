@@ -17,12 +17,12 @@
         var config = new PositionConfig();
 
         for (var i = 0; i < container.length; i++) {
-            var values = config.GetByName(container[i]);
+            var values = config.getPositionsByName(container[i]);
             
-            document.getElementById(container[i]).style.left = grid.GetFrameX(values[0]);
-            document.getElementById(container[i]).style.top = grid.GetFrameY(values[1]);
-            document.getElementById(container[i]).style.width = grid.GetFrameX(1) * values[2];
-            document.getElementById(container[i]).style.height = grid.GetFrameY(1) * values[3];
+            document.getElementById(container[i]).style.left = grid.GetFrameX(values.x);
+            document.getElementById(container[i]).style.top = grid.GetFrameY(values.y);
+            document.getElementById(container[i]).style.width = grid.GetFrameX(1) * values.width;
+            document.getElementById(container[i]).style.height = grid.GetFrameY(1) * values.height;
         }
     }
 
