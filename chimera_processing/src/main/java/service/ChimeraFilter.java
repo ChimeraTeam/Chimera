@@ -44,7 +44,9 @@ public class ChimeraFilter {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            data.append(matcher.group().split(" ")[0]).append(",");
+			String value = matcher.group().split(" ")[0];
+            Double frequency = Double.valueOf(value);
+            data.append(frequencyCompress(frequency)).append(",");
         }
         return data.toString();
     }
@@ -55,8 +57,20 @@ public class ChimeraFilter {
         while (matcher.find()) {
             String value = matcher.group().split(" ")[2];
             Double phase = Math.abs(Double.valueOf(value));
-            data.append(phase - ((int)(phase / (2 * Math.PI))) * 2 * Math.PI).append(",");
+			Double newPhase = phase - ((int)(phase / (2 * Math.PI))) * 2 * Math.PI;
+            data.append(phaseCompress(newPhase)).append(",");
         }
         return data.toString();
     }
+	
+	private String frequencyCompress(Double frequency) {
+		frequency += 1;
+		frequency *= 8.5;
+		
+		return String.valueOf(frequency.intValue());
+	}
+
+	private String phaseCompress(Double phase) {
+		return String.valueOf((new Double(180 * phase / Math.PI)).intValue());
+	}
 }
