@@ -1,6 +1,6 @@
 package service;
 
-import org.tukaani.xz.*;
+import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 
 import java.io.*;
 import java.util.Iterator;
@@ -22,8 +22,8 @@ public class ChimeraReader implements Iterator<String> {
     private void initStream() {
         try {
             FileInputStream compressed = new FileInputStream(file);
-            XZInputStream xzInputStream = new XZInputStream(compressed);
-            this.stream = new BufferedReader(new InputStreamReader(new BufferedInputStream(xzInputStream)));
+            XZCompressorInputStream xzIn = new XZCompressorInputStream(compressed);
+            this.stream = new BufferedReader(new InputStreamReader(new BufferedInputStream(xzIn)));
         } catch (Exception e) {
             e.printStackTrace();
         }
