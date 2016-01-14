@@ -63,7 +63,7 @@
 
         saveCurrentState();
         cutParticles = newParticles;
-        buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, cutParticles);
+        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), cutParticles);
     }
 
     function cutVerticalPart(event, cutVector) {
@@ -90,7 +90,7 @@
 
         saveCurrentState();
         cutParticles = newParticles;
-        buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, cutParticles);
+        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), cutParticles);
     }
 
     function saveCurrentState() {
@@ -137,7 +137,7 @@
 
         var particles = previouslyStatesStack.pop();
         cutParticles = particles;
-        buildProcessor.customParticlesBuild(Options.DefaultOpacity, Options.DefaultPointSize, particles);
+        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), particles);
     }
 
     window.onmousemove = function (event) {

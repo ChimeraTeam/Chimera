@@ -35,7 +35,7 @@
         else if (configLine.indexOf("200x200x200") > -1)
             return Globals.LargeOsillatorsCount;
         else
-            return Options.DefaultOscilatorsNumber;
+            return Options.GetValue(OptionNames.OscillatorsNumber);
     }
 
     function getParameterByName(name)

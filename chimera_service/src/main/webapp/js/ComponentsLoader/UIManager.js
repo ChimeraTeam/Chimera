@@ -3,7 +3,8 @@
 
     var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
     var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
-    var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel];
+    var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel,
+                                                NameList.Reset];
     var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
     var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
     var cutSceneContainer = [NameList.HorizontalCut, NameList.VerticalCut, NameList.CloseCut, NameList.CurrentCutType];
@@ -22,11 +23,14 @@
     }
 
     this.loadAdditionalFunctionalityScene = function () {
+        var opacity = Options.GetValue(OptionNames.Opacity);
+        var pointSize = Options.GetValue(OptionNames.PointSize);
+
         _uiCreator.setSceneVisibility(additionalFunctionalityContainer, true);
-        document.getElementById(NameList.OpacitySlider).value = Options.DefaultOpacity;
-        document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + Options.DefaultOpacity;
-        document.getElementById(NameList.PointSizeSlider).value = Options.DefaultPointSize;
-        document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + Options.DefaultPointSize;
+        document.getElementById(NameList.OpacitySlider).value = opacity;
+        document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + opacity;
+        document.getElementById(NameList.PointSizeSlider).value = pointSize;
+        document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + pointSize;
     }
 
     this.closeAdditionalFunctionalityScene = function () {

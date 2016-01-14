@@ -11,7 +11,9 @@
         <script type="text/javascript" src="js/ThirdParty/three.js"></script>
         <script type="text/javascript" src="js/API/Colors.js"></script>
         <script type="text/javascript" src="js/API/Globals.js"></script>
-        <script type="text/javascript" src="js/API/Options.js"></script>
+        <script type="text/javascript" src="js/Options/OptionSchema.js"></script>
+        <script type="text/javascript" src="js/Options/OptionNames.js"></script>
+        <script type="text/javascript" src="js/Options/Options.js"></script>
         <script type="text/javascript" src="js/API/NameList.js"></script>
         <script type="text/javascript" src="js/API/Messaging.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PageGrid.js"></script>
@@ -53,10 +55,10 @@
 
                 switch (oscilatorsCount) {
                     case Globals.MediumOsillatorsCount:
-                        Options.DefaultCameraPosition = Globals.CameraPositionMedium;
+                        Options.SetValue(OptionNames.CameraPosition, Globals.CameraPositionMedium);
                         break;
                     case Globals.LargeOsillatorsCount:
-                        Options.DefaultCameraPosition = Globals.CameraPositionLarge;
+                        Options.SetValue(OptionNames.CameraPosition, Globals.CameraPositionLarge);
                         break;
                     default:
                         break;
@@ -144,6 +146,7 @@
         <input id="opacityLabel" type="text" class="chimeraLabel" value="Opacity" disabled />
         <input id="pointSize" type="range" style="position:absolute; visibility:hidden" min="0.5" step="0.1" max="10" value="3.5" onchange="chimeraManager.onPointSizeChanged()">
         <input id="pointSizeLabel" type="text" class="chimeraLabel" value="Particle Size" disabled />
+        <input id="reset" type="button" class="chimeraButton" value="Reset" onclick="chimeraManager.reset()"/>
         <label id="sockerDataTransferContainer" style="display:none"></label>
 
     </body>

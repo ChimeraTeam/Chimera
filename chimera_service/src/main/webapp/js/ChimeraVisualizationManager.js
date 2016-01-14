@@ -65,6 +65,16 @@
         cutProcessor.setCurrentType('Current Cut type: vertical');
         cutProcessor.onVerticalCutButtonClick();
     }
+    
+    this.reset = function () {
+        if (Options.IsDirty()) {
+            Options.Reset();
+            buildProcessor.rebuild();
+        }
+        else {
+            alert("no dirty options for reset");
+        }
+    }
 
     this.closeCut = function () {
         cutProcessor.exit();
@@ -85,27 +95,27 @@
         var value = getOpacitySliderValue();
 
         if (uiManager.getCurrentScene() == 'CutScene') {
-            buildProcessor.customParticlesBuild(value, Options.DefaultPointSize, cutProcessor.getCutParticles());
+            buildProcessor.customParticlesBuild(value, Options.GetValue(OptionNames.PointSize), cutProcessor.getCutParticles());
         }
         else {
             buildProcessor.updateOpacity(value);
         }
 
         document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + value;
-        Options.DefaultOpacity = value;
-    }
+        Options.SetValue(OptionNames.Opacity, value);
+    };
 
     this.onPointSizeChanged = function () {
         var value = getPointSizeSliderValue();
 
         if (uiManager.getCurrentScene() == 'CutScene') {
-            buildProcessor.customParticlesBuild(Options.DefaultOpacity, value, cutProcessor.getCutParticles());
+            buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), value, cutProcessor.getCutParticles());
         }
         else {
             buildProcessor.updatePointSize(value);
         }
 
         document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + value;
-        Options.DefaultPointSize = value;
+        Options.GetValue(OptionNames.PointSize);
     }
 }

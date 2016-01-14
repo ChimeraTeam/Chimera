@@ -33,6 +33,7 @@
         push('opacityLabel',        26,     17,     3,      3);
         push('pointSize',           26,     19,     3,      3);
         push('pointSizeLabel',      26,     21,     3,      3);
+        push('reset',               26,     6,      3,      2);
     }
 
     this.getPositionsByName = function(name) {

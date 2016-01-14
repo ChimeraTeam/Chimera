@@ -21,3 +21,5 @@ Globals.CutHorizontal = "horizontal";
 Globals.CutVertical = "vertical";
 Globals.CutDiagonal1 = "diagonal1";
 Globals.CutDiagonal2 = "diagonal2";
+
+Globals.CustomParticles = null;

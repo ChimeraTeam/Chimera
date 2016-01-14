@@ -26,3 +26,4 @@ NameList.OpacitySlider = "opacity";
 NameList.OpacityLabel = "opacityLabel";
 NameList.PointSizeSlider = "pointSize";
 NameList.PointSizeLabel = "pointSizeLabel";
+NameList.Reset = "reset";
