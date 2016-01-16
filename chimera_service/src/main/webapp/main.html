@@ -11,6 +11,7 @@
         <link rel="stylesheet" type="text/css" href="css/styles/controls/progress/style.css" />
         <script type="text/javascript" src="js/ChimeraVisualizationManager.js"></script>
         <script type="text/javascript" src="js/ThirdParty/three.js"></script>
+        <script type="text/javascript" src="js/API/Cookies.js"></script>
         <script type="text/javascript" src="js/API/Colors.js"></script>
         <script type="text/javascript" src="js/API/Globals.js"></script>
         <script type="text/javascript" src="js/Options/OptionSchema.js"></script>
@@ -49,6 +50,7 @@
             {
                 var inspector = new SocketDataInspector();
                 uiManager = new UIManager();
+                Options.TryGetSettingsFromCookies();
 
                 inspector.init(DataReadyCallback, uiManager.loadLoadingScene);
 
@@ -94,6 +96,14 @@
             
             window.onoffline = function () {
                 Messaging.ShowMessage(Messaging.Warning, Messaging.OnOfflineWarning);
+            }
+
+            window.onunload = function () {
+                if (Options.GetValue(OptionNames.NeedSaveSettingsToCookies)) {
+                    Options.Save();
+                } else {
+                    Options.CleanCookies();
+                }
             }
 
             function keyEvent(event) {
@@ -169,7 +179,10 @@
             <br><br>
             <input id="autoResetRotationZoomLabel" type="text" class="chimeraSettingsLabel" value="Auto-Reset Rotation:"/>
             <input id="autoResetRotationZoomCheckBox" type="checkbox" class="chimeraSettingsCheckbox"/>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br>
+            <input id="saveCookiesButton" type="text" class="chimeraSettingsLabel" value="Using cookies:"/>
+            <input id="saveCookiesCheckBox" type="checkbox" class="chimeraSettingsCheckbox"/>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
             <input id="applySettingsButtons" type="button" class="chimeraSettingsButton" value="Apply" onclick="chimeraManager.applySettings()"/>
             <br><br>
             <input id="cancelSettingsButtons" type="button" class="chimeraSettingsButton" value="Cancel" onclick="chimeraManager.changeSettings()"/>

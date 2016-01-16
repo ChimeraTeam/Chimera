@@ -4,10 +4,10 @@
 
 Options.DefaultNames = [OptionNames.OscillatorsNumber, OptionNames.Opacity, OptionNames.PointSize, OptionNames.CameraPosition,
                             OptionNames.UsingCustomParticles, OptionNames.RotationX, OptionNames.RotationY, OptionNames.VideoDelay,
-                                OptionNames.RotationZoomAutomaticReset];
+                                OptionNames.RotationZoomAutomaticReset, OptionNames.NeedSaveSettingsToCookies];
 Options.DefaultValues = [OptionSchema.DefaultOscillatorsNumber, OptionSchema.DefaultOpacity, OptionSchema.DefaultPointSize,
                             OptionSchema.DefaultCameraPosition, OptionSchema.DefaultUsingCustomParticles, OptionSchema.DefaultRotationX,
-                                OptionSchema.DefaultRotationY, OptionSchema.DefaultVideoDelay, OptionSchema.RotationZoomAutomaticReset];
+                                OptionSchema.DefaultRotationY, OptionSchema.DefaultVideoDelay, OptionSchema.RotationZoomAutomaticReset, OptionSchema.DefaultNeedSaveSettingsToCookies];
 
 Options.CustomNames = [];
 Options.CustomValues = [];
@@ -22,6 +22,39 @@ Options.Merge = function () {
     }
 
     Options.Reset();
+}
+
+Options.Save = function () {
+    var cookies = new Cookies();
+
+    for (var i = 0; i < Options.DefaultNames.length; i++){
+        cookies.setCookie(Options.DefaultNames[i], Options.DefaultValues[i]);
+    }
+}
+
+Options.CleanCookies = function () {
+    var cookies = new Cookies();
+
+    for (var i = 0; i < Options.DefaultNames.length; i++){
+        cookies.eraseCookie(Options.DefaultNames[i]);
+    }
+}
+
+Options.TryGetSettingsFromCookies = function () {
+    var cookies = new Cookies();
+
+    for (var i = 0; i < Options.DefaultNames.length; i++){
+        var name = Options.DefaultNames[i];
+        var value = cookies.getCookie(name);
+
+        if (value != ""){
+            Options.SetValue(name, value);
+        }
+    }
+
+    if (Options.CustomNames.length > 0){
+        Options.Merge();
+    }
 }
 
 Options.GetDefaultValue = function (name) {

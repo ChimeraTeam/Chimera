@@ -2,12 +2,19 @@
 
     this.setCookie = function (cname, cvalue) {
         var exdate = new Date();
-        exdate.setDate(exdate.getDate() + (60 * 60 * 1000));
+        exdate.setDate(exdate.getDate() + (24 * 60 * 60 * 1000));
         var c_value = escape(cvalue) + "; expires=" + exdate.toUTCString()
                                     + "; path=/";
         document.cookie = cname + "=" + c_value;
     }
 
+    this.eraseCookie = function (cname) {
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() - 1000);
+        var c_value = "; expires=" + exdate.toUTCString() + "; path=/";
+        document.cookie = cname + "=" + c_value;
+    }
+    
     this.getCookie = function (cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');

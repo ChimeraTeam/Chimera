@@ -16,3 +16,5 @@ OptionsWindowControlNames.AutoResetRotationZoomLabel = "autoResetRotationZoomLab
 OptionsWindowControlNames.AutoResetRotationZoomCheckBox = "autoResetRotationZoomCheckBox";
 OptionsWindowControlNames.ApplySettingsButton = "applySettingsButtons";
 OptionsWindowControlNames.CancelSettingsButton = "cancelSettingsButtons";
+OptionsWindowControlNames.SaveCookiesButton = "saveCookiesButton";
+OptionsWindowControlNames.SaveCookiesCheckBox = "saveCookiesCheckBox";

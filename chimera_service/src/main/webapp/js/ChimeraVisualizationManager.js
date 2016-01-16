@@ -1,10 +1,6 @@
 ﻿ChimeraVisualizationManager = function () {
     var isSettingsChangeWindowVisible = false;
 
-    this.init = function () {
-
-    }
-
     this.startVisualization = function () {
         var currentFrame = document.getElementById(NameList.SelectTimeMomentTextBox).value;
         buildProcessor.build(currentFrame, false);

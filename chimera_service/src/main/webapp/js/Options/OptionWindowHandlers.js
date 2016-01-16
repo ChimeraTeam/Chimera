@@ -6,7 +6,7 @@ OptionWindowHandlers = function () {
     var controlsContainer = [OptionsWindowControlNames.OpacityOptionLabel, OptionsWindowControlNames.OpacityOptionTextBox, OptionsWindowControlNames.PointSizeOptionLabel,
                                 OptionsWindowControlNames.PointSizeOptionTextBox, OptionsWindowControlNames.VideoDelayOptionLabel, OptionsWindowControlNames.VideoDelayOptionTextBox,
                                     OptionsWindowControlNames.AutoResetRotationZoomLabel, OptionsWindowControlNames.AutoResetRotationZoomCheckBox, OptionsWindowControlNames.ApplySettingsButton,
-                                        OptionsWindowControlNames.CancelSettingsButton];
+                                        OptionsWindowControlNames.CancelSettingsButton, OptionsWindowControlNames.SaveCookiesButton, OptionsWindowControlNames.SaveCookiesCheckBox];
     var _uiCreator = new UICreator();
 
     this.setChildControlsVisibility = function (isVisible) {
@@ -19,6 +19,7 @@ OptionWindowHandlers = function () {
         Options.SetValue(OptionNames.PointSize, _uiCreator.getControlValue(OptionsWindowControlNames.PointSizeOptionTextBox));
         Options.SetValue(OptionNames.VideoDelay, _uiCreator.getControlValue(OptionsWindowControlNames.VideoDelayOptionTextBox));
         Options.SetValue(OptionNames.RotationZoomAutomaticReset, _uiCreator.getCheckBoxCheckedValue(OptionsWindowControlNames.AutoResetRotationZoomCheckBox));
+        Options.SetValue(OptionNames.NeedSaveSettingsToCookies, _uiCreator.getCheckBoxCheckedValue(OptionsWindowControlNames.SaveCookiesCheckBox));
 
         Options.Merge();
     }
@@ -28,5 +29,6 @@ OptionWindowHandlers = function () {
         _uiCreator.setControlValue(OptionsWindowControlNames.PointSizeOptionTextBox, Options.GetDefaultValue(OptionNames.PointSize));
         _uiCreator.setControlValue(OptionsWindowControlNames.VideoDelayOptionTextBox, Options.GetDefaultValue(OptionNames.VideoDelay));
         _uiCreator.setCheckBoxCheckedValue(OptionsWindowControlNames.AutoResetRotationZoomCheckBox, Options.GetDefaultValue(OptionNames.RotationZoomAutomaticReset));
+        _uiCreator.setCheckBoxCheckedValue(OptionsWindowControlNames.SaveCookiesCheckBox, Options.GetDefaultValue(OptionNames.NeedSaveSettingsToCookies));
     }
 }

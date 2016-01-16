@@ -16,3 +16,4 @@ OptionNames.RotationY = "RotationY";
 OptionNames.VideoDelay = "VideoDelay";
 OptionNames.RotationZoomAutomaticReset = "RotationZoomAutomaticReset";
 OptionNames.WaitAllFrames = "WaitAllFrames";
+OptionNames.NeedSaveSettingsToCookies = "NeedSaveSettingsToCookies";
