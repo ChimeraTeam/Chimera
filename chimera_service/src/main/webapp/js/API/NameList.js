@@ -27,3 +27,7 @@ NameList.OpacityLabel = "opacityLabel";
 NameList.PointSizeSlider = "pointSize";
 NameList.PointSizeLabel = "pointSizeLabel";
 NameList.Reset = "reset";
+
+NameList.OptionsContainer = "optionsContainer";
+NameList.AboutButton = "aboutButton";
+NameList.ChangeSettingButton = "changeSettingsButton";

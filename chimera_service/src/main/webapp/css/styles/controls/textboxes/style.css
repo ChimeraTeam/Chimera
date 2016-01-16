@@ -10,3 +10,15 @@
     visibility:hidden;
     position:absolute;
 }
+
+.chimeraSettingsTextBox {
+    align-content: flex-start;
+    background-color:transparent;
+    text-align:center;
+    border-color:white;
+    color: white;
+    font-size:15px;
+    font-family:Arial;
+    visibility:hidden;
+    width: 20%;
+}

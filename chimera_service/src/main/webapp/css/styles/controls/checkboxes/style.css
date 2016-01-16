@@ -1,0 +1,10 @@
+.chimeraSettingsCheckbox {
+    margin-left:5%;
+    margin-top:5%;
+    background-color: white;
+    text-align:left;
+    padding-right:10px;
+    color:white;
+    visibility:hidden;
+    width: 10%;
+}

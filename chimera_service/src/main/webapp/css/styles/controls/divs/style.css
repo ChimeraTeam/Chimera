@@ -1,0 +1,9 @@
+.chimeraDiv {
+    border-style: solid;
+    border-width: medium;
+    border-color: white;
+    border-radius: 2%;
+    background-color: dimgrey;
+    visibility: hidden;
+    position: absolute;
+}

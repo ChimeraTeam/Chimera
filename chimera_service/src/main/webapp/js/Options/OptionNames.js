@@ -13,3 +13,6 @@ OptionNames.CameraPosition = "CameraPosition";
 OptionNames.UsingCustomParticles = "UsingCustomParticles";
 OptionNames.RotationX = "RotationX";
 OptionNames.RotationY = "RotationY";
+OptionNames.VideoDelay = "VideoDelay";
+OptionNames.RotationZoomAutomaticReset = "RotationZoomAutomaticReset";
+OptionNames.WaitAllFrames = "WaitAllFrames";

@@ -3,13 +3,31 @@
 };
 
 Options.DefaultNames = [OptionNames.OscillatorsNumber, OptionNames.Opacity, OptionNames.PointSize, OptionNames.CameraPosition,
-                            OptionNames.UsingCustomParticles, OptionNames.RotationX, OptionNames.RotationY];
+                            OptionNames.UsingCustomParticles, OptionNames.RotationX, OptionNames.RotationY, OptionNames.VideoDelay,
+                                OptionNames.RotationZoomAutomaticReset];
 Options.DefaultValues = [OptionSchema.DefaultOscillatorsNumber, OptionSchema.DefaultOpacity, OptionSchema.DefaultPointSize,
                             OptionSchema.DefaultCameraPosition, OptionSchema.DefaultUsingCustomParticles, OptionSchema.DefaultRotationX,
-                                OptionSchema.DefaultRotationY];
+                                OptionSchema.DefaultRotationY, OptionSchema.DefaultVideoDelay, OptionSchema.RotationZoomAutomaticReset];
 
 Options.CustomNames = [];
 Options.CustomValues = [];
+
+Options.Merge = function () {
+    for (var i = 0; i < Options.CustomNames.length; i++) {
+        var index = Options.DefaultNames.indexOf(Options.CustomNames[i]);
+
+        if (index >= 0) {
+            Options.DefaultValues[index] = Options.CustomValues[i];
+        }
+    }
+
+    Options.Reset();
+}
+
+Options.GetDefaultValue = function (name) {
+    var index = Options.DefaultNames.indexOf(name);
+    return Options.DefaultValues[index];
+};
 
 Options.GetValue = function (name) {
     var index = Options.CustomNames.indexOf(name);

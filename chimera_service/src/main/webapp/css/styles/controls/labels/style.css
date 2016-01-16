@@ -12,6 +12,20 @@
     position:absolute;
 }
 
+.chimeraSettingsLabel {
+    margin-left:10%;
+    margin-top:5%;
+    background-color:transparent;
+    text-align:left;
+    padding-right:10px;
+    border:none;
+    color:white;
+    font-size:15px;
+    font-family:Arial;
+    visibility:hidden;
+    width: 60%;
+}
+
 .chimeraProgressLabel {
     background-color:transparent;
     text-align:center;

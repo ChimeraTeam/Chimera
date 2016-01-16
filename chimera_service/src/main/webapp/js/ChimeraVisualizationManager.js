@@ -1,4 +1,6 @@
 ﻿ChimeraVisualizationManager = function () {
+    var isSettingsChangeWindowVisible = false;
+
     this.init = function () {
 
     }
@@ -117,5 +119,27 @@
 
         document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + value;
         Options.GetValue(OptionNames.PointSize);
+    }
+    
+    this.applySettings = function () {
+        var handlers = new OptionWindowHandlers();
+        handlers.applySettings();
+        this.changeSettings();
+        buildProcessor.rebuild();
+    }
+    
+    this.changeSettings = function () {
+        if (!isSettingsChangeWindowVisible) {
+            uiManager.loadChangeSettingsScene();
+            isSettingsChangeWindowVisible = true;
+        }
+        else {
+            uiManager.closeChangeSettingsScene();
+            isSettingsChangeWindowVisible = false;
+        }
+    }
+    
+    this.about = function () {
+        var tab = window.open('../webapp/html/pages/about.html', '_blank')
     }
 }

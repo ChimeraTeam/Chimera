@@ -33,4 +33,16 @@
     this.setControlValue = function(id, value) {
         document.getElementById(id).value = value;
     }
+
+    this.getControlValue = function(id) {
+        return document.getElementById(id).value;
+    }
+
+    this.setCheckBoxCheckedValue = function (id, isCkecked) {
+        document.getElementById(id).checked = isCkecked;
+    }
+
+    this.getCheckBoxCheckedValue = function (id) {
+        return document.getElementById(id).checked;
+    }
 }

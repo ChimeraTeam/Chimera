@@ -2,12 +2,14 @@
     var _uiCreator = new UICreator();
 
     var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
-    var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton];
+    var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton,
+                                                NameList.ChangeSettingButton, NameList.AboutButton];
     var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel,
                                                 NameList.Reset];
     var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
     var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
     var cutSceneContainer = [NameList.HorizontalCut, NameList.VerticalCut, NameList.CloseCut, NameList.CurrentCutType];
+    var changeSettingsSceneContainer = [NameList.OptionsContainer];
     var currentScene = "";
 
     this.getCurrentScene = function () {
@@ -78,6 +80,18 @@
         _uiCreator.setSceneVisibility(loadingSceneContainer, false);
     }
 
+    this.loadChangeSettingsScene = function () {
+        var handlers = new OptionWindowHandlers();
+        handlers.setChildControlsVisibility(true);
+        _uiCreator.setSceneVisibility(changeSettingsSceneContainer, true);
+    }
+
+    this.closeChangeSettingsScene = function () {
+        var handlers = new OptionWindowHandlers();
+        handlers.setChildControlsVisibility(false);
+        _uiCreator.setSceneVisibility(changeSettingsSceneContainer, false);
+    }
+
     this.calculatePositions = function (pageGrid) {
         _uiCreator.setPosition(loadingSceneContainer, pageGrid);
         _uiCreator.setPosition(oneFrameVisualizationSceneContainer, pageGrid);
@@ -85,6 +99,7 @@
         _uiCreator.setPosition(videoVisualizationSceneContainer, pageGrid);
         _uiCreator.setPosition(currentFrameInfoSceneContainer, pageGrid);
         _uiCreator.setPosition(cutSceneContainer, pageGrid);
+        _uiCreator.setPosition(changeSettingsSceneContainer, pageGrid);
     }
 
     this.getUICreator = function () {

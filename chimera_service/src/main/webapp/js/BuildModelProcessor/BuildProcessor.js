@@ -127,7 +127,6 @@
     }
 
     this.build = function (frame, isVideo) {
-
         if (parseInt(frame) < 1 || parseInt(frame) > Globals.MaxTimeFrame) {
             Messaging.ShowMessage(Messaging.Error, Messaging.TimeMomentRangeError);
             return false;
@@ -200,7 +199,7 @@
     }
 
     function renderParticles() {
-        if (!cutInProgress) {
+        if (!cutInProgress && !Options.GetValue(OptionNames.RotationZoomAutomaticReset)) {
             Options.SetValue(OptionNames.RotationX, particleSystem.rotation.x);
             Options.SetValue(OptionNames.RotationY, particleSystem.rotation.y);
 
