@@ -6,7 +6,7 @@
     padding-right:10px;
     border:none;
     color:white;
-    font-size:15px;
+    font-size: 0.9vw;
     font-family:Arial;
     visibility:hidden;
     position:absolute;
@@ -20,7 +20,7 @@
     padding-right:10px;
     border:none;
     color:white;
-    font-size:15px;
+    font-size: 1vw;
     font-family:Arial;
     visibility:hidden;
     width: 60%;
@@ -32,7 +32,7 @@
     padding-right:10px;
     border:none;
     color:black;
-    font-size:15px;
+    font-size: 1vw;
     font-family:Arial;
     visibility:hidden;
     position:absolute;
