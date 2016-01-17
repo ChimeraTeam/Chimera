@@ -18,10 +18,12 @@
     }
 
     this.videoClose = function () {
-        uiManager.closeVideoVisualizationScene();
-        uiManager.loadOneFrameVisualizationScene();
+        if (videoProcessor.isVideoEnd() || videoProcessor.isVideoOnPause()) {
+            uiManager.closeVideoVisualizationScene();
+            uiManager.loadOneFrameVisualizationScene();
 
-        videoProcessor.close();
+            videoProcessor.close();
+        }
     }
 
     this.videoPause = function () {
@@ -34,10 +36,12 @@
             uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNext, false);
         }
         else {
-            videoProcessor.resume();
-            uiManager.getUICreator().setControlValue(NameList.VideoPause, "Pause");
-            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBack, true);
-            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNext, true);
+            if (!videoProcessor.isVideoEnd()) {
+                videoProcessor.resume();
+                uiManager.getUICreator().setControlValue(NameList.VideoPause, "Pause");
+                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBack, true);
+                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNext, true);
+            }
         }
     }
 

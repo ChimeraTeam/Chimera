@@ -31,6 +31,14 @@
         end = false;
     }
 
+    this.isVideoEnd = function () {
+        return end;
+    }
+
+    this.isVideoOnPause = function () {
+        return pause;
+    }
+
     this.play = function () {
         timeMoment = 0;
         animate();
@@ -46,9 +54,6 @@
     }
 
     this.close = function () {
-        if (!pause && !end)
-            return;
-
         processor.clearScene();
         currentFrame = 0;
     }

@@ -35,7 +35,7 @@
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
         <script type="text/javascript" src="js/CutProcessor/CutProcessor.js"></script>
 	</head>
-	<body onKeyDown="keyEvent(event)">
+	<body onKeyDown="keyEvent(event)" onresize="onresize()">
         <div id="container" class="container"></div>
         <script type="text/javascript">
             var chimeraData = [];
@@ -97,6 +97,11 @@
                 pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
                 uiManager.calculatePositions(pageGrid);
             };
+
+            function onresize() {
+                pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
+                uiManager.calculatePositions(pageGrid);
+            }
             
             window.onoffline = function () {
                 Messaging.ShowMessage(Messaging.Warning, Messaging.OnOfflineWarning);
