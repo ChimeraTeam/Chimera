@@ -132,7 +132,10 @@
 
     this.build = function (frame, isVideo) {
         if (parseInt(frame) < 1 || parseInt(frame) > Globals.MaxTimeFrame) {
-            Messaging.ShowMessage(Messaging.Error, Messaging.TimeMomentRangeError);
+            if (!isVideo) {
+                Messaging.ShowMessage(Messaging.Error, Messaging.TimeMomentRangeError);
+            }
+
             return false;
         }
 

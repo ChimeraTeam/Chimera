@@ -127,7 +127,7 @@
         }
     }
     
-    this.onDataChange = function () {
+    this.onDataChanged = function () {
         var dataDecryptService = new DataDecryptedService();
         var container = document.getElementById("sockerDataTransferContainer");
 
@@ -152,5 +152,10 @@
     this.onSaveCookieCheckBoxClicked = function () {
         if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
             Messaging.ShowMessage(Messaging.Warning, 'your custom settings will be reset after page unload if you disable this option');
+    }
+
+    this.about = function () {
+        var tab = window.open('html/pages/about.html', '_blank');
+        tab.focus();
     }
 }

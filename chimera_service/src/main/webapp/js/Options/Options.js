@@ -2,25 +2,25 @@
 
 };
 
-Options.DefaultNames = [OptionNames.OscillatorsNumber, OptionNames.Opacity, OptionNames.PointSize, OptionNames.CameraPosition,
+var DefaultNames = [OptionNames.OscillatorsNumber, OptionNames.Opacity, OptionNames.PointSize, OptionNames.CameraPosition,
                             OptionNames.UsingCustomParticles, OptionNames.RotationX, OptionNames.RotationY, OptionNames.VideoDelay,
                                 OptionNames.RotationZoomAutomaticReset, OptionNames.NeedSaveSettingsToCookies, OptionNames.WaitAllFrames];
-Options.DefaultValues = [OptionSchema.DefaultOscillatorsNumber, OptionSchema.DefaultOpacity, OptionSchema.DefaultPointSize,
+var DefaultValues = [OptionSchema.DefaultOscillatorsNumber, OptionSchema.DefaultOpacity, OptionSchema.DefaultPointSize,
                             OptionSchema.DefaultCameraPosition, OptionSchema.DefaultUsingCustomParticles, OptionSchema.DefaultRotationX,
                                 OptionSchema.DefaultRotationY, OptionSchema.DefaultVideoDelay, OptionSchema.DefaultRotationZoomAutomaticReset, OptionSchema.DefaultNeedSaveSettingsToCookies,
                                     OptionSchema.DefaultWaitAllFrames];
 
-Options.CanSaveToCookiesNames = [OptionNames.Opacity, OptionNames.PointSize, OptionNames.VideoDelay, OptionNames.RotationZoomAutomaticReset, OptionNames.WaitAllFrames];
+var CanSaveToCookiesNames = [OptionNames.Opacity, OptionNames.PointSize, OptionNames.VideoDelay, OptionNames.RotationZoomAutomaticReset, OptionNames.WaitAllFrames];
 
-Options.CustomNames = [];
-Options.CustomValues = [];
+var CustomNames = [];
+var CustomValues = [];
 
 Options.Merge = function () {
-    for (var i = 0; i < Options.CustomNames.length; i++) {
-        var index = Options.DefaultNames.indexOf(Options.CustomNames[i]);
+    for (var i = 0; i < CustomNames.length; i++) {
+        var index = DefaultNames.indexOf(CustomNames[i]);
 
         if (index >= 0) {
-            Options.DefaultValues[index] = Options.CustomValues[i];
+            DefaultValues[index] = CustomValues[i];
         }
     }
 
@@ -30,12 +30,12 @@ Options.Merge = function () {
 Options.Save = function () {
     var cookies = new Cookies();
 
-    for (var i = 0; i < Options.DefaultNames.length; i++){
-        var name = Options.DefaultNames[i];
-        var j = Options.CanSaveToCookiesNames.indexOf(name);
+    for (var i = 0; i < DefaultNames.length; i++){
+        var name = DefaultNames[i];
+        var j = CanSaveToCookiesNames.indexOf(name);
 
         if (j >= 0) {
-            cookies.setCookie(name, Options.DefaultValues[i]);
+            cookies.setCookie(name, DefaultValues[i]);
         }
     }
 }
@@ -43,16 +43,16 @@ Options.Save = function () {
 Options.CleanCookies = function () {
     var cookies = new Cookies();
 
-    for (var i = 0; i < Options.DefaultNames.length; i++){
-        cookies.eraseCookie(Options.DefaultNames[i]);
+    for (var i = 0; i < DefaultNames.length; i++){
+        cookies.eraseCookie(DefaultNames[i]);
     }
 }
 
 Options.TryGetSettingsFromCookies = function () {
     var cookies = new Cookies();
 
-    for (var i = 0; i < Options.CanSaveToCookiesNames.length; i++){
-        var name = Options.CanSaveToCookiesNames[i];
+    for (var i = 0; i < CanSaveToCookiesNames.length; i++){
+        var name = CanSaveToCookiesNames[i];
         var value = cookies.getCookie(name);
 
         if (value != ""){
@@ -60,19 +60,19 @@ Options.TryGetSettingsFromCookies = function () {
         }
     }
 
-    if (Options.CustomNames.length > 0){
+    if (CustomNames.length > 0){
         Options.Merge();
     }
 }
 
 Options.GetDefaultValue = function (name) {
-    var index = Options.DefaultNames.indexOf(name);
-    return Options.DefaultValues[index];
+    var index = DefaultNames.indexOf(name);
+    return DefaultValues[index];
 };
 
 Options.GetDefaultBoolValue = function (name) {
-    var index = Options.DefaultNames.indexOf(name);
-    var stringValue = Options.DefaultValues[index];
+    var index = DefaultNames.indexOf(name);
+    var stringValue = DefaultValues[index];
 
     if (stringValue === 'true') {
         return true;
@@ -84,13 +84,13 @@ Options.GetDefaultBoolValue = function (name) {
 };
 
 Options.GetValue = function (name) {
-    var index = Options.CustomNames.indexOf(name);
+    var index = CustomNames.indexOf(name);
 
     if (index >= 0)
-        return Options.CustomValues[index];
+        return CustomValues[index];
 
-    index = Options.DefaultNames.indexOf(name);
-    return Options.DefaultValues[index];
+    index = DefaultNames.indexOf(name);
+    return DefaultValues[index];
 };
 
 Options.GetBoolValue = function(name) {
@@ -106,36 +106,36 @@ Options.GetBoolValue = function(name) {
 };
 
 Options.SetValue = function (name, value) {
-    var customValueIndex = Options.CustomNames.indexOf(name);
-    var defaultValueIndex = Options.DefaultNames.indexOf(name);
+    var customValueIndex = CustomNames.indexOf(name);
+    var defaultValueIndex = DefaultNames.indexOf(name);
 
-    var valueIsDefault = value == Options.DefaultValues[defaultValueIndex];
+    var valueIsDefault = value == DefaultValues[defaultValueIndex];
 
     if (customValueIndex < 0 && !valueIsDefault) {
-        Options.CustomNames.push(name);
-        Options.CustomValues.push(value);
+        CustomNames.push(name);
+        CustomValues.push(value);
         return;
     }
     else if (customValueIndex < 0 && valueIsDefault) {
         return;
     }
     else if (customValueIndex >= 0 && valueIsDefault){
-        Options.CustomNames.splice(customValueIndex);
-        Options.CustomValues.splice(customValueIndex);
+        CustomNames.splice(customValueIndex);
+        CustomValues.splice(customValueIndex);
         return;
     }
 
-    Options.CustomValues[customValueIndex] = value;
+    CustomValues[customValueIndex] = value;
 };
 
 Options.Reset = function () {
-    Options.CustomNames = [];
-    Options.CustomValues = [];
+    CustomNames = [];
+    CustomValues = [];
 };
 
 /**
  * @return {boolean}
  */
 Options.IsDirty = function () {
-    return Options.CustomValues.length != 0;
+    return CustomValues.length != 0;
 }

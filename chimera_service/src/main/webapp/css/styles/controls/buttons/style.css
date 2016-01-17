@@ -1,12 +1,10 @@
 /*Chimera Buttons style*/
 
 .chimeraButton {
-	-webkit-box-shadow:inset 0px 0px 2px 0px #a1b891;
 	box-shadow:inset 0px 0px 2px 0px #a1b891;
 	background:-moz-linear-gradient(top, #242927 5%, #4c5757 100%);
 	background:linear-gradient(to bottom, #242927 5%, #4c5757 100%);
 	background-color:#242927;
-	-webkit-border-radius:7px;
 	border-radius:6px;
 	border:1px solid #565d69;
 	display:inline-block;
@@ -16,19 +14,16 @@
 	font-size: 1vw;
 	font-weight:bold;
     text-align:center;
-	text-decoration:none;
 	text-shadow:0px -1px 0px #2c3f66;
     visibility:hidden;
     position:absolute;
 }
 
 .chimeraCircleButton {
-	-webkit-box-shadow:inset 0px 0px 2px 0px #a1b891;
 	box-shadow:inset 0px 0px 2px 0px #a1b891;
 	background:-moz-linear-gradient(top, #242927 5%, #4c5757 100%);
 	background:linear-gradient(to bottom, #242927 5%, #4c5757 100%);
 	background-color:#242927;
-	-webkit-border-radius:7px;
 	border-radius:30px;
 	border:1px solid #565d69;
 	display:inline-block;
@@ -38,7 +33,6 @@
 	font-size: 1vw;
 	font-weight:bold;
 	text-align:center;
-	text-decoration:none;
 	text-shadow:0px -1px 0px #2c3f66;
 	visibility:hidden;
 	position:absolute;
@@ -53,7 +47,6 @@
 	font-size: 1vw;
 	font-weight:bold;
 	text-align:center;
-	text-decoration:none;
 	text-shadow:0px -1px 0px #2c3f66;
 	padding-right:10px;
 	visibility:hidden;
