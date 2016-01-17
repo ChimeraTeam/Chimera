@@ -199,7 +199,7 @@
     }
 
     function renderParticles() {
-        if (!cutInProgress && !Options.GetValue(OptionNames.RotationZoomAutomaticReset)) {
+        if (!cutInProgress && !Options.GetBoolValue(OptionNames.RotationZoomAutomaticReset)) {
             Options.SetValue(OptionNames.RotationX, particleSystem.rotation.x);
             Options.SetValue(OptionNames.RotationY, particleSystem.rotation.y);
 

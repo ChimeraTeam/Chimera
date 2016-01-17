@@ -19,7 +19,11 @@
         Globals.VisualizationType = type;
         Globals.MaxTimeFrame = frames;
 
-        progress(0);
+        if (Options.GetBoolValue(OptionNames.WaitAllFrames)){
+            progress(0);
+        } else {
+            callback();
+        }
     }
 
     this.getType = function (configLine) {
@@ -58,6 +62,20 @@
             return;
 
         Data += message.data;
+
+        if (!Options.GetBoolValue(OptionNames.WaitAllFrames)) {
+            var container = document.getElementById("sockerDataTransferContainer");
+            container.innerHTML = Data;
+
+            var event = container["onchange"];
+
+            if (typeof (event) == "function") {
+                event.call(container);
+            }
+
+            return;
+        }
+
         progress(currentFrame);
 
         if (currentFrame == frames) {

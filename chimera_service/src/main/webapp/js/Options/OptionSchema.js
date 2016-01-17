@@ -14,5 +14,6 @@ OptionSchema.DefaultUsingCustomParticles = false;
 OptionSchema.DefaultRotationX = 0.6;
 OptionSchema.DefaultRotationY = -0.6;
 OptionSchema.DefaultVideoDelay = 0;
-OptionSchema.RotationZoomAutomaticReset = false;
+OptionSchema.DefaultWaitAllFrames = true;
+OptionSchema.DefaultRotationZoomAutomaticReset = false;
 OptionSchema.DefaultNeedSaveSettingsToCookies = true;

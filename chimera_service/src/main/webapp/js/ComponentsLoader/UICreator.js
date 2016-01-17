@@ -38,11 +38,11 @@
         return document.getElementById(id).value;
     }
 
-    this.setCheckBoxCheckedValue = function (id, isCkecked) {
-        document.getElementById(id).checked = isCkecked;
+    this.setCheckBoxCheckedValue = function (id, isChecked) {
+        document.getElementById(id).checked = isChecked;
     }
 
     this.getCheckBoxCheckedValue = function (id) {
-        return document.getElementById(id).checked;
+        return document.getElementById(id).checked.toString();
     }
 }

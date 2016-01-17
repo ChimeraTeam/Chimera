@@ -18,3 +18,5 @@ OptionsWindowControlNames.ApplySettingsButton = "applySettingsButtons";
 OptionsWindowControlNames.CancelSettingsButton = "cancelSettingsButtons";
 OptionsWindowControlNames.SaveCookiesButton = "saveCookiesButton";
 OptionsWindowControlNames.SaveCookiesCheckBox = "saveCookiesCheckBox";
+OptionsWindowControlNames.WaitAllFramesButton = "waitAllFramesButton";
+OptionsWindowControlNames.WaitAllFramesCheckBox = "waitAllFramesCheckBox";

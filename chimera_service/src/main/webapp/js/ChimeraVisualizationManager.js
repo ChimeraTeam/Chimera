@@ -70,7 +70,7 @@
             buildProcessor.rebuild();
         }
         else {
-            alert("no dirty options for reset");
+            Messaging.ShowMessage(Messaging.Info, "no dirty options for reset");
         }
     }
 
@@ -124,6 +124,13 @@
         buildProcessor.rebuild();
     }
     
+    this.onDataChange = function () {
+        var dataDecryptService = new DataDecryptedService();
+        var container = document.getElementById("sockerDataTransferContainer");
+
+        chimeraData = dataDecryptService.decryptData(container.innerHTML);
+    }
+    
     this.changeSettings = function () {
         if (!isSettingsChangeWindowVisible) {
             uiManager.loadChangeSettingsScene();
@@ -133,6 +140,15 @@
             uiManager.closeChangeSettingsScene();
             isSettingsChangeWindowVisible = false;
         }
+    }
+    
+    this.onWaitAllFramesCheckBoxClicked = function () {
+        Messaging.ShowMessage(Messaging.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
+    }
+    
+    this.onSaveCookieCheckBoxClicked = function () {
+        if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
+            Messaging.ShowMessage(Messaging.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
     
     this.about = function () {
