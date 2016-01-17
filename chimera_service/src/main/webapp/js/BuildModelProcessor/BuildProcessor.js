@@ -112,6 +112,10 @@
         return vector;
     }
 
+    this.isNeedRebuild = function () {
+        return currentFrameData.length > 0;
+    }
+
     this.clearScene = function() {
         scene.remove(scene.children[0]);
         delete particleSystem;

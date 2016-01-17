@@ -10,7 +10,7 @@ Options.DefaultValues = [OptionSchema.DefaultOscillatorsNumber, OptionSchema.Def
                                 OptionSchema.DefaultRotationY, OptionSchema.DefaultVideoDelay, OptionSchema.DefaultRotationZoomAutomaticReset, OptionSchema.DefaultNeedSaveSettingsToCookies,
                                     OptionSchema.DefaultWaitAllFrames];
 
-Options.CanSaveToCookies = [OptionNames.Opacity, OptionNames.PointSize, OptionNames.VideoDelay, OptionNames.RotationZoomAutomaticReset, OptionNames.WaitAllFrames];
+Options.CanSaveToCookiesNames = [OptionNames.Opacity, OptionNames.PointSize, OptionNames.VideoDelay, OptionNames.RotationZoomAutomaticReset, OptionNames.WaitAllFrames];
 
 Options.CustomNames = [];
 Options.CustomValues = [];
@@ -32,7 +32,7 @@ Options.Save = function () {
 
     for (var i = 0; i < Options.DefaultNames.length; i++){
         var name = Options.DefaultNames[i];
-        var j = Options.CanSaveToCookies.indexOf(name);
+        var j = Options.CanSaveToCookiesNames.indexOf(name);
 
         if (j >= 0) {
             cookies.setCookie(name, Options.DefaultValues[i]);
@@ -51,8 +51,8 @@ Options.CleanCookies = function () {
 Options.TryGetSettingsFromCookies = function () {
     var cookies = new Cookies();
 
-    for (var i = 0; i < Options.DefaultNames.length; i++){
-        var name = Options.DefaultNames[i];
+    for (var i = 0; i < Options.CanSaveToCookiesNames.length; i++){
+        var name = Options.CanSaveToCookiesNames[i];
         var value = cookies.getCookie(name);
 
         if (value != ""){

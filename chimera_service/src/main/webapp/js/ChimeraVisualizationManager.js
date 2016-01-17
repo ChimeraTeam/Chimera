@@ -121,7 +121,10 @@
         var handlers = new OptionWindowHandlers();
         handlers.applySettings();
         this.changeSettings();
-        buildProcessor.rebuild();
+
+        if (buildProcessor.isNeedRebuild()) {
+            buildProcessor.rebuild();
+        }
     }
     
     this.onDataChange = function () {

@@ -1,12 +1,14 @@
 ﻿VideoProcessor = function () {
     var processor;
-    var currentFrame = 0;
+    var currentFrame = 1;
     var pause;
     var end = false;
 
     function animate() {
         if (pause)
             return;
+
+        processor.build(currentFrame, true);
 
         currentFrame++;
 
@@ -16,8 +18,10 @@
             return;
         }
 
-        processor.build(currentFrame, true);
-        requestAnimationFrame(animate);
+        setTimeout(
+            function () {
+                requestAnimationFrame(animate);
+            }, Options.GetValue(OptionNames.VideoDelay));
     }
 
     this.init = function (buildProcessor) {
