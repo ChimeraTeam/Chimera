@@ -153,8 +153,4 @@
         if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
             Messaging.ShowMessage(Messaging.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
-    
-    this.about = function () {
-        var tab = window.open('../webapp/html/pages/about.html', '_blank')
-    }
 }

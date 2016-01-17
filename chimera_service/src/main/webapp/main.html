@@ -142,6 +142,11 @@
 
             }
 
+            function about() {
+                var tab = window.open('../webapp/html/pages/about.html', '_blank')
+                tab.focus();
+            }
+
         </script>
         
         <progress id="loadingProgressBar" class="chimeraProgressBar" max="100" value="0"></progress>
@@ -167,7 +172,7 @@
         <input id="reset" type="button" class="chimeraButton" value="Reset" onclick="chimeraManager.reset()"/>
         <label id="sockerDataTransferContainer" style="display:none" onchange="chimeraManager.onDataChange()"></label>
         <input id="changeSettingsButton" type="button" class="chimeraCircleButton" value="-" onclick="chimeraManager.changeSettings()"/>
-        <input id="aboutButton" type="button" class="chimeraCircleButton" value="?" onclick="chimeraManager.about()"/>
+        <input id="aboutButton" type="button" class="chimeraCircleButton" value="?" onclick="about()"/>
         <div id="optionsContainer" class="chimeraDiv">
             <br>
             <label style="padding-left: 10%; font-size: 2vw">Default Settings</label>
