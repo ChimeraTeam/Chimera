@@ -1,30 +1,28 @@
 ﻿PageGrid = function () {
+    var framesCountX = 30;
+    var framesCountY = 40;
 
-    this.FramesCountX = 30;
-    this.FramesCountY = 40;
+    var framesArrayX = [];
+    var framesArrayY = [];
 
-    this.FramesArrayX = [];
-    this.FramesArrayY = [];
-
-    this.CreateGrid = function (width, height) {
-        var frameWidth = width / this.FramesCountX;
-        var frameHeight = height / this.FramesCountY;
+    this.createGrid = function (width, height) {
+        var frameWidth = width / framesCountX;
+        var frameHeight = height / framesCountY;
 
         for (var i = 0; i < width; i += frameWidth) {
-            this.FramesArrayX.push(i);
+            framesArrayX.push(i);
         }
 
         for (var i = 0; i < height; i += frameHeight) {
-            this.FramesArrayY.push(i);
+            framesArrayY.push(i);
         }
-
     }
 
-    this.GetFrameX = function(x) {
-        return this.FramesArrayX[x];
+    this.getFrameX = function(x) {
+        return framesArrayX[x];
     }
 
-    this.GetFrameY = function (y) {
-        return this.FramesArrayY[y];
+    this.getFrameY = function (y) {
+        return framesArrayY[y];
     }
-}
+};

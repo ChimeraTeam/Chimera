@@ -7,7 +7,7 @@
     }
 
     this.playVideo = function () {
-        uiManager.getUICreator().setControlValue(NameList.VideoPause, "Pause");
+        uiManager.getUICreator().setControlValue(NameList.VideoPauseButton, "Pause");
 
         uiManager.closeOneFrameVisualizationScene();
         uiManager.loadVideoVisualizationScene();
@@ -27,20 +27,20 @@
     }
 
     this.videoPause = function () {
-        var value = document.getElementById(NameList.VideoPause).value;
+        var value = document.getElementById(NameList.VideoPauseButton).value;
 
         if (value == "Pause") {
             videoProcessor.pause();
-            uiManager.getUICreator().setControlValue(NameList.VideoPause, "Resume");
-            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBack, false);
-            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNext, false);
+            uiManager.getUICreator().setControlValue(NameList.VideoPauseButton, "Resume");
+            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBackButton, false);
+            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNextButton, false);
         }
         else {
             if (!videoProcessor.isVideoEnd()) {
                 videoProcessor.resume();
-                uiManager.getUICreator().setControlValue(NameList.VideoPause, "Pause");
-                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBack, true);
-                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNext, true);
+                uiManager.getUICreator().setControlValue(NameList.VideoPauseButton, "Pause");
+                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBackButton, true);
+                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNextButton, true);
             }
         }
     }
@@ -70,11 +70,11 @@
     
     this.reset = function () {
         if (Options.IsDirty()) {
-            Options.Reset();
+            Options.ResetButton();
             buildProcessor.rebuild();
         }
         else {
-            Messaging.ShowMessage(Messaging.Info, "no dirty options for reset");
+            ChimeraMessage.ShowMessage(ChimeraMessage.Info, "no dirty options for reset");
         }
     }
 
@@ -150,12 +150,12 @@
     }
     
     this.onWaitAllFramesCheckBoxClicked = function () {
-        Messaging.ShowMessage(Messaging.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
+        ChimeraMessage.ShowMessage(ChimeraMessage.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
     }
     
     this.onSaveCookieCheckBoxClicked = function () {
         if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
-            Messaging.ShowMessage(Messaging.Warning, 'your custom settings will be reset after page unload if you disable this option');
+            ChimeraMessage.ShowMessage(ChimeraMessage.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
 
     this.about = function () {

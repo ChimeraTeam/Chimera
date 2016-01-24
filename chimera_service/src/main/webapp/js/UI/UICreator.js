@@ -19,10 +19,10 @@
         for (var i = 0; i < container.length; i++) {
             var values = config.getPositionsByName(container[i]);
             
-            document.getElementById(container[i]).style.left = grid.GetFrameX(values.x);
-            document.getElementById(container[i]).style.top = grid.GetFrameY(values.y);
-            document.getElementById(container[i]).style.width = grid.GetFrameX(1) * values.width;
-            document.getElementById(container[i]).style.height = grid.GetFrameY(1) * values.height;
+            document.getElementById(container[i]).style.left = grid.getFrameX(values.x);
+            document.getElementById(container[i]).style.top = grid.getFrameY(values.y);
+            document.getElementById(container[i]).style.width = grid.getFrameX(1) * values.width;
+            document.getElementById(container[i]).style.height = grid.getFrameY(1) * values.height;
         }
     }
 

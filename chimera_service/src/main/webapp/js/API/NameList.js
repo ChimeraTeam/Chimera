@@ -10,23 +10,23 @@ NameList.SelectTimeMomentTextBox = "time";
 NameList.BuildFrameButton = "build";
 NameList.VideoButton = "video3D";
 
-NameList.VideoPause = "videoPause";
-NameList.VideoNext = "videoNext";
-NameList.VideoBack = "videoBack";
-NameList.VideoClose = "videoClose";
+NameList.VideoPauseButton = "videoPause";
+NameList.VideoNextButton = "videoNext";
+NameList.VideoBackButton = "videoBack";
+NameList.VideoCloseButton = "videoClose";
 NameList.CurrentFrameLabel = "currentFrame";
 
 NameList.CutButton = "cut";
-NameList.HorizontalCut = "horizontalCut";
-NameList.VerticalCut = "verticalCut";
-NameList.CurrentCutType = "currentCutType";
-NameList.CloseCut = "closeCut";
+NameList.HorizontalCutButton = "horizontalCut";
+NameList.VerticalCutButton = "verticalCut";
+NameList.CurrentCutTypeLabel = "currentCutType";
+NameList.CloseCutButton = "closeCut";
 
 NameList.OpacitySlider = "opacity";
 NameList.OpacityLabel = "opacityLabel";
 NameList.PointSizeSlider = "pointSize";
 NameList.PointSizeLabel = "pointSizeLabel";
-NameList.Reset = "reset";
+NameList.ResetButton = "reset";
 
 NameList.OptionsContainer = "optionsContainer";
 NameList.AboutButton = "aboutButton";

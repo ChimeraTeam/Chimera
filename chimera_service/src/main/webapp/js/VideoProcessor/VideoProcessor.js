@@ -61,7 +61,7 @@
     this.next = function () {
         currentFrame++;
         if (!processor.build(currentFrame, true)) {
-            Messaging.ShowMessage(Messaging.Warning, Messaging.LastTimeMomentWarning);
+            ChimeraMessage.ShowMessage(ChimeraMessage.Warning, ChimeraMessage.LastTimeMomentWarning);
             currentFrame--;
         }
     }
@@ -69,7 +69,7 @@
     this.back = function () {
         currentFrame--;
         if (!processor.build(currentFrame, true)) {
-            Messaging.ShowMessage(Messaging.Warning, Messaging.FirstTimeMomentWarning);
+            ChimeraMessage.ShowMessage(ChimeraMessage.Warning, ChimeraMessage.FirstTimeMomentWarning);
             currentFrame++;
         }
     }

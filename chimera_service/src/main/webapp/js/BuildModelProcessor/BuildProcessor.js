@@ -42,7 +42,6 @@
     }
 
     function selectDataForCurrentFrame(frame) {
-
         var begin = (frame - 1) * Globals.OscillatorsNumber;
         var end = begin + Globals.OscillatorsNumber;
 
@@ -133,7 +132,7 @@
     this.build = function (frame, isVideo) {
         if (parseInt(frame) < 1 || parseInt(frame) > Globals.MaxTimeFrame) {
             if (!isVideo) {
-                Messaging.ShowMessage(Messaging.Error, Messaging.TimeMomentRangeError);
+                ChimeraMessage.ShowMessage(ChimeraMessage.Error, ChimeraMessage.TimeMomentRangeError);
             }
 
             return false;
@@ -170,7 +169,6 @@
     }
 
     this.removeCustomObjects = function () {
-
         for (var i = 0; i < scene.children.length; i++) {
             if (scene.children[i].name == 'customLine') {
                 scene.remove(scene.children[i]);

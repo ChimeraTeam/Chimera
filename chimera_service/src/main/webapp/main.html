@@ -22,7 +22,7 @@
         <script type="text/javascript" src="js/Options/OptionsWindowControlNames.js"></script>
         <script type="text/javascript" src="js/Options/OptionWindowHandlers.js"></script>
         <script type="text/javascript" src="js/API/NameList.js"></script>
-        <script type="text/javascript" src="js/API/Messaging.js"></script>
+        <script type="text/javascript" src="js/API/ChimeraMessage.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/PageGrid.js"></script>
         <script type="text/javascript" src="js/ComponentsLoader/positionConfig.js"></script>
         <script type="text/javascript" src="js/UI/UIManager.js"></script>
@@ -94,17 +94,17 @@
 
                 pageGrid = new PageGrid();
 
-                pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
+                pageGrid.createGrid(window.innerWidth, window.innerHeight);
                 uiManager.calculatePositions(pageGrid);
             };
 
             function onresize() {
-                pageGrid.CreateGrid(window.innerWidth, window.innerHeight);
+                pageGrid.createGrid(window.innerWidth, window.innerHeight);
                 uiManager.calculatePositions(pageGrid);
             }
             
             window.onoffline = function () {
-                Messaging.ShowMessage(Messaging.Warning, Messaging.OnOfflineWarning);
+                ChimeraMessage.ShowMessage(ChimeraMessage.Warning, ChimeraMessage.OnOfflineWarning);
             }
 
             window.onunload = function () {
@@ -137,7 +137,7 @@
                         break;
                     case 27:
                         if (cutProcessor != null) {
-                            uiManager.getUICreator().setControlValue(NameList.CurrentCutType, 'Current Cut type: none');
+                            uiManager.getUICreator().setControlValue(NameList.CurrentCutTypeLabel, 'Current Cut type: none');
                             cutProcessor.exit();
                         }
                         break;

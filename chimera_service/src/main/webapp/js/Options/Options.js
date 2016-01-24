@@ -24,7 +24,7 @@ Options.Merge = function () {
         }
     }
 
-    Options.Reset();
+    Options.ResetButton();
 }
 
 Options.Save = function () {
@@ -128,7 +128,7 @@ Options.SetValue = function (name, value) {
     CustomValues[customValueIndex] = value;
 };
 
-Options.Reset = function () {
+Options.ResetButton = function () {
     CustomNames = [];
     CustomValues = [];
 };

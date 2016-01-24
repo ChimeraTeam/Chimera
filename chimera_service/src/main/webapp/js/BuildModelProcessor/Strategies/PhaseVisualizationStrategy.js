@@ -13,7 +13,7 @@
             colors[i] = new THREE.Color();
             var H = data[i];
             var hsl = converter.hsv_to_hsl(H, S, V);
-            colors[i].setHSL(hsl[0], hsl[1], hsl[2]);
+            colors[i].setHSL(hsl.h, hsl.s, hsl.l);
         }
 
         return colors;

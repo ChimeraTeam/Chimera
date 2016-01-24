@@ -5,10 +5,10 @@
     var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton,
                                                 NameList.ChangeSettingButton, NameList.AboutButton];
     var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel,
-                                                NameList.Reset];
-    var videoVisualizationSceneContainer = [NameList.VideoBack, NameList.VideoPause, NameList.VideoNext, NameList.VideoClose];
+                                                NameList.ResetButton];
+    var videoVisualizationSceneContainer = [NameList.VideoBackButton, NameList.VideoPauseButton, NameList.VideoNextButton, NameList.VideoCloseButton];
     var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
-    var cutSceneContainer = [NameList.HorizontalCut, NameList.VerticalCut, NameList.CloseCut, NameList.CurrentCutType];
+    var cutSceneContainer = [NameList.HorizontalCutButton, NameList.VerticalCutButton, NameList.CloseCutButton, NameList.CurrentCutTypeLabel];
     var changeSettingsSceneContainer = [NameList.OptionsContainer];
     var currentScene = "";
 
