@@ -132,7 +132,7 @@
     this.build = function (frame, isVideo) {
         if (parseInt(frame) < 1 || parseInt(frame) > Globals.MaxTimeFrame) {
             if (!isVideo) {
-                ChimeraMessage.ShowMessage(ChimeraMessage.Error, ChimeraMessage.TimeMomentRangeError);
+                ChimeraMessage.ShowMessage(ChimeraMessageType.Error, ChimeraMessage.TimeMomentRangeError);
             }
 
             return false;
