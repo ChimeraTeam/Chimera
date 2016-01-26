@@ -22,7 +22,7 @@ public class ChimeraReader implements Iterator<String> {
     private void initStream() {
         try {
             FileInputStream compressed = new FileInputStream(file);
-            XZCompressorInputStream xzIn = new XZCompressorInputStream(compressed);
+            XZCompressorInputStream xzIn = new XZCompressorInputStream(compressed, true);
             this.stream = new BufferedReader(new InputStreamReader(new BufferedInputStream(xzIn)));
         } catch (Exception e) {
             e.printStackTrace();
