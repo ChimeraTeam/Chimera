@@ -34,22 +34,22 @@
         return bytes;
     }
 
-    this.GetObjectSize = function (object) {
+    this.getObjectSize = function (object) {
         return roughSizeOfObject(object);
     }
 
-    this.TimerStart = function () {
+    this.timerStart = function () {
         stopWatch.start();
     }
 
-    this.TimerStop = function (displayAlert) {
+    this.timerStop = function (displayAlert) {
         stopWatch.stop();
         lapTime = stopWatch.time();
         if (displayAlert) alert(lapTime);
         stopWatch.reset();
     }
 
-    this.GetLapTime = function () {
+    this.getLapTime = function () {
         return lapTime;
     }
 }

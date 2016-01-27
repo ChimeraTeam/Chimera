@@ -20,6 +20,7 @@
     }
 
     this.exit = function () {
+        buildProcessor.setCutInProgress(false);
         resetValues();
     }
 
@@ -34,7 +35,6 @@
     function resetValues() {
         inProgress = false;
         currentStrategy = "";
-        buildProcessor.setCutInProgress(false);
         buildProcessor.removeCustomObjects();
         document.getElementById(NameList.CurrentCutTypeLabel).value = 'Current Cut type: none';
     }

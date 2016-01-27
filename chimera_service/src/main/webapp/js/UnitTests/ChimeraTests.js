@@ -1,11 +1,16 @@
-function isEven(val) {
-	return val % 2 === 0;
+function dataDecryptTest(data, count) {
+	var service = new DataDecryptedService();
+    var decryptArray = service.decryptData(data);
+
+    if (decryptArray.length == count)
+        return true;
+
+    return false;
 }
 
-test('isEven()', function() {
-    ok(isEven(0), 'Ноль - четное число');
-    ok(isEven(2), 'Два - тоже');
-    ok(isEven(-4), 'И отрицательное четыре - тоже четное число');
-    ok(!isEven(1), 'Один - нечетное число');
-    ok(!isEven(-7), 'Как и отрицательное семь - нечетное число');
+test('dataDecryptTest()', function() {
+    ok(dataDecryptTest("5.456", 1), 'decrypt data with 1 value');
+    ok(dataDecryptTest("5.456,8.7852", 2), 'decrypt data with 2 values');
+    ok(dataDecryptTest("4.456,6.7852,1.2222", 3), 'decrypt data with 3 values');
+    ok(dataDecryptTest("4.456,6.7852,1.2222,4.456,6.7852,1.2222,4.456,6.7852,1.2222", 9), 'decrypt data with 9 values');
 })

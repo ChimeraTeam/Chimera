@@ -150,12 +150,12 @@
     }
     
     this.onWaitAllFramesCheckBoxClicked = function () {
-        ChimeraMessage.ShowMessage(ChimeraMessage.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
+        ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
     }
     
     this.onSaveCookieCheckBoxClicked = function () {
         if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
-            ChimeraMessage.ShowMessage(ChimeraMessage.Warning, 'your custom settings will be reset after page unload if you disable this option');
+            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
 
     this.about = function () {
