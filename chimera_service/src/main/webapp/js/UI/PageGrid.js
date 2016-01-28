@@ -18,11 +18,10 @@
         }
     }
 
-    this.getFrameX = function(x) {
-        return framesArrayX[x];
-    }
-
-    this.getFrameY = function (y) {
-        return framesArrayY[y];
+    this.getCell = function(x, y) {
+        return {
+            x: framesArrayX[x],
+            y: framesArrayY[y]
+        };
     }
 };

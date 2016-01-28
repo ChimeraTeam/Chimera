@@ -32,9 +32,9 @@ function pageGridTest(){
     var pageGrid = new PageGrid();
     pageGrid.createGrid(2000, 1000);
 
-    QUnit.assert.ok(pageGrid.getFrameX(10) > 0, 'x coordinate for cell number 10 was successfully build');
-    QUnit.assert.ok(pageGrid.getFrameY(20) > 0, 'y coordinate for cell number 20 was successfully build');
-    QUnit.assert.ok(pageGrid.getFrameY(50) == null, 'cell number 50 does not exists');
+    QUnit.assert.ok(pageGrid.getCell(10, 10).x > 0, 'x coordinate for cell number 10 was successfully build');
+    QUnit.assert.ok(pageGrid.getCell(20, 20).y > 0, 'y coordinate for cell number 20 was successfully build');
+    QUnit.assert.ok(pageGrid.getCell(50, 50).x == null, 'cell number 50 does not exists');
 }
 
 QUnit.test('dataDecryptServiceTest', function() {
