@@ -4,11 +4,35 @@
     var pause;
     var end = false;
 
+    function wait(callback) {
+        setTimeout(
+            function () {
+                var result = processor.build(currentFrame, true);
+                if (result == BuildResult.Success) {
+                    if (callback !== undefined) {
+                        callback();
+                    }
+                } else {
+                    wait(callback);
+                }
+            }, 500);
+    }
+
     function animate() {
+        var result = processor.build(currentFrame, true);
+
+        if (result == BuildResult.Success) {
+            animateStart();
+        } else if (result == BuildProcessor.UnexpectedFrame) {
+            return;
+        } else {
+
+        }
+    }
+
+    function animateStart() {
         if (pause)
             return;
-
-        processor.build(currentFrame, true);
 
         currentFrame++;
 
@@ -54,13 +78,13 @@
     }
 
     this.close = function () {
-        processor.clearScene();
+        processor.clear();
         currentFrame = 0;
     }
 
     this.next = function () {
         currentFrame++;
-        if (!processor.build(currentFrame, true)) {
+        if (processor.build(currentFrame, true) != BuildResult.Success) {
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.LastTimeMomentWarning);
             currentFrame--;
         }
@@ -68,7 +92,7 @@
 
     this.back = function () {
         currentFrame--;
-        if (!processor.build(currentFrame, true)) {
+        if (processor.build(currentFrame, true) != BuildResult.Success) {
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.FirstTimeMomentWarning);
             currentFrame++;
         }

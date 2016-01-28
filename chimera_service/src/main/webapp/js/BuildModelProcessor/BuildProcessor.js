@@ -45,9 +45,26 @@
         var begin = (frame - 1) * Globals.OscillatorsNumber;
         var end = begin + Globals.OscillatorsNumber;
 
+        if (chimeraData.length < end)
+            return;
+
         for (var i = begin; i < end; i++) {
             currentFrameData.push(parseFloat(chimeraData[i]));
         }
+    }
+
+    function waitDataForCurrentFrame(frame, callback) {
+        setTimeout(
+            function () {
+                selectDataForCurrentFrame(frame);
+                if (currentFrameData.length != 0) {
+                    if (callback !== undefined) {
+                        callback();
+                    }
+                } else {
+                    waitDataForCurrentFrame(frame, callback);
+                }
+            }, 500);
     }
 
     function createMaterial(opacity, size) {
@@ -115,14 +132,22 @@
         return currentFrameData.length > 0;
     }
 
-    this.clearScene = function() {
-        scene.remove(scene.children[0]);
-        delete particleSystem;
+    var clearValues = function () {
         currentFrameData.length = 0;
+        delete particleSystem;
+    }
+
+    var clearScene = function() {
+        scene.remove(scene.children[0]);
         uiManager.closeCurrentFrameInfoScene();
         uiManager.closeAdditionalFunctionalityScene();
 
         renderer.render(scene, camera);
+    }
+
+    this.clear = function () {
+        clearValues();
+        clearScene();
     }
 
     this.rebuild = function () {
@@ -135,16 +160,31 @@
                 ChimeraMessage.ShowMessage(ChimeraMessageType.Error, ChimeraMessage.TimeMomentRangeError);
             }
 
-            return false;
+            return BuildResult.UnexpectedFrame;
         }
 
-        this.clearScene();
-        uiManager.loadAdditionalFunctionalityScene();
+        clearValues();
 
         selectDataForCurrentFrame(frame);
 
-        if (currentFrameData.length == 0)
-            return;
+        if (currentFrameData.length == 0) {
+            if (!Options.GetBoolValue(OptionNames.WaitAllFrames))
+                waitDataForCurrentFrame(frame, function () {
+                    return startBuild(frame);
+                });
+            else
+                return BuildResult.UnexpectedFrame;
+        } else {
+            return startBuild(frame);
+        }
+
+        return BuildResult.Waiting;
+    }
+
+    var startBuild = function(frame) {
+        uiManager.loadAdditionalFunctionalityScene();
+
+        clearScene();
 
         var colors = buildStrategyInstance.ConvertToColorMap(currentFrameData);
 
@@ -157,7 +197,7 @@
         setCurrentFrameValue(frame);
         currentFrame = frame;
 
-        return true;
+        return BuildResult.Success;
     }
 
     this.addCustomObject = function (object) {
@@ -262,5 +302,12 @@
             renderParticles();
         }
     }
+}
+
+var BuildResult = function () {
 
 }
+
+BuildResult.Success = 0;
+BuildResult.UnexpectedFrame = 1;
+BuildResult.Waiting = 2;
