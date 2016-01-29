@@ -1,5 +1,88 @@
 ﻿ChimeraVisualizationManager = function () {
     var isSettingsChangeWindowVisible = false;
+    var pageGrid = new PageGrid();
+    var uiManager;
+    var buildProcessor;
+    var cutProcessor;
+    var videoProcessor;
+    var visualizationType;
+    var oscilatorsCount;
+    var chimeraData = [];
+
+    this.init = function()
+    {
+        var inspector = new SocketDataInspector();
+        uiManager = new UIManager();
+        Options.TryGetSettingsFromCookies();
+
+        inspector.init(DataReadyCallback, uiManager.loadLoadingScene);
+
+        visualizationType = inspector.getType(Globals.VisualizationType);
+        oscilatorsCount = inspector.getOscillatorNumber(Globals.FilePath);
+
+        Globals.OscillatorsNumber = oscilatorsCount;
+
+        switch (oscilatorsCount) {
+            case Globals.MediumOsillatorsCount:
+                Options.SetValue(OptionNames.CameraPosition, Globals.CameraPositionMedium);
+                break;
+            case Globals.LargeOsillatorsCount:
+                Options.SetValue(OptionNames.CameraPosition, Globals.CameraPositionLarge);
+                break;
+            default:
+                break;
+        }
+
+        buildProcessor = new BuildProcessor(visualizationType, this);
+    }
+
+    this.getChimeraData = function () {
+        return chimeraData;
+    }
+
+    this.getUIManager = function() {
+        return uiManager;
+    }
+
+    window.onload = function onload() {
+        chimeraManager.init();
+
+        pageGrid = new PageGrid();
+
+        pageGrid.createGrid(window.innerWidth, window.innerHeight);
+        uiManager.calculatePositions(pageGrid);
+    }
+
+    window.onunload = function () {
+        if (Options.GetBoolValue(OptionNames.NeedSaveSettingsToCookies)) {
+            Options.Save();
+        } else {
+            Options.CleanCookies();
+        }
+    }
+
+    window.onoffline = function () {
+        ChimeraMessage.ShowMessage(ChimeraMessage.Warning, ChimeraMessage.OnOfflineWarning);
+    }
+
+    function onresize() {
+        pageGrid.createGrid(window.innerWidth, window.innerHeight);
+        uiManager.calculatePositions(pageGrid);
+    }
+
+    function DataReadyCallback()
+    {
+        if (Options.GetBoolValue(OptionNames.WaitAllFrames)) {
+            var dataDecryptService = new DataDecryptedService();
+            var container = document.getElementById("sockerDataTransferContainer");
+
+            chimeraData = dataDecryptService.decryptData(container.innerHTML);
+
+            uiManager.closeLoadingScene();
+        }
+
+        uiManager.loadOneFrameVisualizationScene();
+    }
 
     this.startVisualization = function () {
         var currentFrame = document.getElementById(NameList.SelectTimeMomentTextBox).value;
@@ -161,5 +244,36 @@
     this.about = function () {
         var tab = window.open('html/pages/about.html', '_blank');
         tab.focus();
+    }
+
+    this.keyEvent = function(event) {
+        switch (event.keyCode) {
+            case 37:
+                buildProcessor.rotate_left();
+                break;
+            case 38:
+                buildProcessor.rotate_up();
+                break;
+            case 39:
+                buildProcessor.rotate_right();
+                break;
+            case 40:
+                buildProcessor.rotate_down();
+                break;
+            case 107:
+                buildProcessor.zoom();
+                break;
+            case 109:
+                buildProcessor.unzoom();
+                break;
+            case 27:
+                if (cutProcessor != null) {
+                    uiManager.getUICreator().setControlValue(NameList.CurrentCutTypeLabel, 'Current Cut type: none');
+                    cutProcessor.exit();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
