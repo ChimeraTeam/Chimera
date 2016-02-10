@@ -33,6 +33,9 @@ public class StatHolder {
         }
     }
 
+    public Map<String, Integer> getData() {
+        return data;
+    }
 
     public static StatHolder getStatHolder() {
         return statHolder;

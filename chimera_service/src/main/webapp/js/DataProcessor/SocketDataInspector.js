@@ -107,6 +107,9 @@
 
     function postToWServer(file, type) {
         sendMessage(file + '_' + type);
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "chimera.biomed.kiev.ua:8983/chimera_service/stat", true);
+        xhttp.send();
     }
 
     function closeConnect() {
