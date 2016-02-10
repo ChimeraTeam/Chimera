@@ -25,9 +25,8 @@ public class StatServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter writer = resp.getWriter();
-        writer.write(statHolder.getData().toString());
-        writer.close();
+        req.setAttribute("data", statHolder.getData());
+        req.getRequestDispatcher("jsp/stat.jsp").forward(req, resp);
     }
 
     @Override
