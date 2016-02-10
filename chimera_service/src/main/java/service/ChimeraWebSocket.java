@@ -41,12 +41,6 @@ public class ChimeraWebSocket {
         }).start();
     }
 
-    @OnOpen
-    public void open(HttpServletRequest request) {
-        logger.info("req.....");
-        logger.info(request.getRemoteAddr());
-    }
-
     @OnClose
     public void onClose(Session session) {
         try {
