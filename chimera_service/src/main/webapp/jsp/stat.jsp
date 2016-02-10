@@ -10,6 +10,26 @@
 <html>
 <head>
     <title>Statistics</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <table>
@@ -19,7 +39,7 @@
     </tr>
     <c:forEach items="${data}" var="entry">
         <tr>
-            <td>${entry.key}</td>
+            <td><a href="http://www.w3schools.com/html/${entry.key}">${entry.key}</a></td>
             <td>${entry.value}</td>
         </tr>
     </c:forEach>
