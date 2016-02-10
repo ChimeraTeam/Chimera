@@ -23,9 +23,8 @@ public class StatHolder {
 
     public synchronized void put(String address) {
         if (data.containsKey(address)) {
-            Integer integer = data.get(address);
-            integer++;
-            data.put(address, integer);
+            Integer visits = data.get(address);
+            data.put(address, ++visits);
             logger.info("incrementing ... " + address);
         } else {
             logger.info("putting ... " + address);
