@@ -4,9 +4,9 @@ package service;
 import constants.Types;
 import org.apache.log4j.Logger;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
 /**
@@ -32,7 +32,6 @@ public class ChimeraWebSocket {
                 while (reader.hasNext()) {
                     String value = filter.process(reader.next());
                     if (value != null) {
-//                            session.getAsyncRemote().sendBinary(ByteBuffer.wrap(LZW.compress(value)));
                         if (!session.isOpen()) return;
                         session.getAsyncRemote().sendText(value);
                     }
@@ -42,6 +41,11 @@ public class ChimeraWebSocket {
         }).start();
     }
 
+    @OnOpen
+    public void open(HttpServletRequest request) {
+        logger.info("req.....");
+        logger.info(request.getRemoteAddr());
+    }
 
     @OnClose
     public void onClose(Session session) {
