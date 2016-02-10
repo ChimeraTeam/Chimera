@@ -39,7 +39,7 @@
     </tr>
     <c:forEach items="${data}" var="entry">
         <tr>
-            <td><a href="http://www.w3schools.com/html/${entry.key}">${entry.key}</a></td>
+            <td><a href="http://whatismyipaddress.com/ip/${entry.key}">${entry.key}</a></td>
             <td>${entry.value}</td>
         </tr>
     </c:forEach>
