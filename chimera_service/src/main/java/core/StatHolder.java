@@ -11,7 +11,6 @@ import java.util.Map;
  */
 public class StatHolder {
 
-    private Logger logger = Logger.getLogger(StatHolder.class);
     private static final StatHolder statHolder = new StatHolder();
 
     private Map<String, Integer> data;
@@ -25,9 +24,7 @@ public class StatHolder {
         if (data.containsKey(address)) {
             Integer visits = data.get(address);
             data.put(address, ++visits);
-            logger.info("incrementing ... " + address);
         } else {
-            logger.info("putting ... " + address);
             data.put(address, 1);
         }
     }
