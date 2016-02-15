@@ -57,7 +57,7 @@ public class ChimeraFilter {
 
     private String frequencyCompress(Double frequency) {
         frequency += 1;
-        frequency *= 8.5;
+        frequency *= 128;
         return String.valueOf(frequency.intValue());
     }
 
