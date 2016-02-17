@@ -1,4 +1,4 @@
-﻿ChimeraMessage = function () {
+﻿var ChimeraMessage = function () {
 
 }
 

@@ -1,4 +1,4 @@
-﻿DiagnosticTools = function () {
+﻿var DiagnosticTools = function () {
 
     var stopWatch = new Stopwatch();
     var lapTime = 0;
@@ -54,7 +54,7 @@
     }
 }
 
-Stopwatch = function () {
+var Stopwatch = function () {
     
     var startAt = 0;
     var lapTime = 0;

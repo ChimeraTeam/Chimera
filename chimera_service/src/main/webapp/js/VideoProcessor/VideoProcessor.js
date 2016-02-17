@@ -1,4 +1,4 @@
-﻿VideoProcessor = function () {
+﻿var VideoProcessor = function () {
     var processor;
     var currentFrame = 1;
     var pause;

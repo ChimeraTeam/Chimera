@@ -30,124 +30,17 @@
         <script type="text/javascript" src="js/UI/UICreator.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/BuildProcessor.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy.js"></script>
+        <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy2.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/FrequencyVisualizationStrategy.js"></script>
         <script type="text/javascript" src="js/DataProcessor/SocketDataInspector.js"></script>
         <script type="text/javascript" src="js/DataProcessor/DataDecryptedService/DataDecryptedService.js"></script>
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
         <script type="text/javascript" src="js/CutProcessor/CutProcessor.js"></script>
 	</head>
-	<body onKeyDown="keyEvent(event)" onresize="onresize()">
+	<body onKeyDown="chimeraManager.keyEvent(event)" onresize="chimeraManager.onresize()">
         <div id="container" class="container"></div>
         <script type="text/javascript">
-            var chimeraData = [];
-            var pageGrid;
-            var visualizationType;
-            var oscilatorsCount;
-            var buildProcessor;
-            var cutProcessor;
-            var videoProcessor;
-            var uiManager;
             var chimeraManager = new ChimeraVisualizationManager();
-            
-            function init()
-            {
-                var inspector = new SocketDataInspector();
-                uiManager = new UIManager();
-                Options.TryGetSettingsFromCookies();
-
-                inspector.init(DataReadyCallback, uiManager.loadLoadingScene);
-
-                visualizationType = inspector.getType(Globals.VisualizationType);
-                oscilatorsCount = inspector.getOscillatorNumber(Globals.FilePath);
-
-                Globals.OscillatorsNumber = oscilatorsCount;
-
-                switch (oscilatorsCount) {
-                    case Globals.MediumOsillatorsCount:
-                        Options.SetValue(OptionNames.CameraPosition, Globals.CameraPositionMedium);
-                        break;
-                    case Globals.LargeOsillatorsCount:
-                        Options.SetValue(OptionNames.CameraPosition, Globals.CameraPositionLarge);
-                        break;
-                    default:
-                        break;
-                }
-
-                buildProcessor = new BuildProcessor(visualizationType);
-            }
-
-            function DataReadyCallback()
-            {
-                if (Options.GetBoolValue(OptionNames.WaitAllFrames)) {
-                    var dataDecryptService = new DataDecryptedService();
-                    var container = document.getElementById("sockerDataTransferContainer");
-
-                    chimeraData = dataDecryptService.decryptData(container.innerHTML);
-
-                    uiManager.closeLoadingScene();
-                }
-
-                uiManager.loadOneFrameVisualizationScene();
-            }
-
-            window.onload = function onload() {
-                init();
-
-                pageGrid = new PageGrid();
-
-                pageGrid.createGrid(window.innerWidth, window.innerHeight);
-                uiManager.calculatePositions(pageGrid);
-            };
-
-            function onresize() {
-                pageGrid.createGrid(window.innerWidth, window.innerHeight);
-                uiManager.calculatePositions(pageGrid);
-            }
-            
-            window.onoffline = function () {
-                ChimeraMessage.ShowMessage(ChimeraMessage.Warning, ChimeraMessage.OnOfflineWarning);
-            }
-
-            window.onunload = function () {
-                if (Options.GetBoolValue(OptionNames.NeedSaveSettingsToCookies)) {
-                    Options.Save();
-                } else {
-                    Options.CleanCookies();
-                }
-            }
-
-            function keyEvent(event) {
-                switch (event.keyCode) {
-                    case 37:
-                        buildProcessor.rotate_left();
-                        break;
-                    case 38:
-                        buildProcessor.rotate_up();
-                        break;
-                    case 39:
-                        buildProcessor.rotate_right();
-                        break;
-                    case 40:
-                        buildProcessor.rotate_down();
-                        break;
-                    case 107:
-                        buildProcessor.zoom();
-                        break;
-                    case 109:
-                        buildProcessor.unzoom();
-                        break;
-                    case 27:
-                        if (cutProcessor != null) {
-                            uiManager.getUICreator().setControlValue(NameList.CurrentCutTypeLabel, 'Current Cut type: none');
-                            cutProcessor.exit();
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-
         </script>
         
         <progress id="loadingProgressBar" class="chimeraProgressBar" max="100" value="0"></progress>

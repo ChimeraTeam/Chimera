@@ -1,4 +1,4 @@
-﻿UIManager = function () {
+﻿var UIManager = function () {
     var _uiCreator = new UICreator();
 
     var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];

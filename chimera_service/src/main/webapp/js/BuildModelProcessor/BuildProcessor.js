@@ -1,5 +1,4 @@
-﻿BuildProcessor = function (strategy) {
-
+﻿BuildProcessor = function (strategy, chimeraManager) {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -12,6 +11,7 @@
     var currentFrame;
     var max = -100, min = 100;
     var cutInProgress = false;
+    var uiManager = chimeraManager.getUIManager();
 
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(renderer.domElement);
@@ -20,7 +20,7 @@
 
     function init(st) {
         if (st == "Phase") {
-            buildStrategyInstance = new PhaseVisualizationStrategy();
+            buildStrategyInstance = new PhaseVisualizationStrategy2();
         }
         else {
             buildStrategyInstance = new FrequencyVisualizationStrategy();
@@ -46,7 +46,7 @@
         var end = begin + Globals.OscillatorsNumber;
 
         for (var i = begin; i < end; i++) {
-            currentFrameData.push(parseFloat(chimeraData[i]));
+            currentFrameData.push(parseFloat(chimeraManager.getChimeraData()[i]));
         }
     }
 
@@ -207,7 +207,6 @@
         if (!cutInProgress && !Options.GetBoolValue(OptionNames.RotationZoomAutomaticReset)) {
             Options.SetValue(OptionNames.RotationX, particleSystem.rotation.x);
             Options.SetValue(OptionNames.RotationY, particleSystem.rotation.y);
-
             Options.SetValue(OptionNames.CameraPosition, camera.position.z);
         }
 
