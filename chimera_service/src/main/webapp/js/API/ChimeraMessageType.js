@@ -2,7 +2,7 @@
  * Created by Yurii on 24.01.2016.
  */
 
-ChimeraMessageType = function () {
+var ChimeraMessageType = function () {
 
 }
 

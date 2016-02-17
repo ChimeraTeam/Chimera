@@ -1,4 +1,4 @@
-﻿PageGrid = function () {
+﻿var PageGrid = function () {
     var framesCountX = 30;
     var framesCountY = 40;
 

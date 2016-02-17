@@ -20,7 +20,7 @@
 
     function init(st) {
         if (st == "Phase") {
-            buildStrategyInstance = new PhaseVisualizationStrategy();
+            buildStrategyInstance = new PhaseVisualizationStrategy2();
         }
         else {
             buildStrategyInstance = new FrequencyVisualizationStrategy();
@@ -207,7 +207,6 @@
         if (!cutInProgress && !Options.GetBoolValue(OptionNames.RotationZoomAutomaticReset)) {
             Options.SetValue(OptionNames.RotationX, particleSystem.rotation.x);
             Options.SetValue(OptionNames.RotationY, particleSystem.rotation.y);
-
             Options.SetValue(OptionNames.CameraPosition, camera.position.z);
         }
 

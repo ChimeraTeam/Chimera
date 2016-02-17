@@ -1,4 +1,4 @@
-﻿NameList = function() {
+﻿var NameList = function() {
 
 }
 

@@ -1,4 +1,4 @@
-﻿Colors = function (needInitColors) {
+﻿var Colors = function (needInitColors) {
     var colorsCount = 17;
     var rgbColorMap = [];
 
@@ -10,9 +10,9 @@
 
     function init(needCreateColors) {
         if (needCreateColors) {
-            push(255, 255, 0);      //ffffff
+            push(255, 255, 255);    //ffffff
             push(255, 255, 204);    //ffffcc
-            push(255, 204, 153);    //ffff99
+            push(255, 255, 153);    //ffff99
             push(255, 255, 102);    //ffff66
             push(255, 255, 51);     //ffff33
             push(255, 255, 0);      //ffff00

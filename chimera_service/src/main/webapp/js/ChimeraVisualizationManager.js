@@ -1,4 +1,4 @@
-﻿ChimeraVisualizationManager = function () {
+﻿var ChimeraVisualizationManager = function () {
     var isSettingsChangeWindowVisible = false;
     var pageGrid = new PageGrid();
     var uiManager;

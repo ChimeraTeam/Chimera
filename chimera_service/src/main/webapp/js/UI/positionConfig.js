@@ -1,4 +1,4 @@
-﻿PositionConfig = function () {
+﻿var PositionConfig = function () {
     var positionMap = [];
     init();
 
