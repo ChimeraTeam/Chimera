@@ -5,15 +5,17 @@
     var frames = -1;
     var callback;
     var progress;
+    var compress;
     var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
     this.init = function (callbackMethod, showProgressMethod) {
         var file = getParameterByName('fileName');
         var type = getParameterByName('type');
+        compress = getParameterByName('compress');
         frames = getParameterByName('frames');
         callback = callbackMethod;
         progress = showProgressMethod;
 
-        postToWServer(file, type);
+        postToWServer(file, type, compress);
 
         Globals.FilePath = file;
         Globals.VisualizationType = type;
@@ -34,10 +36,15 @@
     }
 
     this.getOscillatorNumber = function (configLine) {
+        if (compress == 'M' || compress == 'S')
+            return Globals.SmallOsillatorsCount;
+
         if (configLine.indexOf("100x100x100") > -1) 
             return Globals.MediumOsillatorsCount;
         else if (configLine.indexOf("200x200x200") > -1)
             return Globals.LargeOsillatorsCount;
+        else if (configLine.indexOf("400x400x400") > -1)
+            return Globals.VeryLargeOsillatorsCount;
         else
             return Options.GetValue(OptionNames.OscillatorsNumber);
     }
@@ -105,8 +112,8 @@
         });
     }
 
-    function postToWServer(file, type) {
-        sendMessage(file + '_' + type);
+    function postToWServer(file, type, compress) {
+        sendMessage(file + '_' + type + '_' + compress);
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", "http://chimera.biomed.kiev.ua:8983/chimera_service/stat", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

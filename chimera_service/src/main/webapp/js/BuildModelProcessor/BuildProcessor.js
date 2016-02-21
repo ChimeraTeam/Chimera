@@ -44,7 +44,7 @@
     function selectDataForCurrentFrame(frame) {
         var begin = (frame - 1) * Globals.OscillatorsNumber;
         var end = begin + Globals.OscillatorsNumber;
-
+        
         for (var i = begin; i < end; i++) {
             currentFrameData.push(parseFloat(chimeraManager.getChimeraData()[i]));
         }
