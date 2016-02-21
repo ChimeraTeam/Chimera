@@ -1,6 +1,7 @@
 ﻿var ChimeraVisualizationManager = function () {
     var isSettingsChangeWindowVisible = false;
     var pageGrid = new PageGrid();
+    var snapshotsManager;
     var uiManager;
     var buildProcessor;
     var cutProcessor;
@@ -13,6 +14,7 @@
     {
         var inspector = new SocketDataInspector();
         uiManager = new UIManager();
+        snapshotsManager = new SnapshotsManager();
         Options.TryGetSettingsFromCookies();
 
         inspector.init(DataReadyCallback, uiManager.loadLoadingScene);
@@ -137,7 +139,7 @@
     }
 
     this.cut = function () {
-        cutProcessor = new CutProcessor(buildProcessor);
+        cutProcessor = new CutProcessor(buildProcessor, snapshotsManager);
         uiManager.loadCutScene();
     }
 

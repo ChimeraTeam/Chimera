@@ -1,4 +1,4 @@
-﻿CutProcessor = function (processor) {
+﻿CutProcessor = function (processor, snapshotsManager) {
 
     var buildProcessor = processor;
     var inProgress = false;
@@ -20,6 +20,10 @@
     }
 
     this.exit = function () {
+        if (!Options.GetBoolValue(OptionSchema.DefaultRotationZoomAutomaticReset)) {
+            snapshotsManager.takeSnapshot('temp1', cutParticles, false);
+        }
+
         buildProcessor.setCutInProgress(false);
         resetValues();
     }
