@@ -29,7 +29,7 @@ public enum Types {
 
     @Override
     public String toString() {
-        return "enums.Types{" +
+        return "Types{" +
                 "value='" + value + '\'' +
                 '}';
     }

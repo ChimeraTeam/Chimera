@@ -20,7 +20,7 @@ public enum RegExps {
 
     @Override
     public String toString() {
-        return "enums.RegExps{" +
+        return "RegExps{" +
                 "value='" + value + '\'' +
                 '}';
     }
