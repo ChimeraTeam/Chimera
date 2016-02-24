@@ -43,7 +43,7 @@ public class ChimeraParser {
             if (type.equals(Types.FREQUENCY)) {
                 out = parseFrequency(value);
                 data.append(out).append(",");
-                calculateValues(value);
+                calculateValues(Double.valueOf(value));
             } else {
                 out = parsePhase(value);
                 data.append(out).append(",");
