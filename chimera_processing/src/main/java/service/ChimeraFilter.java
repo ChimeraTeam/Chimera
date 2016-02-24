@@ -13,8 +13,8 @@ public class ChimeraFilter {
 
     private Types type;
     private Pattern pattern;
-    private Double min = 1;
-    private Double max = -1;
+    private Double min = 1.0;
+    private Double max = -1.0;
 
     public ChimeraFilter(Types type) {
         this.type = type;
@@ -72,8 +72,8 @@ public class ChimeraFilter {
     }
 
     private void refresh() {
-        min = 1;
-        max = -1;
+        min = 1.0;
+        max = -1.0;
     }
 
     private void frequencyCalculations(Double frequency) {
