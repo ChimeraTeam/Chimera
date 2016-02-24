@@ -61,7 +61,7 @@ public class ChimeraParser {
 
     private String compressFrequency(Double frequency) {
         frequency += 1;
-        frequency *= 128;
+        frequency *= 1280;
         return String.valueOf(frequency.intValue());
     }
 
