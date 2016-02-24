@@ -6,8 +6,13 @@
         }
 
         var array = data.split(',');
+        alert(array.length);
         var min = array.pop();
         var max = array.pop();
+        alert(array.length);
+        alert(min);
+        alert(max);
+        alert(array[0]);
     }
     
 };

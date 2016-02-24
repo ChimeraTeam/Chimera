@@ -76,7 +76,7 @@ public class ChimeraFilter {
         max = -1;
     }
 
-    private void frequencyCalculations(frequency) {
+    private void frequencyCalculations(Double frequency) {
         if (frequency > max) {
             max = frequency;
         }
