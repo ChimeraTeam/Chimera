@@ -36,7 +36,6 @@
         push('reset',               26,     6,      3,      2);
 
         push('optionsContainer',    24,     3,      5.1,    32);
-        push('snapshotsManagerButton', 23,  1,      1,      2);
         push('changeSettingsButton',25,     1,      1,      2);
         push('aboutButton',         27,     1,      1,      2);
     }

@@ -13,8 +13,6 @@ public class ChimeraFilter {
 
     private Types type;
     private Pattern pattern;
-    private Double min = 1.0;
-    private Double max = -1.0;
 
     public ChimeraFilter(Types type) {
         this.type = type;
@@ -37,15 +35,11 @@ public class ChimeraFilter {
     private String frequencyProcess(String line) {
         StringBuilder data = new StringBuilder();
         Matcher matcher = pattern.matcher(line);
-        refresh();
         while (matcher.find()) {
             String value = matcher.group().split(" ")[0];
             Double frequency = Double.valueOf(value);
-            frequencyCalculations(frequency);
             data.append(frequencyCompress(frequency)).append(",");
         }
-        data.append(frequencyCompress(min)).append(",");
-        data.append(frequencyCompress(max)).append(",");
         return data.toString();
     }
 
@@ -69,20 +63,5 @@ public class ChimeraFilter {
 
     private String phaseCompress(Double phase) {
         return String.valueOf((new Double(180 * phase / Math.PI)).intValue());
-    }
-
-    private void refresh() {
-        min = 1.0;
-        max = -1.0;
-    }
-
-    private void frequencyCalculations(Double frequency) {
-        if (frequency > max) {
-            max = frequency;
-        }
-
-        if (frequency < min) {
-            min = frequency;
-        }
     }
 }

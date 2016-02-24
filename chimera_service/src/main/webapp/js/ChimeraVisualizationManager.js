@@ -234,10 +234,6 @@
         }
     }
     
-    this.snapshotsManager = function () {
-        
-    }
-    
     this.onWaitAllFramesCheckBoxClicked = function () {
         ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
     }
