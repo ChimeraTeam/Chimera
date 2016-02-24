@@ -44,8 +44,8 @@ public class ChimeraFilter {
             frequencyCalculations(frequency);
             data.append(frequencyCompress(frequency)).append(",");
         }
-        data.append(min.toString()).append(",");
-        data.append(max.toString()).append(",");
+        data.append(frequencyCompress(min)).append(",");
+        data.append(frequencyCompress(max)).append(",");
         return data.toString();
     }
 
