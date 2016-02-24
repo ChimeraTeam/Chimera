@@ -4,4 +4,8 @@
 
 var Snapshot = function (particles) {
     this.particles = particles;
+    this.colors = null;
+    this.rotation = null;
+    this.pointSize = null;
+    this.opacity = null;
 }

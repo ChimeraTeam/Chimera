@@ -31,3 +31,4 @@ NameList.ResetButton = "reset";
 NameList.OptionsContainer = "optionsContainer";
 NameList.AboutButton = "aboutButton";
 NameList.ChangeSettingButton = "changeSettingsButton";
+NameList.SnapshotsManagerButton = "snapshotsManagerButton";

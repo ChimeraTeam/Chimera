@@ -3,7 +3,7 @@
 
     var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
     var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton,
-                                                NameList.ChangeSettingButton, NameList.AboutButton];
+                                                NameList.ChangeSettingButton, NameList.SnapshotsManagerButton, NameList.AboutButton];
     var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel,
                                                 NameList.ResetButton];
     var videoVisualizationSceneContainer = [NameList.VideoBackButton, NameList.VideoPauseButton, NameList.VideoNextButton, NameList.VideoCloseButton];
