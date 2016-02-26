@@ -1,6 +1,11 @@
-function dataDecryptServiceTest(data, count) {
+function dataDecryptServiceTest(data, count, type) {
 	var service = new DataDecryptedService();
+    Globals.VisualizationType = type;
     QUnit.assert.equal(service.decryptData(data).length, count, 'decrypt data with ' + count + ' values');
+}
+
+function socketDataInspectorTest() {
+
 }
 
 function cookiesAPITest(name, value) {
@@ -38,10 +43,10 @@ function pageGridTest(){
 }
 
 QUnit.test('dataDecryptServiceTest', function() {
-    dataDecryptServiceTest("5.456", 1);
-    dataDecryptServiceTest("5.456,8.7852", 2);
-    dataDecryptServiceTest("4.456,6.7852,1.2222", 3);
-    dataDecryptServiceTest("4.456,6.7852,1.2222,4.456,6.7852,1.2222,4.456,6.7852,1.2222", 9);
+    dataDecryptServiceTest("5.456", 1, "P");
+    dataDecryptServiceTest("5.456,8.7852", 2, "P");
+    dataDecryptServiceTest("4.456,6.7852,1.2222", 3, "P");
+    dataDecryptServiceTest("4.456,6.7852,1.2222,4.456,6.7852,1.2222,4.456,6.7852,1.2222", 9, "P");
 })
 
 QUnit.test('cookiesAPITest', function() {
@@ -55,3 +60,8 @@ QUnit.test('uiTests', function() {
 QUnit.test('pageGridTest', function() {
     pageGridTest();
 })
+
+QUnit.test('socketDataInspectorTest', function() {
+    socketDataInspectorTest();
+})
+
