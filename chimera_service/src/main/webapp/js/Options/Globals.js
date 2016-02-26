@@ -23,3 +23,6 @@ Globals.CutDiagonal1 = "diagonal1";
 Globals.CutDiagonal2 = "diagonal2";
 
 Globals.CustomParticles = null;
+
+Globals.DefaultCompressValue = "N";
+Globals.PhaseVisualizationStrategy = "1";

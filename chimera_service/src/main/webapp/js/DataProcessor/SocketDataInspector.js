@@ -4,22 +4,31 @@
     var currentFrame = 0;
     var frames = -1;
     var callback;
+    var compress
     var progress;
-    var compress;
     var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
     this.init = function (callbackMethod, showProgressMethod) {
         var file = getParameterByName('fileName');
         var type = getParameterByName('type');
+        var strategy = getParameterByName('strategy');
         compress = getParameterByName('compress');
         frames = getParameterByName('frames');
         callback = callbackMethod;
         progress = showProgressMethod;
+
+        if (compress == "") {
+            compress = Globals.DefaultCompressValue;
+        }
 
         postToWServer(file, type, compress);
 
         Globals.FilePath = file;
         Globals.VisualizationType = type;
         Globals.MaxTimeFrame = frames;
+
+        if (strategy != "") {
+            Globals.PhaseVisualizationStrategy = strategy;
+        }
 
         if (Options.GetBoolValue(OptionNames.WaitAllFrames)){
             progress(0);

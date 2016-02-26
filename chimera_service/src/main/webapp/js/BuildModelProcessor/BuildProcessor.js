@@ -20,7 +20,11 @@
 
     function init(st) {
         if (st == "Phase") {
-            buildStrategyInstance = new PhaseVisualizationStrategy2();
+            if (Globals.PhaseVisualizationStrategy == "1") {
+                buildStrategyInstance = new PhaseVisualizationStrategy2();
+            } else {
+                buildStrategyInstance = new PhaseVisualizationStrategy();
+            }
         }
         else {
             buildStrategyInstance = new FrequencyVisualizationStrategy();
