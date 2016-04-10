@@ -70,7 +70,8 @@ public class ChimeraParser {
 
     private String compressFrequency(Double frequency) {
         frequency += 1;
-        return String.valueOf(frequency);
+        frequency *= 128;
+        return String.valueOf(frequency.intValue());
     }
 
     private String compressPhase(Double phase) {
@@ -80,8 +81,7 @@ public class ChimeraParser {
     private void calculateValues(Double frequency) {
         if (frequency > max) {
             max = frequency;
-        }
-        if (frequency < min) {
+        } else if (frequency < min) {
             min = frequency;
         }
     }

@@ -33,7 +33,7 @@ public class ChimeraParserTest {
     public void testFrequency() throws Exception {
 //        String expected = "-0.127974,-0.098345,-0.075887,-0.060424,-0.051721,-0.048630,-0.050253,-0.055397,-0.062478" +
 //                ",-0.06998,-0.077800,-0.085861,-0.094070,-0.102332,-0.110557,-0.118636,-0.126500,-0.134047";
-        String expected = "111,115,118,120,121,121,121,120,120,119,118,117,115,114,113,112,111,110,";
+        String expected = "111,115,118,120,121,121,121,120,120,119,118,117,115,114,113,112,111,110,110,121,";
         parser = new ChimeraParser(Types.FREQUENCY, Compress.N);
         String actual = parser.process(value);
         assertEquals(expected, actual);
@@ -56,7 +56,7 @@ public class ChimeraParserTest {
 //                ",-0.06998,-0.077800,-0.085861,-0.094070,-0.102332,-0.110557,-0.118636,-0.126500,-0.134047";
 //        pre-compressed:
 //        String expected = "111,115,118,120,121,121,121,120,120,119,118,117,115,114,113,112,111,110,";
-        String expected = "120,112,";
+        String expected = "120,112,112,120,";
         Compress compress = Compress.S;
         compress.setCompressValue(8);
         parser = new ChimeraParser(Types.FREQUENCY, compress);
