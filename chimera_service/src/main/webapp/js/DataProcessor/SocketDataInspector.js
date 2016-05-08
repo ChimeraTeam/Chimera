@@ -1,5 +1,4 @@
 ﻿SocketDataInspector = function () {
-
     var Data = "";
     var currentFrame = 0;
     var frames = -1;
@@ -47,8 +46,7 @@
     this.getOscillatorNumber = function (configLine) {
         if (compress == 'M' || compress == 'S')
             return Globals.SmallOsillatorsCount;
-
-        if (configLine.indexOf("100x100x100") > -1) 
+        else if (configLine.indexOf("100x100x100") > -1)
             return Globals.MediumOsillatorsCount;
         else if (configLine.indexOf("200x200x200") > -1)
             return Globals.LargeOsillatorsCount;

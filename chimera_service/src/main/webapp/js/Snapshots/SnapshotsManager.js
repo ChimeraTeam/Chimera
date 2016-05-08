@@ -4,35 +4,36 @@
 
 var SnapshotsManager = function () {
 
-    /*n(rows) x 3(columns) array
-    * 1 - snapshot name
-    * 2 - snapshot data
-    * 3 - flag (true - user snapshot)*/
     var snapshots = [];
 
-    this.takeSnapshot = function (name, particles, isUserCreate) {
-        var snapshotInfo = search(name);
+    this.takeSnapshot = function (snapshot) {
+        var snapshotInfo = search(snapshot.name);
 
         if (snapshotInfo.isExist) {
-            if (!isUserCreate) {
+            if (!snapshot.isUserCreated) {
                 var index = snapshotInfo.index;
-                snapshots[index][1] = new Snapshot(particles);
+                snapshots[index] = new Snapshot(snapshot.name, snapshot.particles, false);
                 return true;
             }
+
             else {
                 return false;
             }
         }
 
-        snapshots.push([name, new Snapshot(particles), isUserCreate]);
+        snapshots.push(new Snapshot(snapshot.name, snapshot.particles, true));
         return true;
     }
 
+    this.removeSnapshot = function (name) {
+        snapshots.splice(snapshots.indexOf(name));
+    }
+    
     this.getSnapshot = function (snapshotName) {
         var snapshotInfo = search(snapshotName);
 
         if (snapshotInfo.isExist) {
-            return snapshots[snapshotInfo.index][1];
+            return snapshots[snapshotInfo.index];
         }
 
         return null;
@@ -46,7 +47,7 @@ var SnapshotsManager = function () {
 
     function search(name) {
         for (var i = 0; i < snapshots.length; i++){
-            if (snapshots[i][0] == name)
+            if (snapshots[i].name == name)
                 return {
                     isExist: true,
                     index: i
@@ -64,8 +65,8 @@ var SnapshotsManager = function () {
 
         for (var i = 0; i < snapshots.length; i++){
             var current = snapshots[i];
-            if (current[2]) {
-                userSnapshots.push([current[0], current[1]]);
+            if (current.isUserCreated) {
+                userSnapshots.push(current);
             }
         }
 
@@ -77,8 +78,8 @@ var SnapshotsManager = function () {
 
         for (var i = 0; i < snapshots.length; i++){
             var current = snapshots[i];
-            if (!current[2]) {
-                notUserSnapshots.push([current[0], current[1]]);
+            if (!current.isUserCreated) {
+                notUserSnapshots.push(current);
             }
         }
 

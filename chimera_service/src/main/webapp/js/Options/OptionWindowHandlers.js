@@ -2,7 +2,7 @@
  * Created by Yurii on 15.01.2016.
  */
 
-OptionWindowHandlers = function () {
+var OptionWindowHandlers = function () {
     var controlsContainer = [OptionsWindowControlNames.OpacityOptionLabel, OptionsWindowControlNames.OpacityOptionTextBox, OptionsWindowControlNames.PointSizeOptionLabel,
                                 OptionsWindowControlNames.PointSizeOptionTextBox, OptionsWindowControlNames.VideoDelayOptionLabel, OptionsWindowControlNames.VideoDelayOptionTextBox,
                                     OptionsWindowControlNames.AutoResetRotationZoomLabel, OptionsWindowControlNames.AutoResetRotationZoomCheckBox, OptionsWindowControlNames.ApplySettingsButton,
