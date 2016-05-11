@@ -8,6 +8,10 @@ function socketDataInspectorTest() {
 
 }
 
+function snapshotsManagerTest() {
+	
+}
+
 function cookiesAPITest(name, value) {
     var cookiesApi = new Cookies();
     cookiesApi.setCookie(name, value);
