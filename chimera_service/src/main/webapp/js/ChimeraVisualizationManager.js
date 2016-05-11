@@ -273,7 +273,7 @@
         }
 
         var snapshotsCount = snapshotsManager.getUserSnapshots().length;
-        var snapshot = new Snapshot(name, null, true);
+        var snapshot = new Snapshot(name, buildProcessor.getParticles(), true);
         var res = snapshotsManager.takeSnapshot(snapshot);
 
         if (!res) {
@@ -305,6 +305,8 @@
     this.revertSnapshot = function () {
         var name = getNameFromTarget(event.currentTarget);
         var particles = snapshotsManager.getSnapshot(name);
+        buildProcessor.setCustomParticles(particles);
+        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), particles);
     }
 
     this.removeSnapshot = function () {

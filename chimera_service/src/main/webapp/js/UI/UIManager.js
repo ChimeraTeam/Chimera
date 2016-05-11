@@ -8,7 +8,8 @@
                                                 NameList.ResetButton];
     var videoVisualizationSceneContainer = [NameList.VideoBackButton, NameList.VideoPauseButton, NameList.VideoNextButton, NameList.VideoCloseButton];
     var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
-    var cutSceneContainer = [NameList.HorizontalCutButton, NameList.VerticalCutButton, NameList.CloseCutButton, NameList.CurrentCutTypeLabel];
+    var cutSceneContainer = [NameList.HorizontalCutButton, NameList.VerticalCutButton, NameList.CloseCutButton, NameList.CurrentCutTypeLabel,
+                                NameList.SnapshotsManagerButton, NameList.ChangeSettingButton, NameList.AboutButton];
     var changeSettingsSceneContainer = [NameList.OptionsContainer];
     var snapshotsManagerContainer = [NameList.SnapshotsManagerContainer];
     var currentScene = "";
