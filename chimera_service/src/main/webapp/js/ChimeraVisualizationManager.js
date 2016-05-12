@@ -13,14 +13,14 @@
 
     this.init = function()
     {
-        var inspector = new SocketDataInspector();
+        var dataProcessor = new DataProcessor();
         uiManager = new UIManager();
         Options.TryGetSettingsFromCookies();
 
-        inspector.init(DataReadyCallback, uiManager.loadLoadingScene);
+        dataProcessor.process(DataReadyCallback, uiManager.loadLoadingScene);
 
-        visualizationType = inspector.getType(Globals.VisualizationType);
-        oscilatorsCount = inspector.getOscillatorNumber(Globals.FilePath);
+        visualizationType = dataProcessor.getType(Globals.VisualizationType);
+        oscilatorsCount = dataProcessor.getOscillatorNumber(Globals.FilePath);
 
         Globals.OscillatorsNumber = oscilatorsCount;
 

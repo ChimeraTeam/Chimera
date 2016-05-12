@@ -1,68 +1,30 @@
 ﻿SocketDataInspector = function () {
-    var Data = "";
+    var data = "";
     var currentFrame = 0;
-    var frames = -1;
-    var callback;
-    var compress
-    var progress;
+    var info = null;
+
     var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
-    this.init = function (callbackMethod, showProgressMethod) {
-        var file = getParameterByName('fileName');
-        var type = getParameterByName('type');
-        var strategy = getParameterByName('strategy');
-        compress = getParameterByName('compress');
-        frames = getParameterByName('frames');
-        callback = callbackMethod;
-        progress = showProgressMethod;
-
-        if (compress == "") {
-            compress = Globals.DefaultCompressValue;
-        }
-
-        postToWServer(file, type, compress);
-
-        Globals.FilePath = file;
-        Globals.VisualizationType = type;
-        Globals.MaxTimeFrame = frames;
-
-        if (strategy != "") {
-            Globals.PhaseVisualizationStrategy = strategy;
-        }
+    this.init = function (dataProcessorInfo) {
+        info = dataProcessorInfo;
+        postToWServer(info.file, info.type, info.compress);
 
         if (Options.GetBoolValue(OptionNames.WaitAllFrames)){
-            progress(0);
+            info.showProgressMethod(0);
         } else {
-            callback();
+            info.callbackMethod();
         }
     }
 
-    this.getType = function (configLine) {
-        if (configLine == "P")
-            return "Phase";
-        if (configLine == "F")
-            return "Frequency";
+    function postToWServer(file, type, compress) {
+        sendMessage(file + '_' + type + '_' + compress);
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://chimera.biomed.kiev.ua:8983/chimera_service/stat", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send();
     }
 
-    this.getOscillatorNumber = function (configLine) {
-        if (compress == 'M' || compress == 'S')
-            return Globals.SmallOsillatorsCount;
-        else if (configLine.indexOf("100x100x100") > -1)
-            return Globals.MediumOsillatorsCount;
-        else if (configLine.indexOf("200x200x200") > -1)
-            return Globals.LargeOsillatorsCount;
-        else if (configLine.indexOf("400x400x400") > -1)
-            return Globals.VeryLargeOsillatorsCount;
-        else
-            return Options.GetValue(OptionNames.OscillatorsNumber);
-    }
-
-    function getParameterByName(name)
-    {
-        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-            results = regex.exec(location.search);
-
-        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    this.getData = function () {
+        return data;
     }
 
     socket.onopen = function () {
@@ -72,14 +34,14 @@
     socket.onmessage = function (message) {
         currentFrame++;
 
-        if (currentFrame > frames)
+        if (currentFrame > info.frames)
             return;
 
-        Data += message.data;
+        data += message.data;
 
         if (!Options.GetBoolValue(OptionNames.WaitAllFrames)) {
             var container = document.getElementById("sockerDataTransferContainer");
-            container.innerHTML = Data;
+            container.innerHTML = data;
 
             var event = container["onchange"];
 
@@ -90,12 +52,15 @@
             return;
         }
 
-        progress(currentFrame);
+        info.showProgressMethod(currentFrame);
 
-        if (currentFrame == frames) {
+        if (currentFrame == info.frames) {
             var container = document.getElementById("sockerDataTransferContainer");
-            container.innerHTML = Data;
-            callback();
+            if (container != null) {
+                container.innerHTML = data;
+            }
+
+            info.callbackMethod();
         }
     }
 
@@ -106,7 +71,6 @@
                     if (callback !== undefined) {
                         callback();
                     }
-
                 } else {
                     waitForSocketConnection(socket, callback);
                 }
@@ -117,14 +81,6 @@
         waitForSocketConnection(socket, function () {
             socket.send(msg);
         });
-    }
-
-    function postToWServer(file, type, compress) {
-        sendMessage(file + '_' + type + '_' + compress);
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://chimera.biomed.kiev.ua:8983/chimera_service/stat", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send();
     }
 
     function closeConnect() {
