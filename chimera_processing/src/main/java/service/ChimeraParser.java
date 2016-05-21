@@ -1,6 +1,5 @@
 package service;
 
-
 import constants.Compress;
 import constants.RegExps;
 import constants.Types;
@@ -16,8 +15,6 @@ public class ChimeraParser {
     private Types type;
     private Pattern pattern;
     private Compress compress;
-    private Double min = 1.0;
-    private Double max = -1.0;
 
     public ChimeraParser(Types type, Compress compress) {
         this.type = type;
@@ -36,15 +33,18 @@ public class ChimeraParser {
         Matcher matcher = pattern.matcher(input);
         String out;
         int i = 0;
-        refresh();
+        double min = 1.0;
+        double max = -1.0;
         while (matcher.find()) {
-            i++;
-            if (Compress.S.equals(compress) && (i % compress.getCompressValue() != 0)) continue;
+            if (Compress.S.equals(compress) && (++i % compress.getCompressValue() != 0)) continue;
             String value = matcher.group().split(" ")[type.equals(Types.FREQUENCY) ? 0 : 2];
             if (type.equals(Types.FREQUENCY)) {
                 out = parseFrequency(value);
                 data.append(out).append(",");
-                calculateValues(Double.valueOf(value));
+
+                max = Math.max(Double.valueOf(value), max);
+                min = Math.min(Double.valueOf(value), min);
+
             } else {
                 out = parsePhase(value);
                 data.append(out).append(",");
@@ -77,18 +77,5 @@ public class ChimeraParser {
 
     private String compressPhase(Double phase) {
         return String.valueOf((new Double(180 * phase / Math.PI)).intValue());
-    }
-
-    private void calculateValues(Double frequency) {
-        if (frequency > max) {
-            max = frequency;
-        } else if (frequency < min) {
-            min = frequency;
-        }
-    }
-
-    private void refresh() {
-        min = 1.0;
-        max = -1.0;
     }
 }

@@ -26,34 +26,32 @@ public class ChimeraWebSocket {
     @OnMessage
     public void onMessage(String data, Session session) {
         logger.info("Get message message=" + data + " session=" + session.getId());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                String fileName = data.split("_")[0];
-                String type = data.split("_")[1];
-                String compress = data.split("_")[2];
+            String fileName = data.split("_")[0];
+            String type = data.split("_")[1];
+            String compress = data.split("_")[2];
 
-                String result = checkInCache(fileName);
-                if (result != null) {
-                    session.getAsyncRemote().sendText(result);
-                    return;
-                }
-
-                logger.info("Starting processing file=" + fileName + " type=" + type + " session=" + session.getId());
-
-                ChimeraReader reader = new ChimeraReader(fileName);
-                ChimeraParser filter = new ChimeraParser(Types.getEnum(type), getCompressValue(compress, fileName));
-                while (reader.hasNext()) {
-                    String value = filter.process(reader.next());
-                    if (value != null) {
-                        if (!session.isOpen()) return;
-                        session.getAsyncRemote().sendText(value);
-                        cacheManager.put(fileName, value);
-                    }
-                }
-                logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
+            String result = checkInCache(fileName);
+            if (result != null) {
+                session.getAsyncRemote().sendText(result);
+                return;
             }
+
+            logger.info("Starting processing file=" + fileName + " type=" + type + " session=" + session.getId());
+
+            ChimeraReader reader = new ChimeraReader(fileName);
+            ChimeraParser filter = new ChimeraParser(Types.getEnum(type), getCompressValue(compress, fileName));
+            while (reader.hasNext()) {
+                String value = filter.process(reader.next());
+                if (value != null) {
+                    if (!session.isOpen()) return;
+                    session.getAsyncRemote().sendText(value);
+                    cacheManager.put(fileName, value);
+                }
+            }
+            cacheManager.put(fileName, "c");
+            logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
         }).start();
     }
 
