@@ -18,7 +18,6 @@
             var max = current.pop();
             var min = current.pop();
             parser.parse(current, min, max, readyData);
-            alert(readyData);
         }
 
         return readyData;

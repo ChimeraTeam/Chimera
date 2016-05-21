@@ -6,8 +6,8 @@
         colors = [];
 
         var H, Vm, a, Vi, Vd;
-        var S = (1 - this.min / this.max) * 100;
-        var V = (this.max * 60) / 3.6;
+        var S = 0.5;
+        var V = 0.5;
 
         for (var i = 0; i < data.length; i++) {
             colors[i] = new THREE.Color();

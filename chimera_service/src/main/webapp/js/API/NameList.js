@@ -28,6 +28,8 @@ NameList.PointSizeSlider = "pointSize";
 NameList.PointSizeLabel = "pointSizeLabel";
 NameList.ResetButton = "reset";
 
+NameList.SnapshotsManagerContainer = "snapshotsManagerContainer";
 NameList.OptionsContainer = "optionsContainer";
 NameList.AboutButton = "aboutButton";
+NameList.SnapshotsManagerButton = "snapshotsManagerButton";
 NameList.ChangeSettingButton = "changeSettingsButton";

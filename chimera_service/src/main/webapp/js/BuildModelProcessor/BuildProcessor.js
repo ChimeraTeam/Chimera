@@ -5,6 +5,7 @@
     var particleSystem;
     var particlesTemporary = new THREE.Geometry();
     var particles = new THREE.Geometry();
+    var customParticles = new THREE.Geometry();
     var container = document.getElementById('container');
     var buildStrategyInstance;
     var currentFrameData = [];
@@ -92,7 +93,6 @@
 
     this.customParticlesBuild = function (opacity, size, particlesArray) {
         scene.remove(scene.children[0]);
-        Globals.CustomParticles = particlesArray;
         renderModel(opacity, size, particlesArray);
     }
 
@@ -172,6 +172,10 @@
         renderParticles();
     }
 
+    this.setCustomParticles = function (particlesArray) {
+        customParticles = particlesArray;
+    }
+
     this.removeCustomObjects = function () {
         for (var i = 0; i < scene.children.length; i++) {
             if (scene.children[i].name == 'customLine') {
@@ -181,17 +185,16 @@
         }
 
         renderParticles();
+
     }
 
     this.updateOpacity = function (opacity) {
         scene.remove(scene.children[0]);
-
         particlesBuild(opacity, Options.GetValue(OptionNames.PointSize));
     }
 
     this.updatePointSize = function (size) {
         scene.remove(scene.children[0]);
-
         particlesBuild(Options.GetValue(OptionNames.Opacity), size);
     }
 
@@ -253,14 +256,14 @@
     }
 
     this.zoom = function () {
-        if (!cutInProgress) {
+        if (!cutInProgress && camera.position.z > 0) {
             camera.position.z -= 5;
             renderParticles();
         }
     }
 
     this.unzoom = function () {
-        if (!cutInProgress) {
+        if (!cutInProgress  && camera.position.z < 150) {
             camera.position.z += 5;
             renderParticles();
         }

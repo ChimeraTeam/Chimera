@@ -3,13 +3,15 @@
 
     var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
     var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton,
-                                                NameList.ChangeSettingButton, NameList.AboutButton];
+                                                NameList.SnapshotsManagerButton, NameList.ChangeSettingButton, NameList.AboutButton];
     var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel,
                                                 NameList.ResetButton];
     var videoVisualizationSceneContainer = [NameList.VideoBackButton, NameList.VideoPauseButton, NameList.VideoNextButton, NameList.VideoCloseButton];
     var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
-    var cutSceneContainer = [NameList.HorizontalCutButton, NameList.VerticalCutButton, NameList.CloseCutButton, NameList.CurrentCutTypeLabel];
+    var cutSceneContainer = [NameList.HorizontalCutButton, NameList.VerticalCutButton, NameList.CloseCutButton, NameList.CurrentCutTypeLabel,
+                                NameList.SnapshotsManagerButton, NameList.ChangeSettingButton, NameList.AboutButton];
     var changeSettingsSceneContainer = [NameList.OptionsContainer];
+    var snapshotsManagerContainer = [NameList.SnapshotsManagerContainer];
     var currentScene = "";
 
     this.getCurrentScene = function () {
@@ -92,6 +94,18 @@
         _uiCreator.setSceneVisibility(changeSettingsSceneContainer, false);
     }
 
+    this.loadSnapshotsManagerScene = function () {
+        var handlers = new SnapshotsManagerWindowHandlers();
+        handlers.setChildControlsVisibility(true);
+        _uiCreator.setSceneVisibility(snapshotsManagerContainer, true);
+    }
+
+    this.closeSnapshotsManagerScene = function () {
+        var handlers = new SnapshotsManagerWindowHandlers();
+        handlers.setChildControlsVisibility(false);
+        _uiCreator.setSceneVisibility(snapshotsManagerContainer, false);
+    }
+
     this.calculatePositions = function (pageGrid) {
         _uiCreator.setPosition(loadingSceneContainer, pageGrid);
         _uiCreator.setPosition(oneFrameVisualizationSceneContainer, pageGrid);
@@ -100,6 +114,7 @@
         _uiCreator.setPosition(currentFrameInfoSceneContainer, pageGrid);
         _uiCreator.setPosition(cutSceneContainer, pageGrid);
         _uiCreator.setPosition(changeSettingsSceneContainer, pageGrid);
+        _uiCreator.setPosition(snapshotsManagerContainer, pageGrid);
     }
 
     this.getUICreator = function () {
