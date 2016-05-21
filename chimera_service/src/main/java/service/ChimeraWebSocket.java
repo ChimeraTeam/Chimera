@@ -21,6 +21,7 @@ public class ChimeraWebSocket {
     private static final String[] OSCILLATIONS_100 = {"100x100x100", "8"};
     private static final String[] OSCILLATIONS_200 = {"200x200x200", "64"};
     private static final String[] OSCILLATIONS_400 = {"400x400x400", "512"};
+    private CacheManager cacheManager = CacheManager.getCacheManager();
 
     @OnMessage
     public void onMessage(String data, Session session) {
@@ -33,6 +34,12 @@ public class ChimeraWebSocket {
                 String type = data.split("_")[1];
                 String compress = data.split("_")[2];
 
+                String result = checkInCache(fileName);
+                if (result != null) {
+                    session.getAsyncRemote().sendText(result);
+                    return;
+                }
+
                 logger.info("Starting processing file=" + fileName + " type=" + type + " session=" + session.getId());
 
                 ChimeraReader reader = new ChimeraReader(fileName);
@@ -42,11 +49,16 @@ public class ChimeraWebSocket {
                     if (value != null) {
                         if (!session.isOpen()) return;
                         session.getAsyncRemote().sendText(value);
+                        cacheManager.put(fileName, value);
                     }
                 }
                 logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
             }
         }).start();
+    }
+
+    private String checkInCache(String fileName) {
+        return cacheManager.get(fileName);
     }
 
     private Compress getCompressValue(String compress, String fileName) {

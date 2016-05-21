@@ -1,7 +1,5 @@
 package core;
 
-import org.apache.log4j.Logger;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.Map;
 /**
  * Created by gleb on 2/10/16.
  */
-public class StatHolder {
+public final class StatHolder {
 
     private static final StatHolder statHolder = new StatHolder();
 

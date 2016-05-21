@@ -1,6 +1,7 @@
 package chimera;
 
-import enums.Types;
+
+import constants.Types;
 import map.ChimeraMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;

@@ -9,9 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>test</module>
         <module>chimera_common</module>
-        <module>chimera_web</module>
         <module>chimera_hadoop</module>
         <module>chimera_processing</module>
         <module>chimera_service</module>
