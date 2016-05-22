@@ -2,7 +2,7 @@
  * Created by p8h77m on 1/28/2016.
  */
 
-ControlsEmulator = function () {
+var ControlsEmulator = function () {
     var controlsId = [];
 
     this.emulate = function () {

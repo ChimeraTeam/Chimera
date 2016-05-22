@@ -1,6 +1,8 @@
-﻿ChimeraVisualizationManager = function () {
+﻿var ChimeraVisualizationManager = function () {
     var isSettingsChangeWindowVisible = false;
+    var isSnapshotsManagerWindowVisible = false;
     var pageGrid = new PageGrid();
+    var snapshotsManager = new SnapshotsManager();
     var uiManager;
     var buildProcessor;
     var cutProcessor;
@@ -11,14 +13,14 @@
 
     this.init = function()
     {
-        var inspector = new SocketDataInspector();
+        var dataProcessor = new DataProcessor();
         uiManager = new UIManager();
         Options.TryGetSettingsFromCookies();
 
-        inspector.init(DataReadyCallback, uiManager.loadLoadingScene);
+        dataProcessor.process(DataReadyCallback, uiManager.loadLoadingScene);
 
-        visualizationType = inspector.getType(Globals.VisualizationType);
-        oscilatorsCount = inspector.getOscillatorNumber(Globals.FilePath);
+        visualizationType = dataProcessor.getType(Globals.VisualizationType);
+        oscilatorsCount = dataProcessor.getOscillatorNumber(Globals.FilePath);
 
         Globals.OscillatorsNumber = oscilatorsCount;
 
@@ -65,11 +67,6 @@
         ChimeraMessage.ShowMessage(ChimeraMessage.Warning, ChimeraMessage.OnOfflineWarning);
     }
 
-    function onresize() {
-        pageGrid.createGrid(window.innerWidth, window.innerHeight);
-        uiManager.calculatePositions(pageGrid);
-    }
-
     function DataReadyCallback()
     {
         if (Options.GetBoolValue(OptionNames.WaitAllFrames)) {
@@ -82,6 +79,11 @@
         }
 
         uiManager.loadOneFrameVisualizationScene();
+    }
+
+    this.onresize = function() {
+        pageGrid.createGrid(window.innerWidth, window.innerHeight);
+        uiManager.calculatePositions(pageGrid);
     }
 
     this.startVisualization = function () {
@@ -137,7 +139,7 @@
     }
 
     this.cut = function () {
-        cutProcessor = new CutProcessor(buildProcessor);
+        cutProcessor = new CutProcessor(buildProcessor, snapshotsManager);
         uiManager.loadCutScene();
     }
 
@@ -150,7 +152,7 @@
         cutProcessor.setCurrentType('Current Cut type: vertical');
         cutProcessor.onVerticalCutButtonClick();
     }
-    
+
     this.reset = function () {
         if (Options.IsDirty()) {
             Options.ResetButton();
@@ -203,7 +205,22 @@
         document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + value;
         Options.GetValue(OptionNames.PointSize);
     }
-    
+
+    this.snapshotsManagerButton_OnClick = function () {
+        if (!isSnapshotsManagerWindowVisible) {
+            if (isSettingsChangeWindowVisible) {
+                uiManager.closeChangeSettingsScene();
+                isSettingsChangeWindowVisible = false;
+            }
+
+            uiManager.loadSnapshotsManagerScene();
+            isSnapshotsManagerWindowVisible = true;
+        } else {
+            uiManager.closeSnapshotsManagerScene();
+            isSnapshotsManagerWindowVisible = false;
+        }
+    }
+
     this.applySettings = function () {
         var handlers = new OptionWindowHandlers();
         handlers.applySettings();
@@ -213,16 +230,21 @@
             buildProcessor.rebuild();
         }
     }
-    
+
     this.onDataChanged = function () {
         var dataDecryptService = new DataDecryptedService();
         var container = document.getElementById("sockerDataTransferContainer");
 
         chimeraData = dataDecryptService.decryptData(container.innerHTML);
     }
-    
+
     this.changeSettings = function () {
         if (!isSettingsChangeWindowVisible) {
+            if (isSnapshotsManagerWindowVisible) {
+                uiManager.closeSnapshotsManagerScene();
+                isSnapshotsManagerWindowVisible = false;
+            }
+
             uiManager.loadChangeSettingsScene();
             isSettingsChangeWindowVisible = true;
         }
@@ -231,14 +253,74 @@
             isSettingsChangeWindowVisible = false;
         }
     }
-    
+
     this.onWaitAllFramesCheckBoxClicked = function () {
         ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
     }
-    
+
     this.onSaveCookieCheckBoxClicked = function () {
         if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'your custom settings will be reset after page unload if you disable this option');
+    }
+
+    this.takeSnapshot = function () {
+        var name = uiManager.getUICreator().getControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox);
+        var tmpl = document.getElementById('snapshot-template');
+
+        if (name == "") {
+            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'Please input snapshot name');
+            return;
+        }
+
+        var snapshotsCount = snapshotsManager.getUserSnapshots().length;
+        var snapshot = new Snapshot(name, buildProcessor.getParticles(), true);
+        var res = snapshotsManager.takeSnapshot(snapshot);
+
+        if (!res) {
+            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'Another snapshot with the same name is exist');
+            return;
+        }
+
+        var d = tmpl.content.querySelectorAll("DIV")[0];
+        var label = d.querySelectorAll("LABEL")[0];
+        label.textContent = name + ' - ' + snapshot.dateTime.toString();
+
+        var revertButton = d.querySelectorAll("BUTTON")[0];
+        revertButton.id = 'revertTo' + snapshotsCount + 1;
+
+        document.getElementById(NameList.SnapshotsManagerContainer).appendChild(tmpl.content.cloneNode(true));
+        uiManager.getUICreator().setControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox, "");
+    }
+
+    function getNameFromTarget(target) {
+        var text = target.parentElement.firstElementChild.textContent;
+        return getNameFromText(text);
+    }
+
+    function getNameFromText(text) {
+        var name = text.split(' - ');
+        return name[0];
+    }
+
+    this.revertSnapshot = function () {
+        var name = getNameFromTarget(event.currentTarget);
+        var particles = snapshotsManager.getSnapshot(name);
+        buildProcessor.setCustomParticles(particles);
+        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), particles);
+    }
+
+    this.removeSnapshot = function () {
+        var name = getNameFromTarget(event.currentTarget);
+        snapshotsManager.removeSnapshot(name);
+
+        var g = document.getElementById(NameList.SnapshotsManagerContainer);
+
+        for (var i = 0; i < g.childNodes.length; i++){
+            var node = g.childNodes[i];
+            if (node.nodeName == "DIV" && getNameFromText(node.innerText) == name){
+                g.removeChild(g.childNodes[i]);
+            }
+        }
     }
 
     this.about = function () {

@@ -1,4 +1,4 @@
-﻿UICreator = function () {
+﻿var UICreator = function () {
 
     this.setSceneVisibility = function (container, value) {
         for (var i = 0; i < container.length; i++) {

@@ -15,12 +15,18 @@
         <script type="text/javascript" src="js/ThirdParty/three.js"></script>
         <script type="text/javascript" src="js/API/Cookies.js"></script>
         <script type="text/javascript" src="js/API/Colors.js"></script>
+        <script type="text/javascript" src="js/API/DateTime.js"></script>
+        <script type="text/javascript" src="js/API/RGBColorMap.js"></script>
         <script type="text/javascript" src="js/Options/Globals.js"></script>
         <script type="text/javascript" src="js/Options/OptionSchema.js"></script>
         <script type="text/javascript" src="js/Options/OptionNames.js"></script>
         <script type="text/javascript" src="js/Options/Options.js"></script>
         <script type="text/javascript" src="js/Options/OptionsWindowControlNames.js"></script>
         <script type="text/javascript" src="js/Options/OptionWindowHandlers.js"></script>
+        <script type="text/javascript" src="js/Snapshots/Snapshot.js"></script>
+        <script type="text/javascript" src="js/Snapshots/SnapshotsManager.js"></script>
+        <script type="text/javascript" src="js/Snapshots/SnapshotsManagerWindowHandlers.js"></script>
+        <script type="text/javascript" src="js/Snapshots/SnapshotsManagerWindowControlNames.js"></script>
         <script type="text/javascript" src="js/API/NameList.js"></script>
         <script type="text/javascript" src="js/API/ChimeraMessage.js"></script>
         <script type="text/javascript" src="js/API/ChimeraMessageType.js"></script>
@@ -30,9 +36,12 @@
         <script type="text/javascript" src="js/UI/UICreator.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/BuildProcessor.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy.js"></script>
+        <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy2.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/FrequencyVisualizationStrategy.js"></script>
         <script type="text/javascript" src="js/DataProcessor/SocketDataInspector.js"></script>
+        <script type="text/javascript" src="js/DataProcessor/DataProcessor.js"></script>
         <script type="text/javascript" src="js/DataProcessor/DataDecryptedService/DataDecryptedService.js"></script>
+        <script type="text/javascript" src="js/DataProcessor/DataDecryptedService/FrequencyParser.js"></script>
         <script type="text/javascript" src="js/VideoProcessor/VideoProcessor.js"></script>
         <script type="text/javascript" src="js/CutProcessor/CutProcessor.js"></script>
 	</head>
@@ -64,8 +73,18 @@
         <input id="pointSizeLabel" type="text" class="chimeraLabel" value="Particle Size" disabled />
         <input id="reset" type="button" class="chimeraButton" value="Reset" onclick="chimeraManager.reset()"/>
         <label id="sockerDataTransferContainer" style="display:none" onchange="chimeraManager.onDataChanged()"></label>
+        <input id="snapshotsManagerButton" type="button" class="chimeraCircleButton" value="S" onclick="chimeraManager.snapshotsManagerButton_OnClick()"/>
         <input id="changeSettingsButton" type="button" class="chimeraCircleButton" value="=" onclick="chimeraManager.changeSettings()"/>
         <input id="aboutButton" type="button" class="chimeraCircleButton" value="?" onclick="chimeraManager.about()"/>
+        <div id="snapshotsManagerContainer" class="chimeraDiv">
+            <br>
+            <label style="padding-left: 10%; font-size: 2vw">Snapshots Manager</label>
+            <br><br>
+            <input id="snapshotNameTextBox" style="width: 60%; margin-left: 20%" type="text" class="chimeraSettingsTextBox"/>
+            <br>
+            <input id="takeSnapshotButton" style="width: 50%; margin-left: 25%; margin-top: 2%" type="button" class="chimeraButton" value="Take Snapshot" onclick="chimeraManager.takeSnapshot()"/>
+            <br><br>
+        </div>
         <div id="optionsContainer" class="chimeraDiv">
             <br>
             <label style="padding-left: 10%; font-size: 2vw">Default Settings</label>
@@ -92,5 +111,12 @@
             <br><br>
             <input id="cancelSettingsButtons" type="button" class="chimeraSettingsButton" value="Cancel" onclick="chimeraManager.changeSettings()"/>
         </div>
+        <template id="snapshot-template">
+            <div style="width: 92%; margin-left: 4%; margin-top: 2%;border: groove #4CAF50; background-color: #2B81AF">
+                <label id="snapshotName" style="margin-left: 5%"></label>
+                <button id="remove" style="width: 10%; margin-left: 80%" onclick="chimeraManager.removeSnapshot()">X</button>
+                <button id="revertTo" style="width: 50%; margin-left: 5%" onclick="chimeraManager.revertSnapshot()">Revert to this state</button>
+            </div>
+        </template>
     </body>
 </html>

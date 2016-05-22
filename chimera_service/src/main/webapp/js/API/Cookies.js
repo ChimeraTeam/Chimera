@@ -1,4 +1,4 @@
-﻿Cookies = function () {
+﻿var Cookies = function () {
 
     this.setCookie = function (cname, cvalue) {
         var exdate = new Date();
