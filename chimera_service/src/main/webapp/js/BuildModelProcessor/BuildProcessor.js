@@ -210,6 +210,10 @@
         cutInProgress = value;
     }
 
+    this.getCutInProgress = function () {
+        return cutInProgress;
+    }
+
     function renderParticles() {
         if (!cutInProgress && !Options.GetBoolValue(OptionNames.RotationZoomAutomaticReset)) {
             Options.SetValue(OptionNames.RotationX, particleSystem.rotation.x);

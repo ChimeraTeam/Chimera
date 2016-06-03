@@ -22,4 +22,8 @@
 
         return readyData;
     }
+    
+    this.encyptData = function () {
+        
+    }
 };
