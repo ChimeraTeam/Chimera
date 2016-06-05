@@ -1,6 +1,6 @@
-﻿DataDecryptedService = function () {
+﻿var DataDecryptor = function () {
 
-    this.decryptData = function (data) {
+    this.decrypt = function (data) {
         if (Globals.VisualizationType == 'P') {
             return data.split(',');
         }
@@ -21,9 +21,5 @@
         }
 
         return readyData;
-    }
-    
-    this.encyptData = function () {
-        
     }
 };

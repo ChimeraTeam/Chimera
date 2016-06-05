@@ -31,7 +31,7 @@ var SnapshotsManager = function () {
     }
     
     this.removeSnapshot = function (name) {
-        snapshots.splice(snapshots.indexOf(name));
+        snapshots.splice(search(name).index);
     }
     
     this.getSnapshot = function (snapshotName) {

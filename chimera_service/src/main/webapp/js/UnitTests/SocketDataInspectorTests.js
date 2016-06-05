@@ -53,13 +53,13 @@ var SocketDataInspectorTests = function () {
             callbackMethod: function () {},
             showProgressMethod: function () {}
         };
-        var decryptService = new DataDecryptedService();
+        var decryptService = new DataDecryptor();
         inspector.init(info);
         QUnit.stop();
         setTimeout(function () {
             QUnit.start();
             QUnit.assert.ok(inspector.getData().length > 0, "Data was obtained from WebSocket");
-            QUnit.assert.ok(decryptService.decryptData(inspector.getData()).length == (info.frames * 125000 + 1), "Phase data for " + info.frames + " frames were successfully obtained and decrypted");
+            QUnit.assert.ok(decryptService.decrypt(inspector.getData()).length == (info.frames * 125000 + 1), "Phase data for " + info.frames + " frames were successfully obtained and decrypted");
         }, 3000);
     }
 
@@ -74,13 +74,13 @@ var SocketDataInspectorTests = function () {
             callbackMethod: function () {},
             showProgressMethod: function () {}
         };
-        var decryptService = new DataDecryptedService();
+        var decryptService = new DataDecryptor();
         inspector.init(info);
         QUnit.stop();
         setTimeout(function () {
             QUnit.start();
             QUnit.assert.ok(inspector.getData().length > 0, "Data was obtained from WebSocket");
-            QUnit.assert.ok(decryptService.decryptData(inspector.getData()).length > info.frames * 125000, "Frequency data for " + info.frames + " frames were successfully obtained and decrypted");
+            QUnit.assert.ok(decryptService.decrypt(inspector.getData()).length > info.frames * 125000, "Frequency data for " + info.frames + " frames were successfully obtained and decrypted");
         }, 5000);
     }
 
@@ -95,13 +95,13 @@ var SocketDataInspectorTests = function () {
             callbackMethod: function () {},
             showProgressMethod: function () {}
         };
-        var decryptService = new DataDecryptedService();
+        var decryptService = new DataDecryptor();
         inspector.init(info);
         QUnit.stop();
         setTimeout(function () {
             QUnit.start();
             if (inspector.getData().length > 0){
-                var decryptedData = decryptService.decryptData(inspector.getData());
+                var decryptedData = decryptService.decrypt(inspector.getData());
                 var res = true;
                 for (var i = 0; i < decryptedData.length; i++) {
                     if (decryptedData[i] < 0 || decryptedData[i] > 360) {

@@ -20,7 +20,7 @@ var PhaseVisualizationStrategy2 = function () {
             colors[i].setHSL(hsl.h, hsl.s, hsl.l);
         }
 
-        return colors;
+        return PhaseColorDecorator.decorate(colors);;
     }
 
 }

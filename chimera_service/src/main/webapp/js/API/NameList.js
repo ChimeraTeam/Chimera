@@ -33,3 +33,21 @@ NameList.OptionsContainer = "optionsContainer";
 NameList.AboutButton = "aboutButton";
 NameList.SnapshotsManagerButton = "snapshotsManagerButton";
 NameList.ChangeSettingButton = "changeSettingsButton";
+
+NameList.OpacityOptionLabel = "opacityOptionLabel";
+NameList.OpacityOptionTextBox = "opacityOptionTextBox";
+NameList.PointSizeOptionLabel = "pointSizeOptionLabel";
+NameList.PointSizeOptionTextBox = "pointSizeOptionTextBox";
+NameList.VideoDelayOptionLabel = "videoDelayOptionLabel";
+NameList.VideoDelayOptionTextBox = "videoDelayOptionTextBox";
+NameList.AutoResetRotationZoomLabel = "autoResetRotationZoomLabel";
+NameList.AutoResetRotationZoomCheckBox = "autoResetRotationZoomCheckBox";
+NameList.ApplySettingsButton = "applySettingsButtons";
+NameList.CancelSettingsButton = "cancelSettingsButtons";
+NameList.SaveCookiesButton = "saveCookiesButton";
+NameList.SaveCookiesCheckBox = "saveCookiesCheckBox";
+NameList.WaitAllFramesButton = "waitAllFramesButton";
+NameList.WaitAllFramesCheckBox = "waitAllFramesCheckBox";
+
+NameList.SnapshotNameTextBox = "snapshotNameTextBox";
+NameList.TakeSnapshotButton = "takeSnapshotButton";

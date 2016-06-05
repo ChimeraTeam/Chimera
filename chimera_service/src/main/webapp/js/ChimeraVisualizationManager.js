@@ -70,10 +70,10 @@
     function DataReadyCallback()
     {
         if (Options.GetBoolValue(OptionNames.WaitAllFrames)) {
-            var dataDecryptService = new DataDecryptedService();
+            var dataDecryptService = new DataDecryptor();
             var container = document.getElementById("sockerDataTransferContainer");
 
-            chimeraData = dataDecryptService.decryptData(container.innerHTML);
+            chimeraData = dataDecryptService.decrypt(container.innerHTML);
 
             uiManager.closeLoadingScene();
         }
@@ -232,10 +232,10 @@
     }
 
     this.onDataChanged = function () {
-        var dataDecryptService = new DataDecryptedService();
+        var dataDecryptService = new DataDecryptor();
         var container = document.getElementById("sockerDataTransferContainer");
 
-        chimeraData = dataDecryptService.decryptData(container.innerHTML);
+        chimeraData = dataDecryptService.decrypt(container.innerHTML);
     }
 
     this.changeSettings = function () {
@@ -259,12 +259,12 @@
     }
 
     this.onSaveCookieCheckBoxClicked = function () {
-        if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
+        if (!document.getElementById(NameList.SaveCookiesCheckBox.checked))
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
 
     this.takeSnapshot = function () {
-        var name = uiManager.getUICreator().getControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox);
+        var name = uiManager.getUICreator().getControlValue(NameList.SnapshotNameTextBox);
         var tmpl = document.getElementById('snapshot-template');
 
         if (name == "") {
@@ -291,7 +291,7 @@
         revertButton.id = 'revertTo' + snapshotsCount + 1;
 
         document.getElementById(NameList.SnapshotsManagerContainer).appendChild(tmpl.content.cloneNode(true));
-        uiManager.getUICreator().setControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox, "");
+        uiManager.getUICreator().setControlValue(NameList.SnapshotNameTextBox, "");
     }
 
     function getNameFromTarget(target) {
