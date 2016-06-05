@@ -12,8 +12,37 @@ function push(r, g, b) {
     colorMap.push(new Array(r, g, b));
 }
 
-RGBColorMap.init = function () {
+RGBColorMap.getCount = function () {
+    init();
+    return colorMap.length - 1;
+};
+
+RGBColorMap.getColorMap = function () {
+    if (colorMap == null) {
+        init();
+    }
+
+    return colorMap;
+}
+
+function init() {
     push(0,0,0);
+    push(0,0,128);
+    push(0,0,255);
+    push(128,0,0);
+    push(128,0,128);
+    push(128,128,0);
+    push(0,128,128);
+    push(0,128,0);
+    push(255,0,0);
+    push(255,0,255);
+    push(0,255,0);
+    push(128,128,128);
+    push(255,255,0);
+    push(192,192,192);
+    push(255,255,255);
+
+    /*push(0,0,0);
     push(255,235,205);
     push(0,0,255);
     push(0,0,238);
@@ -416,7 +445,7 @@ RGBColorMap.init = function () {
     push(238, 238,0);
     push(205, 205,0);
     push(139, 139,0);
-    push(154, 205,50);
+    push(154, 205,50);*/
 
     return colorMap;
 }
