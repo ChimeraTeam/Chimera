@@ -1,14 +1,14 @@
-﻿var VideoProcessor = function () {
-    var processor;
+﻿var VideoProcessor = function (buildProcessor) {
+    var processor = buildProcessor;
     var currentFrame = 1;
-    var pause;
+    var pause = false;
     var end = false;
 
     function animate() {
         if (pause)
             return;
 
-        processor.build(currentFrame, true);
+        processor.process(currentFrame, true);
 
         currentFrame++;
 
@@ -23,12 +23,6 @@
             function () {
                 requestAnimationFrame(animate);
             }, Options.GetValue(OptionNames.VideoDelay));
-    }
-
-    this.init = function (buildProcessor) {
-        processor = buildProcessor;
-        pause = false;
-        end = false;
     }
 
     this.isVideoEnd = function () {
@@ -60,7 +54,7 @@
 
     this.next = function () {
         currentFrame++;
-        if (!processor.build(currentFrame, true)) {
+        if (!processor.process(currentFrame, true)) {
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.LastTimeMomentWarning);
             currentFrame--;
         }
@@ -68,7 +62,7 @@
 
     this.back = function () {
         currentFrame--;
-        if (!processor.build(currentFrame, true)) {
+        if (!processor.process(currentFrame, true)) {
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.FirstTimeMomentWarning);
             currentFrame++;
         }

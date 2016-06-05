@@ -36,6 +36,8 @@
         }
 
         buildProcessor = new BuildProcessor(visualizationType, this);
+        videoProcessor = new VideoProcessor(buildProcessor);
+        cutProcessor = new CutProcessor(buildProcessor, snapshotsManager);
     }
 
     this.getChimeraData = function () {
@@ -88,7 +90,7 @@
 
     this.startVisualization = function () {
         var currentFrame = document.getElementById(NameList.SelectTimeMomentTextBox).value;
-        buildProcessor.build(currentFrame, false);
+        buildProcessor.process(currentFrame, false);
     }
 
     this.playVideo = function () {
@@ -97,8 +99,6 @@
         uiManager.closeOneFrameVisualizationScene();
         uiManager.loadVideoVisualizationScene();
 
-        videoProcessor = new VideoProcessor()
-        videoProcessor.init(buildProcessor);
         videoProcessor.play();
     }
 
@@ -139,7 +139,6 @@
     }
 
     this.cut = function () {
-        cutProcessor = new CutProcessor(buildProcessor, snapshotsManager);
         uiManager.loadCutScene();
     }
 
@@ -181,29 +180,31 @@
     this.onOpacityChanged = function () {
         var value = getOpacitySliderValue();
 
+        Options.SetValue(OptionNames.Opacity, value);
+        UIUpdater.update(uiManager);
+
         if (uiManager.getCurrentScene() == 'CutScene') {
-            buildProcessor.customParticlesBuild(value, Options.GetValue(OptionNames.PointSize), cutProcessor.getCutParticles());
+            buildProcessor.setCustomParticles(cutProcessor.getCutParticles());
+            buildProcessor.customProcess(null, null);
         }
         else {
             buildProcessor.updateOpacity(value);
         }
-
-        document.getElementById(NameList.OpacityLabel).value = Templates.OpacityLabelTemplate + value;
-        Options.SetValue(OptionNames.Opacity, value);
     };
 
     this.onPointSizeChanged = function () {
         var value = getPointSizeSliderValue();
 
+        Options.SetValue(OptionNames.PointSize, value);
+        UIUpdater.update(uiManager);
+
         if (uiManager.getCurrentScene() == 'CutScene') {
-            buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), value, cutProcessor.getCutParticles());
+            buildProcessor.setCustomParticles(cutProcessor.getCutParticles());
+            buildProcessor.customProcess(null, null);
         }
         else {
             buildProcessor.updatePointSize(value);
         }
-
-        document.getElementById(NameList.PointSizeLabel).value = Templates.PointSizeLabelTemplate + value;
-        Options.GetValue(OptionNames.PointSize);
     }
 
     this.snapshotsManagerButton_OnClick = function () {
@@ -309,7 +310,8 @@
         var snapshotInfo = snapshotsManager.getSnapshot(name);
         var particles = snapshotInfo.particles;
         snapshotsManager.revertSnapshot(snapshotInfo);
-        buildProcessor.customParticlesBuild(snapshotInfo.opacity, snapshotInfo.pointSize, particles);
+        buildProcessor.setCustomParticles(particles);
+        buildProcessor.customProcess(snapshotInfo.opacity, snapshotInfo.pointSize);
         UIUpdater.update(uiManager);
         this.removeSnapshot();
     }

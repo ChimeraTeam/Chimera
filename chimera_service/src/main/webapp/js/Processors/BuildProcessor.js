@@ -91,11 +91,6 @@
         renderModel(opacity, size, particles);
     }
 
-    this.customParticlesBuild = function (opacity, size, particlesArray) {
-        scene.remove(scene.children[0]);
-        renderModel(opacity, size, particlesArray);
-    }
-
     function setCurrentFrameValue(value) {
         uiManager.getUICreator().setControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
     }
@@ -130,10 +125,17 @@
     }
 
     this.rebuild = function () {
-        this.build(currentFrame, false);
+        this.process(currentFrame, false);
     }
 
-    this.build = function (frame, isVideo) {
+    this.customProcess = function (opacity, pointSize) {
+        opacity = opacity == null ? Options.GetValue(OptionNames.Opacity) : opacity;
+        pointSize = pointSize == null ? Options.GetValue(OptionNames.PointSize) : opacity;
+        var particlesForBuild = customParticles == null ? particles : customParticles;
+        renderModel(opacity, pointSize, particlesForBuild);
+    }
+    
+    this.process = function (frame, isVideo) {
         if (parseInt(frame) < 1 || parseInt(frame) > Globals.MaxTimeFrame) {
             if (!isVideo) {
                 ChimeraMessage.ShowMessage(ChimeraMessageType.Error, ChimeraMessage.TimeMomentRangeError);

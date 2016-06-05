@@ -14,7 +14,7 @@ function push(r, g, b) {
 
 RGBColorMap.init = function () {
     push(0,0,0);
-    push(255,235,205);
+    /*push(255,235,205);
     push(0,0,255);
     push(0,0,238);
     push(0,0,205);
@@ -138,7 +138,7 @@ RGBColorMap.init = function () {
     push(190, 190,190);
     push(28, 28,28);
     push(54, 54,54);
-    push(79, 79,79);
+    push(79, 79,79);*/
     push(105, 105,105);
     push(130, 130,130);
     push(156, 156,156);
