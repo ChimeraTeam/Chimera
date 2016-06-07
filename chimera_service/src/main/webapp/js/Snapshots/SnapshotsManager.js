@@ -12,7 +12,7 @@ var SnapshotsManager = function () {
         if (snapshotInfo.isExist) {
             if (!snapshot.isUserCreated) {
                 var index = snapshotInfo.index;
-                snapshots[index] = new Snapshot(snapshot.name, snapshot.particles, false);
+                snapshots[index] = new Snapshot(snapshot.name, snapshot.particles, snapshot.opacity, snapshot.pointSize, false);
                 return true;
             }
 
@@ -21,12 +21,17 @@ var SnapshotsManager = function () {
             }
         }
 
-        snapshots.push(new Snapshot(snapshot.name, snapshot.particles, true));
+        snapshots.push(new Snapshot(snapshot.name, snapshot.particles, snapshot.opacity, snapshot.pointSize, true));
         return true;
     }
 
+    this.revertSnapshot = function (snapshot) {
+        Options.SetValue(OptionNames.Opacity, snapshot.opacity);
+        Options.SetValue(OptionNames.PointSize, snapshot.pointSize);
+    }
+    
     this.removeSnapshot = function (name) {
-        snapshots.splice(snapshots.indexOf(name));
+        snapshots.splice(search(name).index);
     }
     
     this.getSnapshot = function (snapshotName) {

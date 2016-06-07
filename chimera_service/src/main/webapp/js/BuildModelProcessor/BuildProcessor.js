@@ -210,6 +210,10 @@
         cutInProgress = value;
     }
 
+    this.getCutInProgress = function () {
+        return cutInProgress;
+    }
+
     function renderParticles() {
         if (!cutInProgress && !Options.GetBoolValue(OptionNames.RotationZoomAutomaticReset)) {
             Options.SetValue(OptionNames.RotationX, particleSystem.rotation.x);
@@ -228,45 +232,33 @@
     }
 
     this.rotate_left = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.y -= 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.y -= 0.05;
+        renderParticles();
     }
 
     this.rotate_right = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.y += 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.y += 0.05;
+        renderParticles();
     }
 
     this.rotate_down = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.x += 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.x += 0.05;
+        renderParticles();
     }
 
     this.rotate_up = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.x -= 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.x -= 0.05;
+        renderParticles();
     }
 
     this.zoom = function () {
-        if (!cutInProgress && camera.position.z > 0) {
-            camera.position.z -= 5;
-            renderParticles();
-        }
+        camera.position.z -= 5;
+        renderParticles();
     }
 
     this.unzoom = function () {
-        if (!cutInProgress  && camera.position.z < 150) {
-            camera.position.z += 5;
-            renderParticles();
-        }
+        camera.position.z += 5;
+        renderParticles();
     }
 
 }

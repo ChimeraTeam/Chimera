@@ -5,7 +5,7 @@
 
     function init(needCreateColors) {
         if (needCreateColors) {
-            rgbColorMap = RGBColorMap.init();
+            rgbColorMap = RGBColorMap.getColorMap();
         }
     }
 

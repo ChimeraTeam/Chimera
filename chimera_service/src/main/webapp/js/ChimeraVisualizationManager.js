@@ -70,10 +70,10 @@
     function DataReadyCallback()
     {
         if (Options.GetBoolValue(OptionNames.WaitAllFrames)) {
-            var dataDecryptService = new DataDecryptedService();
+            var dataDecryptService = new DataDecryptor();
             var container = document.getElementById("sockerDataTransferContainer");
 
-            chimeraData = dataDecryptService.decryptData(container.innerHTML);
+            chimeraData = dataDecryptService.decrypt(container.innerHTML);
 
             uiManager.closeLoadingScene();
         }
@@ -188,7 +188,7 @@
             buildProcessor.updateOpacity(value);
         }
 
-        document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + value;
+        document.getElementById(NameList.OpacityLabel).value = Templates.OpacityLabelTemplate + value;
         Options.SetValue(OptionNames.Opacity, value);
     };
 
@@ -202,7 +202,7 @@
             buildProcessor.updatePointSize(value);
         }
 
-        document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + value;
+        document.getElementById(NameList.PointSizeLabel).value = Templates.PointSizeLabelTemplate + value;
         Options.GetValue(OptionNames.PointSize);
     }
 
@@ -232,10 +232,10 @@
     }
 
     this.onDataChanged = function () {
-        var dataDecryptService = new DataDecryptedService();
+        var dataDecryptService = new DataDecryptor();
         var container = document.getElementById("sockerDataTransferContainer");
 
-        chimeraData = dataDecryptService.decryptData(container.innerHTML);
+        chimeraData = dataDecryptService.decrypt(container.innerHTML);
     }
 
     this.changeSettings = function () {
@@ -259,12 +259,12 @@
     }
 
     this.onSaveCookieCheckBoxClicked = function () {
-        if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
+        if (!document.getElementById(NameList.SaveCookiesCheckBox.checked))
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
 
     this.takeSnapshot = function () {
-        var name = uiManager.getUICreator().getControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox);
+        var name = uiManager.getUICreator().getControlValue(NameList.SnapshotNameTextBox);
         var tmpl = document.getElementById('snapshot-template');
 
         if (name == "") {
@@ -273,7 +273,9 @@
         }
 
         var snapshotsCount = snapshotsManager.getUserSnapshots().length;
-        var snapshot = new Snapshot(name, buildProcessor.getParticles(), true);
+        var particles = buildProcessor.getCutInProgress() ? cutProcessor.getCutParticles() : buildProcessor.getParticles();
+        var snapshot = new Snapshot(name, particles, Options.GetValue(OptionNames.Opacity),
+            Options.GetValue(OptionNames.PointSize), true);
         var res = snapshotsManager.takeSnapshot(snapshot);
 
         if (!res) {
@@ -289,7 +291,7 @@
         revertButton.id = 'revertTo' + snapshotsCount + 1;
 
         document.getElementById(NameList.SnapshotsManagerContainer).appendChild(tmpl.content.cloneNode(true));
-        uiManager.getUICreator().setControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox, "");
+        uiManager.getUICreator().setControlValue(NameList.SnapshotNameTextBox, "");
     }
 
     function getNameFromTarget(target) {
@@ -304,21 +306,24 @@
 
     this.revertSnapshot = function () {
         var name = getNameFromTarget(event.currentTarget);
-        var particles = snapshotsManager.getSnapshot(name);
-        buildProcessor.setCustomParticles(particles);
-        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), particles);
+        var snapshotInfo = snapshotsManager.getSnapshot(name);
+        var particles = snapshotInfo.particles;
+        snapshotsManager.revertSnapshot(snapshotInfo);
+        buildProcessor.customParticlesBuild(snapshotInfo.opacity, snapshotInfo.pointSize, particles);
+        UIUpdater.update(uiManager);
+        this.removeSnapshot();
     }
 
     this.removeSnapshot = function () {
         var name = getNameFromTarget(event.currentTarget);
         snapshotsManager.removeSnapshot(name);
 
-        var g = document.getElementById(NameList.SnapshotsManagerContainer);
+        var container = document.getElementById(NameList.SnapshotsManagerContainer);
 
-        for (var i = 0; i < g.childNodes.length; i++){
-            var node = g.childNodes[i];
+        for (var i = 0; i < container.childNodes.length; i++){
+            var node = container.childNodes[i];
             if (node.nodeName == "DIV" && getNameFromText(node.innerText) == name){
-                g.removeChild(g.childNodes[i]);
+                container.removeChild(container.childNodes[i]);
             }
         }
     }

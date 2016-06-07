@@ -5,3 +5,7 @@
 var PhaseColorDecorator = function () {
     
 }
+
+PhaseColorDecorator.decorate = function (colors) {
+    return colors;
+}

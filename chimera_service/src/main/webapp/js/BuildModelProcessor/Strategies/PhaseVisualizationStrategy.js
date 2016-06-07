@@ -6,12 +6,12 @@
         colors = [];
 
         var H, Vm, a, Vi, Vd;
-        var S = 0.5;
-        var V = 0.5;
+        var S = 100;
+        var V = 80;
 
         for (var i = 0; i < data.length; i++) {
             colors[i] = new THREE.Color();
-            H = 3 * data[i] / Math.PI;
+            H = 3 * data[i] / (60 * Math.PI);
             Vm = V * (100 - S) / 100;
             a = (V - Vm) * (H % 1) / 60;
             Vi = Vm + a;
@@ -34,7 +34,7 @@
             }
         }
 
-        return colors;
+        return PhaseColorDecorator.decorate(colors);
     }
 
 }

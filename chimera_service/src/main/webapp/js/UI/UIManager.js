@@ -59,9 +59,9 @@
 
     this.loadCutScene = function () {
         _uiCreator.setVisibilityControlProperty(NameList.CutButton, false);
-        _uiCreator.setSceneVisibility(cutSceneContainer, true);
         this.closeOneFrameVisualizationScene();
         this.closeVideoVisualizationScene();
+        _uiCreator.setSceneVisibility(cutSceneContainer, true);
         currentScene = "CutScene";
     }
 
