@@ -3,7 +3,7 @@
  */
 
 var SnapshotsManagerWindowHandlers = function () {
-    var controlsContainer = [NameList.SnapshotNameTextBox, NameList.TakeSnapshotButton];
+    var controlsContainer = [ControlsNames.SnapshotNameTextBox, ControlsNames.TakeSnapshotButton];
     var _uiCreator = new UICreator();
 
     this.setChildControlsVisibility = function (isVisible) {

@@ -29,7 +29,7 @@
     }
 
     this.setCurrentType = function (value) {
-        document.getElementById(NameList.CurrentCutTypeLabel).value = value;
+        document.getElementById(ControlsNames.CurrentCutTypeLabel).value = value;
     }
     
     this.getCutParticles = function () {
@@ -40,7 +40,7 @@
         inProgress = false;
         currentStrategy = "";
         buildProcessor.removeCustomObjects();
-        document.getElementById(NameList.CurrentCutTypeLabel).value = 'Current Cut type: none';
+        document.getElementById(ControlsNames.CurrentCutTypeLabel).value = 'Current Cut type: none';
     }
 
     function cutHorizontalPart(event, cutVector) {
