@@ -96,8 +96,8 @@
     function createGifAndDownload() {
         gifshot.createGIF({
             'images': images,
-            'gifWidth': 400,
-            'gifHeight': 400,
+            'gifWidth': processor.getWebGLContainerWidth(),
+            'gifHeight': processor.getWebGLContainerHeight(),
             'interval': gifDelay
         },function(obj) {
             if(!obj.error) {

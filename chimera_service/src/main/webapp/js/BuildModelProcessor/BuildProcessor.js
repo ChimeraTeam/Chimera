@@ -91,6 +91,14 @@
         renderModel(opacity, size, particles);
     }
 
+    this.getWebGLContainerWidth = function () {
+        return container.offsetWidth;
+    }
+
+    this.getWebGLContainerHeight = function () {
+        return container.offsetHeight;
+    }
+    
     this.customParticlesBuild = function (opacity, size, particlesArray) {
         scene.remove(scene.children[0]);
         renderModel(opacity, size, particlesArray);
