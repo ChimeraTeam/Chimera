@@ -22,6 +22,7 @@
             end = true;
             chimeraManager.videoPause();
             currentFrame--;
+            createGif();
             return;
         }
 
@@ -102,5 +103,22 @@
         } else {
             location.replace(uri);
         }
+    }
+
+    function createGif() {
+        gifshot.createGIF({
+            'images': ['http://i.imgur.com/2OO33vX.jpg', 'http://i.imgur.com/qOwVaSN.png', 'http://i.imgur.com/Vo5mFZJ.gif']
+        },function(obj) {
+            if(!obj.error) {
+                var image = obj.image,
+                    animatedImage = document.createElement('img');
+                animatedImage.src = image;
+                document.body.appendChild(animatedImage);
+                animatedImage.download = "test.gif";
+                animatedImage.href = image.replace("image/gif", "image/octet-stream");
+                animatedImage.click();
+                document.body.removeChild(animatedImage);
+            }
+        });
     }
 }
