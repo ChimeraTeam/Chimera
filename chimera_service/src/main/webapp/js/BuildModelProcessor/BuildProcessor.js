@@ -97,7 +97,7 @@
     }
 
     function setCurrentFrameValue(value) {
-        uiManager.getUICreator().setControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
+        uiManager.getUICreator().setControlValue(ControlsNames.CurrentFrameLabel, 'Current Frame: ' + value);
     }
 
     this.translateCoordinatesFromEvent = function (event) {
@@ -115,6 +115,11 @@
         return vector;
     }
 
+    this.takeScreenShot = function () {
+        var strMime = "image/jpeg";
+        return renderer.domElement.toDataURL(strMime);
+    }
+    
     this.isNeedRebuild = function () {
         return currentFrameData.length > 0;
     }
