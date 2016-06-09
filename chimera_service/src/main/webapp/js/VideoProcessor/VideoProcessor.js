@@ -40,7 +40,6 @@
     }
 
     this.play = function () {
-        timeMoment = 0;
         animate();
     }
 

@@ -310,6 +310,7 @@
         var particles = snapshotInfo.particles;
         snapshotsManager.revertSnapshot(snapshotInfo);
         buildProcessor.customParticlesBuild(snapshotInfo.opacity, snapshotInfo.pointSize, particles);
+        uiManager.loadAdditionalFunctionalityScene();
         UIUpdater.update(uiManager);
         this.removeSnapshot();
     }
