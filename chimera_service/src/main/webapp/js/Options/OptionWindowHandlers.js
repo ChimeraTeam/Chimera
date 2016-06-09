@@ -3,11 +3,11 @@
  */
 
 var OptionWindowHandlers = function () {
-    var controlsContainer = [NameList.OpacityOptionLabel, NameList.OpacityOptionTextBox, NameList.PointSizeOptionLabel,
-                                NameList.PointSizeOptionTextBox, NameList.VideoDelayOptionLabel, NameList.VideoDelayOptionTextBox,
-                                    NameList.AutoResetRotationZoomLabel, NameList.AutoResetRotationZoomCheckBox, NameList.ApplySettingsButton,
-                                        NameList.CancelSettingsButton, NameList.SaveCookiesButton, NameList.SaveCookiesCheckBox,
-                                            NameList.WaitAllFramesButton, NameList.WaitAllFramesCheckBox];
+    var controlsContainer = [ControlsNames.OpacityOptionLabel, ControlsNames.OpacityOptionTextBox, ControlsNames.PointSizeOptionLabel,
+                                ControlsNames.PointSizeOptionTextBox, ControlsNames.VideoDelayOptionLabel, ControlsNames.VideoDelayOptionTextBox,
+                                    ControlsNames.AutoResetRotationZoomLabel, ControlsNames.AutoResetRotationZoomCheckBox, ControlsNames.ApplySettingsButton,
+                                        ControlsNames.CancelSettingsButton, ControlsNames.SaveCookiesButton, ControlsNames.SaveCookiesCheckBox,
+                                            ControlsNames.WaitAllFramesButton, ControlsNames.WaitAllFramesCheckBox];
     var _uiCreator = new UICreator();
 
     this.setChildControlsVisibility = function (isVisible) {
@@ -16,22 +16,22 @@ var OptionWindowHandlers = function () {
     }
     
     this.applySettings = function () {
-        Options.SetValue(OptionNames.Opacity, _uiCreator.getControlValue(NameList.OpacityOptionTextBox));
-        Options.SetValue(OptionNames.PointSize, _uiCreator.getControlValue(NameList.PointSizeOptionTextBox));
-        Options.SetValue(OptionNames.VideoDelay, _uiCreator.getControlValue(NameList.VideoDelayOptionTextBox));
-        Options.SetValue(OptionNames.RotationZoomAutomaticReset, _uiCreator.getCheckBoxCheckedValue(NameList.AutoResetRotationZoomCheckBox));
-        Options.SetValue(OptionNames.NeedSaveSettingsToCookies, _uiCreator.getCheckBoxCheckedValue(NameList.SaveCookiesCheckBox));
-        Options.SetValue(OptionNames.WaitAllFrames, _uiCreator.getCheckBoxCheckedValue(NameList.WaitAllFramesCheckBox));
+        Options.SetValue(OptionNames.Opacity, _uiCreator.getControlValue(ControlsNames.OpacityOptionTextBox));
+        Options.SetValue(OptionNames.PointSize, _uiCreator.getControlValue(ControlsNames.PointSizeOptionTextBox));
+        Options.SetValue(OptionNames.VideoDelay, _uiCreator.getControlValue(ControlsNames.VideoDelayOptionTextBox));
+        Options.SetValue(OptionNames.RotationZoomAutomaticReset, _uiCreator.getCheckBoxCheckedValue(ControlsNames.AutoResetRotationZoomCheckBox));
+        Options.SetValue(OptionNames.NeedSaveSettingsToCookies, _uiCreator.getCheckBoxCheckedValue(ControlsNames.SaveCookiesCheckBox));
+        Options.SetValue(OptionNames.WaitAllFrames, _uiCreator.getCheckBoxCheckedValue(ControlsNames.WaitAllFramesCheckBox));
 
         Options.Merge();
     }
 
     function readDefaultValues(){
-        _uiCreator.setControlValue(NameList.OpacityOptionTextBox, Options.GetDefaultValue(OptionNames.Opacity));
-        _uiCreator.setControlValue(NameList.PointSizeOptionTextBox, Options.GetDefaultValue(OptionNames.PointSize));
-        _uiCreator.setControlValue(NameList.VideoDelayOptionTextBox, Options.GetDefaultValue(OptionNames.VideoDelay));
-        _uiCreator.setCheckBoxCheckedValue(NameList.AutoResetRotationZoomCheckBox, Options.GetDefaultBoolValue(OptionNames.RotationZoomAutomaticReset));
-        _uiCreator.setCheckBoxCheckedValue(NameList.SaveCookiesCheckBox, Options.GetDefaultBoolValue(OptionNames.NeedSaveSettingsToCookies));
-        _uiCreator.setCheckBoxCheckedValue(NameList.WaitAllFramesCheckBox, Options.GetDefaultBoolValue(OptionNames.WaitAllFrames));
+        _uiCreator.setControlValue(ControlsNames.OpacityOptionTextBox, Options.GetDefaultValue(OptionNames.Opacity));
+        _uiCreator.setControlValue(ControlsNames.PointSizeOptionTextBox, Options.GetDefaultValue(OptionNames.PointSize));
+        _uiCreator.setControlValue(ControlsNames.VideoDelayOptionTextBox, Options.GetDefaultValue(OptionNames.VideoDelay));
+        _uiCreator.setCheckBoxCheckedValue(ControlsNames.AutoResetRotationZoomCheckBox, Options.GetDefaultBoolValue(OptionNames.RotationZoomAutomaticReset));
+        _uiCreator.setCheckBoxCheckedValue(ControlsNames.SaveCookiesCheckBox, Options.GetDefaultBoolValue(OptionNames.NeedSaveSettingsToCookies));
+        _uiCreator.setCheckBoxCheckedValue(ControlsNames.WaitAllFramesCheckBox, Options.GetDefaultBoolValue(OptionNames.WaitAllFrames));
     }
 }
