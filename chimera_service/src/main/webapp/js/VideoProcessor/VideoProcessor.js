@@ -5,6 +5,7 @@
     var end = false;
     var saveVideo = false;
     var images = [];
+    var gifDelay;
 
     function animate() {
         if (pause)
@@ -22,7 +23,7 @@
             end = true;
             chimeraManager.videoPause();
             currentFrame--;
-            createGif();
+            createGifAndDownload();
             return;
         }
 
@@ -39,6 +40,7 @@
 
         if (confirm('Are you want download video in .gif format after video will finished?')) {
             saveVideo = true;
+            gifDelay = Options.GetValue(OptionNames.VideoDelay) / 1000 + 0.1;
         } else {
             saveVideo = false;
         }
@@ -89,33 +91,23 @@
     function saveAsImage() {
         var image = processor.takeScreenShot();
         images.push(image);
-        saveFile(image.replace("image/jpeg", "image/octet-stream"), "test.jpg");
     }
 
-    var saveFile = function (strData, filename) {
-        var link = document.createElement('a');
-        if (typeof link.download === 'string') {
-            document.body.appendChild(link);
-            link.download = filename;
-            link.href = strData;
-            link.click();
-            document.body.removeChild(link);
-        } else {
-            location.replace(uri);
-        }
-    }
-
-    function createGif() {
+    function createGifAndDownload() {
         gifshot.createGIF({
-            'images': ['http://i.imgur.com/2OO33vX.jpg', 'http://i.imgur.com/qOwVaSN.png', 'http://i.imgur.com/Vo5mFZJ.gif']
+            'images': images,
+            'gifWidth': 400,
+            'gifHeight': 400,
+            'interval': gifDelay
         },function(obj) {
             if(!obj.error) {
+                var delay = Options.GetValue(OptionNames.VideoDelay);
                 var image = obj.image,
-                    animatedImage = document.createElement('img');
+                    animatedImage = document.createElement('a');
                 animatedImage.src = image;
                 document.body.appendChild(animatedImage);
                 animatedImage.download = "test.gif";
-                animatedImage.href = image.replace("image/gif", "image/octet-stream");
+                animatedImage.href = image;
                 animatedImage.click();
                 document.body.removeChild(animatedImage);
             }
