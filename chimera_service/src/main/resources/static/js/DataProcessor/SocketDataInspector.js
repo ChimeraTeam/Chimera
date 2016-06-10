@@ -3,7 +3,7 @@
     var currentFrame = 0;
     var info = null;
 
-    var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
+    var socket = new WebSocket("ws://localhost:8983/chimera_service/websocket");
     this.init = function (dataProcessorInfo) {
         info = dataProcessorInfo;
         postToWServer(info.file, info.type, info.compress);
@@ -18,7 +18,7 @@
     function postToWServer(file, type, compress) {
         sendMessage(file + '_' + type + '_' + compress);
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://chimera.biomed.kiev.ua:8983/chimera_service/stat", true);
+        xhttp.open("POST", "http://localhost:8983/chimera_service/stat", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send();
     }

@@ -2,6 +2,7 @@ package service;
 
 import constants.Compress;
 import constants.Types;
+import core.ChimeraParser;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

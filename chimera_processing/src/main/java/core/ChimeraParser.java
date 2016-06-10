@@ -1,4 +1,4 @@
-package service;
+package core;
 
 import constants.Compress;
 import constants.RegExps;

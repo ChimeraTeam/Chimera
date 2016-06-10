@@ -1,13 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: gleb
-  Date: 2/10/16
-  Time: 9:53 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Statistics</title>
     <style>
@@ -37,12 +28,21 @@
         <th>Ip</th>
         <th>Visits</th>
     </tr>
-    <c:forEach items="${data}" var="entry">
-        <tr>
-            <td><a href="http://whatismyipaddress.com/ip/${entry.key}">${entry.key}</a></td>
-            <td>${entry.value}</td>
-        </tr>
-    </c:forEach>
+
+    <!--<tr th:each="entry : ${data}">-->
+    <!--<td><a th:href="http://whatismyipaddress.com/ip/" ${entry.key}>${entry.key}</a></td>-->
+    <!--<td>${entry.value}</td>-->
+    <!--</tr>-->
+
+    <tr th:each="entry : ${data}">
+        <td>
+            <a th:href="@{'http://whatismyipaddress.com/ip/' + ${entry.key}}">
+                <b th:text="${entry.key}"></b>
+            </a>
+        </td>
+        <td th:text="${entry.value}">num</td>
+    </tr>
+
 </table>
 </body>
 </html>

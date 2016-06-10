@@ -1,4 +1,4 @@
-package service;
+package core;
 
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 

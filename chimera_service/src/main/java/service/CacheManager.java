@@ -14,11 +14,11 @@ public final class CacheManager {
 
     private static CacheManager cacheManager = new CacheManager();
 
-    public synchronized void put(String fileName, String text) {
+    public void put(String fileName, String text) {
         client.append(fileName, text);
     }
 
-    public synchronized String get(String fileName) {
+    public String get(String fileName) {
         return client.get(fileName);
     }
 

@@ -1,9 +1,13 @@
-package service;
+package web;
 
 
 import constants.Compress;
 import constants.Types;
-import org.apache.log4j.Logger;
+import model.InputData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import service.ChimeraService;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -14,49 +18,48 @@ import javax.websocket.server.ServerEndpoint;
  * Created by gleb on 06.10.15.
  */
 
-@ServerEndpoint("/websocket")
+@Component
+@ServerEndpoint("/chimera_service/websocket")
 public class ChimeraWebSocket {
 
-    private Logger logger = Logger.getLogger(ChimeraWebSocket.class);
+    private Logger logger = LoggerFactory.getLogger(ChimeraWebSocket.class);
+
     private static final String[] OSCILLATIONS_100 = {"100x100x100", "8"};
     private static final String[] OSCILLATIONS_200 = {"200x200x200", "64"};
     private static final String[] OSCILLATIONS_400 = {"400x400x400", "512"};
-    private CacheManager cacheManager = CacheManager.getCacheManager();
+    private ChimeraService chimeraService = new ChimeraService();
 
     @OnMessage
     public void onMessage(String data, Session session) {
-        logger.info("Get message message=" + data + " session=" + session.getId());
+        logger.info("Get message message={} session={}", data, session.getId());
+
         new Thread(() -> {
 
-            String fileName = data.split("_")[0];
-            String type = data.split("_")[1];
-            String compress = data.split("_")[2];
+            InputData inputData = createInputData(data);
+            chimeraService.init(inputData);
 
-            String result = checkInCache(fileName);
+            logger.info("Starting processing file={} type={} session={}",
+                    new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
+
+
+            String result = chimeraService.checkInCache(inputData.getFileName());
             if (result != null) {
-                session.getAsyncRemote().sendText(result);
+                session.getAsyncRemote().sendText("c" + result);
                 return;
             }
 
-            logger.info("Starting processing file=" + fileName + " type=" + type + " session=" + session.getId());
-
-            ChimeraReader reader = new ChimeraReader(fileName);
-            ChimeraParser filter = new ChimeraParser(Types.getEnum(type), getCompressValue(compress, fileName));
-            while (reader.hasNext()) {
-                String value = filter.process(reader.next());
+            while (chimeraService.hasNext()) {
+                String value = chimeraService.next();
                 if (value != null) {
                     if (!session.isOpen()) return;
                     session.getAsyncRemote().sendText(value);
-                    cacheManager.put(fileName, value);
+                    chimeraService.put(inputData.getFileName(), value);
                 }
             }
-            cacheManager.put(fileName, "c");
-            logger.info("Processed successfully file=" + fileName + " type=" + type + " session=" + session.getId());
-        }).start();
-    }
 
-    private String checkInCache(String fileName) {
-        return cacheManager.get(fileName);
+            logger.info("Processed successfully file={} type={} session={}",
+                    new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
+        }).start();
     }
 
     private Compress getCompressValue(String compress, String fileName) {
@@ -76,13 +79,21 @@ public class ChimeraWebSocket {
         return Compress.N;
     }
 
+    private InputData createInputData(String input) {
+        String[] params = input.split("_");
+        String fileName = params[0];
+        String type = params[1];
+        String compress = params[2];
+        return new InputData(fileName, Types.getEnum(type), getCompressValue(compress, fileName));
+    }
+
     @OnClose
     public void onClose(Session session) {
         try {
             session.close();
         } catch (Exception ignored) {
         }
-        logger.info("Connection closed, session=" + session.getId());
+        logger.info("Connection closed, session={}", session.getId());
     }
 
 }
