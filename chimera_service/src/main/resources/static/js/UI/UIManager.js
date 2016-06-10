@@ -1,17 +1,17 @@
 ﻿var UIManager = function () {
     var _uiCreator = new UICreator();
 
-    var loadingSceneContainer = [NameList.LoadingLabel, NameList.LoadingProgressBar];
-    var oneFrameVisualizationSceneContainer = [NameList.TimeMomentsLabel, NameList.SelectTimeMomentTextBox, NameList.BuildFrameButton, NameList.VideoButton,
-                                                NameList.SnapshotsManagerButton, NameList.ChangeSettingButton, NameList.AboutButton];
-    var additionalFunctionalityContainer = [NameList.CutButton, NameList.OpacitySlider, NameList.OpacityLabel, NameList.PointSizeSlider, NameList.PointSizeLabel,
-                                                NameList.ResetButton];
-    var videoVisualizationSceneContainer = [NameList.VideoBackButton, NameList.VideoPauseButton, NameList.VideoNextButton, NameList.VideoCloseButton];
-    var currentFrameInfoSceneContainer = [NameList.CurrentFrameLabel];
-    var cutSceneContainer = [NameList.HorizontalCutButton, NameList.VerticalCutButton, NameList.CloseCutButton, NameList.CurrentCutTypeLabel,
-                                NameList.SnapshotsManagerButton, NameList.ChangeSettingButton, NameList.AboutButton];
-    var changeSettingsSceneContainer = [NameList.OptionsContainer];
-    var snapshotsManagerContainer = [NameList.SnapshotsManagerContainer];
+    var loadingSceneContainer = [ControlsNames.LoadingLabel, ControlsNames.LoadingProgressBar];
+    var oneFrameVisualizationSceneContainer = [ControlsNames.TimeMomentsLabel, ControlsNames.SelectTimeMomentTextBox, ControlsNames.BuildFrameButton, ControlsNames.VideoButton,
+                                                ControlsNames.SnapshotsManagerButton, ControlsNames.ChangeSettingButton, ControlsNames.AboutButton];
+    var additionalFunctionalityContainer = [ControlsNames.CutButton, ControlsNames.OpacitySlider, ControlsNames.OpacityLabel, ControlsNames.PointSizeSlider, ControlsNames.PointSizeLabel,
+                                                ControlsNames.ResetButton];
+    var videoVisualizationSceneContainer = [ControlsNames.VideoBackButton, ControlsNames.VideoPauseButton, ControlsNames.VideoNextButton, ControlsNames.VideoCloseButton];
+    var currentFrameInfoSceneContainer = [ControlsNames.CurrentFrameLabel];
+    var cutSceneContainer = [ControlsNames.HorizontalCutButton, ControlsNames.VerticalCutButton, ControlsNames.CloseCutButton, ControlsNames.CurrentCutTypeLabel,
+                                ControlsNames.SnapshotsManagerButton, ControlsNames.ChangeSettingButton, ControlsNames.AboutButton];
+    var changeSettingsSceneContainer = [ControlsNames.OptionsContainer];
+    var snapshotsManagerContainer = [ControlsNames.SnapshotsManagerContainer];
     var currentScene = "";
 
     this.getCurrentScene = function () {
@@ -31,10 +31,10 @@
         var pointSize = Options.GetValue(OptionNames.PointSize);
 
         _uiCreator.setSceneVisibility(additionalFunctionalityContainer, true);
-        document.getElementById(NameList.OpacitySlider).value = opacity;
-        document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + opacity;
-        document.getElementById(NameList.PointSizeSlider).value = pointSize;
-        document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + pointSize;
+        document.getElementById(ControlsNames.OpacitySlider).value = opacity;
+        document.getElementById(ControlsNames.OpacityLabel).value = 'Opacity: ' + opacity;
+        document.getElementById(ControlsNames.PointSizeSlider).value = pointSize;
+        document.getElementById(ControlsNames.PointSizeLabel).value = 'Point Size: ' + pointSize;
     }
 
     this.closeAdditionalFunctionalityScene = function () {
@@ -58,23 +58,23 @@
     }
 
     this.loadCutScene = function () {
-        _uiCreator.setVisibilityControlProperty(NameList.CutButton, false);
-        _uiCreator.setSceneVisibility(cutSceneContainer, true);
+        _uiCreator.setVisibilityControlProperty(ControlsNames.CutButton, false);
         this.closeOneFrameVisualizationScene();
         this.closeVideoVisualizationScene();
+        _uiCreator.setSceneVisibility(cutSceneContainer, true);
         currentScene = "CutScene";
     }
 
     this.closeCutScene = function () {
-        _uiCreator.setVisibilityControlProperty(NameList.CutButton, true);
+        _uiCreator.setVisibilityControlProperty(ControlsNames.CutButton, true);
         _uiCreator.setSceneVisibility(cutSceneContainer, false);
         this.loadOneFrameVisualizationScene();
         currentScene = "";
     }
 
     this.loadLoadingScene = function (value) {
-        _uiCreator.setControlValue(NameList.LoadingLabel, 'Loaded frames: ' + value + ' from ' + Globals.MaxTimeFrame);
-        _uiCreator.setControlValue(NameList.LoadingProgressBar, 100 * value / Globals.MaxTimeFrame);
+        _uiCreator.setControlValue(ControlsNames.LoadingLabel, 'Loaded frames: ' + value + ' from ' + Globals.MaxTimeFrame);
+        _uiCreator.setControlValue(ControlsNames.LoadingProgressBar, 100 * value / Globals.MaxTimeFrame);
         _uiCreator.setSceneVisibility(loadingSceneContainer, true);
     }
 

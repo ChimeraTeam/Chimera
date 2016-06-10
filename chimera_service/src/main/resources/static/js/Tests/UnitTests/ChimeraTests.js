@@ -1,7 +1,7 @@
 function dataDecryptServiceTest(data, count, type) {
-	var service = new DataDecryptedService();
+	var service = new DataDecryptor();
     Globals.VisualizationType = type;
-    QUnit.assert.equal(service.decryptData(data).length, count, 'decrypt data with ' + count + ' values');
+    QUnit.assert.equal(service.decrypt(data).length, count, 'decrypt data with ' + count + ' values');
 }
 
 function socketDataInspectorSimpleDataPhaseTest() {
@@ -54,13 +54,13 @@ function socketDataInspectorComplexPhaseTest() {
         callbackMethod: function () {},
         showProgressMethod: function () {}
     };
-    var decryptService = new DataDecryptedService();
+    var decryptService = new DataDecryptor();
     inspector.init(info);
     QUnit.stop();
     setTimeout(function () {
         QUnit.start();
         QUnit.assert.ok(inspector.getData().length > 0, "Data was obtained from WebSocket");
-        QUnit.assert.ok(decryptService.decryptData(inspector.getData()).length == (info.frames * 125000 + 1), "Phase data for " + info.frames + " frames were successfully obtained and decrypted");
+        QUnit.assert.ok(decryptService.decrypt(inspector.getData()).length == (info.frames * 125000 + 1), "Phase data for " + info.frames + " frames were successfully obtained and decrypted");
     }, 3000);
 }
 
@@ -75,13 +75,13 @@ function socketDataInspectorComplexFrequencyTest() {
         callbackMethod: function () {},
         showProgressMethod: function () {}
     };
-    var decryptService = new DataDecryptedService();
+    var decryptService = new DataDecryptor();
     inspector.init(info);
     QUnit.stop();
     setTimeout(function () {
         QUnit.start();
         QUnit.assert.ok(inspector.getData().length > 0, "Data was obtained from WebSocket");
-        QUnit.assert.ok(decryptService.decryptData(inspector.getData()).length > info.frames * 125000, "Frequency data for " + info.frames + " frames were successfully obtained and decrypted");
+        QUnit.assert.ok(decryptService.decrypt(inspector.getData()).length > info.frames * 125000, "Frequency data for " + info.frames + " frames were successfully obtained and decrypted");
     }, 4000);
 }
 

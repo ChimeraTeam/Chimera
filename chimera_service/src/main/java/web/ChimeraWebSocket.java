@@ -42,7 +42,7 @@ public class ChimeraWebSocket {
                     new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
 
 
-            String result = chimeraService.checkInCache(inputData.getFileName());
+            String result = chimeraService.checkInCache(generateCacheKey(inputData));
             if (result != null) {
                 session.getAsyncRemote().sendText("c" + result);
                 return;
@@ -53,13 +53,17 @@ public class ChimeraWebSocket {
                 if (value != null) {
                     if (!session.isOpen()) return;
                     session.getAsyncRemote().sendText(value);
-                    chimeraService.put(inputData.getFileName(), value);
+                    chimeraService.put(generateCacheKey(inputData), value);
                 }
             }
 
             logger.info("Processed successfully file={} type={} session={}",
                     new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
         }).start();
+    }
+
+    private String generateCacheKey(InputData inputData) {
+        return inputData.getFileName() + "_" + inputData.getType().name();
     }
 
     private Compress getCompressValue(String compress, String fileName) {

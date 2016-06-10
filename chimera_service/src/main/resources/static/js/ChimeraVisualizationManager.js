@@ -7,8 +7,6 @@
     var buildProcessor;
     var cutProcessor;
     var videoProcessor;
-    var visualizationType;
-    var oscilatorsCount;
     var chimeraData = [];
 
     this.init = function()
@@ -19,12 +17,12 @@
 
         dataProcessor.process(DataReadyCallback, uiManager.loadLoadingScene);
 
-        visualizationType = dataProcessor.getType(Globals.VisualizationType);
-        oscilatorsCount = dataProcessor.getOscillatorNumber(Globals.FilePath);
+        var visualizationType = dataProcessor.getType(Globals.VisualizationType);
+        var oscillatorsCount = dataProcessor.getOscillatorNumber(Globals.FilePath);
 
-        Globals.OscillatorsNumber = oscilatorsCount;
+        Globals.OscillatorsNumber = oscillatorsCount;
 
-        switch (oscilatorsCount) {
+        switch (oscillatorsCount) {
             case Globals.MediumOsillatorsCount:
                 Options.SetValue(OptionNames.CameraPosition, Globals.CameraPositionMedium);
                 break;
@@ -70,14 +68,15 @@
     function DataReadyCallback()
     {
         if (Options.GetBoolValue(OptionNames.WaitAllFrames)) {
-            var dataDecryptService = new DataDecryptedService();
+            var dataDecryptService = new DataDecryptor();
             var container = document.getElementById("sockerDataTransferContainer");
 
-            chimeraData = dataDecryptService.decryptData(container.innerHTML);
+            chimeraData = dataDecryptService.decrypt(container.innerHTML);
 
             uiManager.closeLoadingScene();
         }
 
+        uiManager.closeLoadingScene();
         uiManager.loadOneFrameVisualizationScene();
     }
 
@@ -87,12 +86,12 @@
     }
 
     this.startVisualization = function () {
-        var currentFrame = document.getElementById(NameList.SelectTimeMomentTextBox).value;
+        var currentFrame = document.getElementById(ControlsNames.SelectTimeMomentTextBox).value;
         buildProcessor.build(currentFrame, false);
     }
 
     this.playVideo = function () {
-        uiManager.getUICreator().setControlValue(NameList.VideoPauseButton, "Pause");
+        uiManager.getUICreator().setControlValue(ControlsNames.VideoPauseButton, "Pause");
 
         uiManager.closeOneFrameVisualizationScene();
         uiManager.loadVideoVisualizationScene();
@@ -112,20 +111,20 @@
     }
 
     this.videoPause = function () {
-        var value = document.getElementById(NameList.VideoPauseButton).value;
+        var value = document.getElementById(ControlsNames.VideoPauseButton).value;
 
         if (value == "Pause") {
             videoProcessor.pause();
-            uiManager.getUICreator().setControlValue(NameList.VideoPauseButton, "Resume");
-            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBackButton, false);
-            uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNextButton, false);
+            uiManager.getUICreator().setControlValue(ControlsNames.VideoPauseButton, "Resume");
+            uiManager.getUICreator().setDisabledButtonProperty(ControlsNames.VideoBackButton, false);
+            uiManager.getUICreator().setDisabledButtonProperty(ControlsNames.VideoNextButton, false);
         }
         else {
             if (!videoProcessor.isVideoEnd()) {
                 videoProcessor.resume();
-                uiManager.getUICreator().setControlValue(NameList.VideoPauseButton, "Pause");
-                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoBackButton, true);
-                uiManager.getUICreator().setDisabledButtonProperty(NameList.VideoNextButton, true);
+                uiManager.getUICreator().setControlValue(ControlsNames.VideoPauseButton, "Pause");
+                uiManager.getUICreator().setDisabledButtonProperty(ControlsNames.VideoBackButton, true);
+                uiManager.getUICreator().setDisabledButtonProperty(ControlsNames.VideoNextButton, true);
             }
         }
     }
@@ -171,11 +170,11 @@
     }
 
     function getOpacitySliderValue() {
-        return document.getElementById(NameList.OpacitySlider).value;
+        return document.getElementById(ControlsNames.OpacitySlider).value;
     }
 
     function getPointSizeSliderValue() {
-        return document.getElementById(NameList.PointSizeSlider).value;
+        return document.getElementById(ControlsNames.PointSizeSlider).value;
     }
 
     this.onOpacityChanged = function () {
@@ -188,7 +187,7 @@
             buildProcessor.updateOpacity(value);
         }
 
-        document.getElementById(NameList.OpacityLabel).value = 'Opacity: ' + value;
+        document.getElementById(ControlsNames.OpacityLabel).value = Templates.OpacityLabelTemplate + value;
         Options.SetValue(OptionNames.Opacity, value);
     };
 
@@ -202,7 +201,7 @@
             buildProcessor.updatePointSize(value);
         }
 
-        document.getElementById(NameList.PointSizeLabel).value = 'Point Size: ' + value;
+        document.getElementById(ControlsNames.PointSizeLabel).value = Templates.PointSizeLabelTemplate + value;
         Options.GetValue(OptionNames.PointSize);
     }
 
@@ -232,10 +231,10 @@
     }
 
     this.onDataChanged = function () {
-        var dataDecryptService = new DataDecryptedService();
+        var dataDecryptService = new DataDecryptor();
         var container = document.getElementById("sockerDataTransferContainer");
 
-        chimeraData = dataDecryptService.decryptData(container.innerHTML);
+        chimeraData = dataDecryptService.decrypt(container.innerHTML);
     }
 
     this.changeSettings = function () {
@@ -259,12 +258,12 @@
     }
 
     this.onSaveCookieCheckBoxClicked = function () {
-        if (!document.getElementById(OptionsWindowControlNames.SaveCookiesCheckBox.checked))
+        if (!document.getElementById(ControlsNames.SaveCookiesCheckBox.checked))
             ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
 
     this.takeSnapshot = function () {
-        var name = uiManager.getUICreator().getControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox);
+        var name = uiManager.getUICreator().getControlValue(ControlsNames.SnapshotNameTextBox);
         var tmpl = document.getElementById('snapshot-template');
 
         if (name == "") {
@@ -273,7 +272,9 @@
         }
 
         var snapshotsCount = snapshotsManager.getUserSnapshots().length;
-        var snapshot = new Snapshot(name, buildProcessor.getParticles(), true);
+        var particles = buildProcessor.getCutInProgress() ? cutProcessor.getCutParticles() : buildProcessor.getParticles();
+        var snapshot = new Snapshot(name, particles, Options.GetValue(OptionNames.Opacity),
+            Options.GetValue(OptionNames.PointSize), true);
         var res = snapshotsManager.takeSnapshot(snapshot);
 
         if (!res) {
@@ -288,8 +289,8 @@
         var revertButton = d.querySelectorAll("BUTTON")[0];
         revertButton.id = 'revertTo' + snapshotsCount + 1;
 
-        document.getElementById(NameList.SnapshotsManagerContainer).appendChild(tmpl.content.cloneNode(true));
-        uiManager.getUICreator().setControlValue(SnapshotsManagerWindowControlNames.SnapshotNameTextBox, "");
+        document.getElementById(ControlsNames.SnapshotsManagerContainer).appendChild(tmpl.content.cloneNode(true));
+        uiManager.getUICreator().setControlValue(ControlsNames.SnapshotNameTextBox, "");
     }
 
     function getNameFromTarget(target) {
@@ -304,21 +305,25 @@
 
     this.revertSnapshot = function () {
         var name = getNameFromTarget(event.currentTarget);
-        var particles = snapshotsManager.getSnapshot(name);
-        buildProcessor.setCustomParticles(particles);
-        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), particles);
+        var snapshotInfo = snapshotsManager.getSnapshot(name);
+        var particles = snapshotInfo.particles;
+        snapshotsManager.revertSnapshot(snapshotInfo);
+        buildProcessor.customParticlesBuild(snapshotInfo.opacity, snapshotInfo.pointSize, particles);
+        uiManager.loadAdditionalFunctionalityScene();
+        UIUpdater.update(uiManager);
+        this.removeSnapshot();
     }
 
     this.removeSnapshot = function () {
         var name = getNameFromTarget(event.currentTarget);
         snapshotsManager.removeSnapshot(name);
 
-        var g = document.getElementById(NameList.SnapshotsManagerContainer);
+        var container = document.getElementById(ControlsNames.SnapshotsManagerContainer);
 
-        for (var i = 0; i < g.childNodes.length; i++){
-            var node = g.childNodes[i];
+        for (var i = 0; i < container.childNodes.length; i++){
+            var node = container.childNodes[i];
             if (node.nodeName == "DIV" && getNameFromText(node.innerText) == name){
-                g.removeChild(g.childNodes[i]);
+                container.removeChild(container.childNodes[i]);
             }
         }
     }
@@ -350,7 +355,7 @@
                 break;
             case 27:
                 if (cutProcessor != null) {
-                    uiManager.getUICreator().setControlValue(NameList.CurrentCutTypeLabel, 'Current Cut type: none');
+                    uiManager.getUICreator().setControlValue(ControlsNames.CurrentCutTypeLabel, 'Current Cut type: none');
                     cutProcessor.exit();
                 }
                 break;

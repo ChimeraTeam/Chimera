@@ -91,13 +91,21 @@
         renderModel(opacity, size, particles);
     }
 
+    this.getWebGLContainerWidth = function () {
+        return container.offsetWidth;
+    }
+
+    this.getWebGLContainerHeight = function () {
+        return container.offsetHeight;
+    }
+    
     this.customParticlesBuild = function (opacity, size, particlesArray) {
         scene.remove(scene.children[0]);
         renderModel(opacity, size, particlesArray);
     }
 
     function setCurrentFrameValue(value) {
-        uiManager.getUICreator().setControlValue(NameList.CurrentFrameLabel, 'Current Frame: ' + value);
+        uiManager.getUICreator().setControlValue(ControlsNames.CurrentFrameLabel, 'Current Frame: ' + value);
     }
 
     this.translateCoordinatesFromEvent = function (event) {
@@ -115,6 +123,11 @@
         return vector;
     }
 
+    this.takeScreenShot = function () {
+        var strMime = "image/jpeg";
+        return renderer.domElement.toDataURL(strMime);
+    }
+    
     this.isNeedRebuild = function () {
         return currentFrameData.length > 0;
     }
@@ -210,6 +223,10 @@
         cutInProgress = value;
     }
 
+    this.getCutInProgress = function () {
+        return cutInProgress;
+    }
+
     function renderParticles() {
         if (!cutInProgress && !Options.GetBoolValue(OptionNames.RotationZoomAutomaticReset)) {
             Options.SetValue(OptionNames.RotationX, particleSystem.rotation.x);
@@ -228,45 +245,33 @@
     }
 
     this.rotate_left = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.y -= 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.y -= 0.05;
+        renderParticles();
     }
 
     this.rotate_right = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.y += 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.y += 0.05;
+        renderParticles();
     }
 
     this.rotate_down = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.x += 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.x += 0.05;
+        renderParticles();
     }
 
     this.rotate_up = function () {
-        if (!cutInProgress) {
-            particleSystem.rotation.x -= 0.05;
-            renderParticles();
-        }
+        particleSystem.rotation.x -= 0.05;
+        renderParticles();
     }
 
     this.zoom = function () {
-        if (!cutInProgress && camera.position.z > 0) {
-            camera.position.z -= 5;
-            renderParticles();
-        }
+        camera.position.z -= 5;
+        renderParticles();
     }
 
     this.unzoom = function () {
-        if (!cutInProgress  && camera.position.z < 150) {
-            camera.position.z += 5;
-            renderParticles();
-        }
+        camera.position.z += 5;
+        renderParticles();
     }
 
 }

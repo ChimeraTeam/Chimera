@@ -2,13 +2,15 @@
     var data = "";
     var currentFrame = 0;
     var info = null;
+    var waitAllFrames = true;
 
     var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
     this.init = function (dataProcessorInfo) {
         info = dataProcessorInfo;
+        waitAllFrames = Options.GetBoolValue(OptionNames.WaitAllFrames);
         postToWServer(info.file, info.type, info.compress);
 
-        if (Options.GetBoolValue(OptionNames.WaitAllFrames)){
+        if (waitAllFrames){
             info.showProgressMethod(0);
         } else {
             info.callbackMethod();
@@ -32,14 +34,21 @@
     }
 
     socket.onmessage = function (message) {
+        if (message == 'c') {
+            waitAllFrames = false;
+            info.callbackMethod();
+            return;
+        }
+
         currentFrame++;
 
-        if (currentFrame > info.frames)
+        if (currentFrame > info.frames) {
             return;
+        }
 
         data += message.data;
 
-        if (!Options.GetBoolValue(OptionNames.WaitAllFrames)) {
+        if (!waitAllFrames) {
             var container = document.getElementById("sockerDataTransferContainer");
             container.innerHTML = data;
 

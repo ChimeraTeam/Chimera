@@ -1,9 +1,12 @@
-﻿﻿DataDecryptedService = function () {
+﻿﻿var DataDecryptor = function () {
 
-    this.decryptData = function (data) {
+    this.decrypt = function (data) {
         if (Globals.VisualizationType == 'P') {
             return data.split(',');
         }
+
+        var worker = new LZMAWorker();
+        data = worker.extract(data);
 
         var readyData = [];
         var parser = new FrequencyParser();
