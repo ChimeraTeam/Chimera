@@ -5,6 +5,9 @@
             return data.split(',');
         }
 
+        var worker = new LZMAWorker();
+        data = worker.extract(data);
+
         var readyData = [];
         var parser = new FrequencyParser();
         var array = data.split(',');
