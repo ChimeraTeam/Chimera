@@ -76,6 +76,7 @@
             uiManager.closeLoadingScene();
         }
 
+        uiManager.closeLoadingScene();
         uiManager.loadOneFrameVisualizationScene();
     }
 

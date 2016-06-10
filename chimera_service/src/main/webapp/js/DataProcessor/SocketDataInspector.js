@@ -36,6 +36,7 @@
     socket.onmessage = function (message) {
         if (message == 'c') {
             waitAllFrames = false;
+            info.callbackMethod();
             return;
         }
 
