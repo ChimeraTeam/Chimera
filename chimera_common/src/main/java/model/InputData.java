@@ -14,4 +14,5 @@ public class InputData {
     private String fileName;
     private Types type;
     private Compress compress;
+    private String frames;
 }

@@ -38,7 +38,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
                 try {
                     session.sendMessage(new TextMessage("c" + result));
                 } catch (IOException e) {
-                   logger.error(e.getMessage());
+                    logger.error(e.getMessage());
                 }
                 return;
             }
@@ -66,7 +66,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
     }
 
     private String generateCacheKey(InputData inputData) {
-        return inputData.getFileName() + "_" + inputData.getType().name();
+        return inputData.getFileName() + "_" + inputData.getType().name() + "_" + inputData.getFileName();
     }
 
 }

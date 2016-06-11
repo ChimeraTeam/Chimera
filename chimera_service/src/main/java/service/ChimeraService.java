@@ -45,7 +45,8 @@ public class ChimeraService {
         String fileName = params[0];
         String type = params[1];
         String compress = params[2];
-        InputData inputData = new InputData(fileName, Types.getEnum(type), getCompressValue(compress, fileName));
+        String frames = params[3];
+        InputData inputData = new InputData(fileName, Types.getEnum(type), getCompressValue(compress, fileName), frames);
         init(inputData);
         return inputData;
     }
