@@ -4,7 +4,7 @@
     var info = null;
     var waitAllFrames = true;
 
-    var socket = new WebSocket("ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket");
+    var socket = new WebSocket(Globals.WebSocketUrl);
     this.init = function (dataProcessorInfo) {
         info = dataProcessorInfo;
         waitAllFrames = Options.GetBoolValue(OptionNames.WaitAllFrames);
@@ -20,7 +20,7 @@
     function postToWServer(file, type, compress) {
         sendMessage(file + '_' + type + '_' + compress);
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://chimera.biomed.kiev.ua:8983/chimera_service/stat", true);
+        xhttp.open("POST", Globals.StatUrl, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send();
     }
@@ -34,19 +34,19 @@
     }
 
     socket.onmessage = function (message) {
-        if (message.data.charAt(0) == 'c') {
-            waitAllFrames = false;
-            info.callbackMethod();
-            return;
-        }
-
         currentFrame++;
 
         if (currentFrame > info.frames) {
             return;
         }
 
-        data += message.data;
+        if (message.data.charAt(0) == 'c') {
+            waitAllFrames = false;
+            info.callbackMethod();
+            data += message.data.substr(1, message.data.length - 1);
+        } else {
+            data += message.data;
+        }
 
         if (!waitAllFrames) {
             var container = document.getElementById("sockerDataTransferContainer");
