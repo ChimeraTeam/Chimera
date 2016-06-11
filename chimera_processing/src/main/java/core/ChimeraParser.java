@@ -3,6 +3,7 @@ package core;
 import constants.Compress;
 import constants.RegExps;
 import constants.Types;
+import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Created by gleb on 08.10.15.
  */
+@Component
 public class ChimeraParser {
 
     private Types type;

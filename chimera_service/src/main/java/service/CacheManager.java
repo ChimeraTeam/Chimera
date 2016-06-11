@@ -1,18 +1,19 @@
 package service;
 
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 /**
  * Created by gleb on 5/21/16.
  */
-public final class CacheManager {
+@Component
+public class CacheManager {
 
-    private static Jedis client = new Jedis("localhost");
+    private Jedis client;
 
-    private CacheManager() {
+    public CacheManager(String host) {
+        this.client = new Jedis(host);
     }
-
-    private static CacheManager cacheManager = new CacheManager();
 
     public void put(String fileName, String text) {
         client.append(fileName, text);
@@ -20,10 +21,6 @@ public final class CacheManager {
 
     public String get(String fileName) {
         return client.get(fileName);
-    }
-
-    public synchronized static CacheManager getCacheManager() {
-        return cacheManager;
     }
 
 }

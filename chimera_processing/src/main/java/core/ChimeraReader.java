@@ -1,6 +1,7 @@
 package core;
 
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.Iterator;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 /**
  * Created by gleb on 08.10.15.
  */
+@Component
 public class ChimeraReader implements Iterator<String> {
 
     private BufferedReader stream;
