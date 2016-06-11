@@ -8,7 +8,7 @@
     this.init = function (dataProcessorInfo) {
         info = dataProcessorInfo;
         waitAllFrames = Options.GetBoolValue(OptionNames.WaitAllFrames);
-        postToWServer(info.file, info.type, info.compress);
+        postToWServer(info.file, info.type, info.compress, info.frames);
 
         if (waitAllFrames){
             info.showProgressMethod(0);
@@ -17,8 +17,8 @@
         }
     }
 
-    function postToWServer(file, type, compress) {
-        sendMessage(file + '_' + type + '_' + compress);
+    function postToWServer(file, type, compress, frames) {
+        sendMessage(file + '_' + type + '_' + compress + '_' + frames);
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", Globals.StatUrl, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
