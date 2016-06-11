@@ -66,7 +66,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
     }
 
     private String generateCacheKey(InputData inputData) {
-        return inputData.getFileName() + "_" + inputData.getType().name() + "_" + inputData.getFileName();
+        return inputData.getFileName() + "_" + inputData.getType().name() + "_" + inputData.getFrames();
     }
 
 }
