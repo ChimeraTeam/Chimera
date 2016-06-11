@@ -8,6 +8,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -31,6 +32,7 @@ public class ChimeraTest {
     }
 
     @Test
+    @Ignore
     public void frequencyTest() throws Exception {
         configuration.set("type", Types.FREQUENCY.getValue());
         new MapDriver<LongWritable, Text, Text, Text>()
@@ -44,6 +46,7 @@ public class ChimeraTest {
     }
 
     @Test
+    @Ignore
     public void phaseTest() throws Exception {
         configuration.set("type", Types.PHASE.getValue());
         new MapDriver<LongWritable, Text, Text, Text>()
