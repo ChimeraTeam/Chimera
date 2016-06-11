@@ -37,7 +37,7 @@
         if (message.data.charAt(0) == 'c') {
             waitAllFrames = false;
             info.callbackMethod();
-            data = message.data;
+            return;
         }
 
         currentFrame++;
