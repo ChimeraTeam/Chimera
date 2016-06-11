@@ -1,4 +1,6 @@
-package core;
+package service;
+
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,15 +9,13 @@ import java.util.Map;
 /**
  * Created by gleb on 2/10/16.
  */
-public final class StatHolder {
-
-    private static final StatHolder statHolder = new StatHolder();
+@Component
+public class StatHolder {
 
     private Map<String, Integer> data;
 
     private StatHolder() {
-        this.data = new HashMap<>();
-        this.data = Collections.synchronizedMap(data);
+        this.data = Collections.synchronizedMap(new HashMap<>());
     }
 
     public synchronized void put(String address) {
@@ -29,9 +29,5 @@ public final class StatHolder {
 
     public Map<String, Integer> getData() {
         return data;
-    }
-
-    public static StatHolder getStatHolder() {
-        return statHolder;
     }
 }

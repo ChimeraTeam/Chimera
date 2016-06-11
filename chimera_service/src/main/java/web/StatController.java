@@ -1,6 +1,7 @@
 package web;
 
-import core.StatHolder;
+import service.StatHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class StatController {
 
-    private StatHolder statHolder = StatHolder.getStatHolder();
+    @Autowired
+    private StatHolder statHolder;
 
     @RequestMapping(value = "/stat", method = RequestMethod.GET)
     public String getData(Model model) {
