@@ -38,7 +38,7 @@
         pause = false;
         end = false;
 
-        if (confirm('Are you want download video in .gif format after video will finished?')) {
+        if (confirm('Do you want download video in .gif format after video will finished?')) {
             saveVideo = true;
             gifDelay = Options.GetValue(OptionNames.VideoDelay) / 1000 + 0.1;
         } else {
