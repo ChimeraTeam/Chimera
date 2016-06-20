@@ -20,6 +20,7 @@
         push('videoPause',          11,     1,      2,      2);
         push('videoNext',           17,     1,      2,      2);
         push('videoClose',          23,     1,      2,      2);
+        push('downloadVideo',       26,     30,     3,      2);
 
         push('currentFrame',        13,     35,     4,      2);
 

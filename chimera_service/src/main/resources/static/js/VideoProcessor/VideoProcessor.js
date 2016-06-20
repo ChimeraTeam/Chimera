@@ -3,7 +3,6 @@
     var currentFrame = 1;
     var pause;
     var end = false;
-    var saveVideo = false;
     var images = [];
     var gifDelay;
 
@@ -13,9 +12,7 @@
 
         processor.process(new BuildOptions(null, null, null, currentFrame, true));
 
-        if (saveVideo) {
-            saveAsImage();
-        }
+        saveAsImage();
 
         currentFrame++;
 
@@ -23,7 +20,11 @@
             end = true;
             chimeraManager.videoPause();
             currentFrame--;
-            createGifAndDownload();
+            if (Options.GetBoolValue(OptionNames.AlwaysDownloadVideo)) {
+                createGifAndDownload();
+            } else {
+                chimeraManager.getUIManager().loadDownloadVideoScene();
+            }
             return;
         }
 
@@ -37,13 +38,6 @@
         processor = buildProcessor;
         pause = false;
         end = false;
-
-        if (ChimeraMessage.showMessage(ChimeraMessageType.Confirm, ChimeraMessage.IsNeedDownloadVideo)) {
-            saveVideo = true;
-            gifDelay = Options.GetValue(OptionNames.VideoDelay) / 1000 + 0.1;
-        } else {
-            saveVideo = false;
-        }
     }
 
     this.isVideoEnd = function () {
@@ -68,6 +62,7 @@
     }
 
     this.close = function () {
+        chimeraManager.getUIManager().closeDownloadVideoScene();
         processor.clearScene();
         currentFrame = 0;
     }
@@ -88,6 +83,10 @@
         }
     }
 
+    this.downloadVideo = function () {
+        createGifAndDownload();
+    }
+    
     function saveAsImage() {
         var image = processor.takeScreenShot();
         images.push(image);

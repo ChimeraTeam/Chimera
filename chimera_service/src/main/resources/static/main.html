@@ -66,6 +66,7 @@
         <input id="videoNext" type="button" class="chimeraButton" value="Next" onclick="chimeraManager.videoNext()" disabled>
         <input id="videoBack" type="button" class="chimeraButton" value="Back" onclick="chimeraManager.videoBack()" disabled>
         <input id="videoClose" type="button"class="chimeraButton" value="Close" onclick="chimeraManager.videoClose()">
+        <input id="downloadVideo" type="button"class="chimeraButton" value="Download Video" onclick="chimeraManager.downloadVideo()">
         <input id="currentFrame" type="text" class="chimeraLabel" value="Current Frame:" disabled />
         <input id="cut" type="submit" class="chimeraButton" value="Cut" onclick="chimeraManager.cut()">
         <input id="horizontalCut" type="button" class="chimeraButton" value="H" onclick="chimeraManager.horizontalCut()"/>
@@ -111,7 +112,10 @@
             <br><br>
             <input id="waitAllFramesButton" type="text" class="chimeraSettingsLabel" value="Wait All Frames:"/>
             <input id="waitAllFramesCheckBox" type="checkbox" class="chimeraSettingsCheckbox" onclick="chimeraManager.onWaitAllFramesCheckBoxClicked()"/>
-            <br><br><br><br><br><br><br><br><br><br>
+            <br><br>
+            <input id="alwaysDownloadVideoButton" type="text" class="chimeraSettingsLabel" value="Save video:"/>
+            <input id="alwaysDownloadVideoCheckBox" type="checkbox" class="chimeraSettingsCheckbox"/>
+            <br><br><br><br><br><br><br>
             <input id="applySettingsButtons" type="button" class="chimeraSettingsButton" value="Apply" onclick="chimeraManager.applySettings()"/>
             <br><br>
             <input id="cancelSettingsButtons" type="button" class="chimeraSettingsButton" value="Cancel" onclick="chimeraManager.changeSettings()"/>

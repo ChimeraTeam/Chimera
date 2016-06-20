@@ -110,6 +110,10 @@
         }
     }
 
+    this.downloadVideo = function () {
+        videoProcessor.downloadVideo();
+    }
+
     this.videoPause = function () {
         var value = document.getElementById(ControlsNames.VideoPauseButton).value;
 

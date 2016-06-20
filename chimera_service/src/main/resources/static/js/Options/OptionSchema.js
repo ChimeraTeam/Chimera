@@ -6,6 +6,7 @@ OptionSchema = function () {
 
 }
 
+OptionSchema.DefaultAlwaysDownloadVideo = false;
 OptionSchema.DefaultOscillatorsNumber = 125000;
 OptionSchema.DefaultOpacity = 0.12;
 OptionSchema.DefaultPointSize = 3.5;

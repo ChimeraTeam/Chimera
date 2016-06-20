@@ -4,13 +4,15 @@
 
 var DefaultNames = [OptionNames.OscillatorsNumber, OptionNames.Opacity, OptionNames.PointSize, OptionNames.CameraPosition,
                             OptionNames.UsingCustomParticles, OptionNames.RotationX, OptionNames.RotationY, OptionNames.VideoDelay,
-                                OptionNames.RotationZoomAutomaticReset, OptionNames.NeedSaveSettingsToCookies, OptionNames.WaitAllFrames];
+                                OptionNames.RotationZoomAutomaticReset, OptionNames.NeedSaveSettingsToCookies, OptionNames.WaitAllFrames,
+                                    OptionNames.AlwaysDownloadVideo];
 var DefaultValues = [OptionSchema.DefaultOscillatorsNumber, OptionSchema.DefaultOpacity, OptionSchema.DefaultPointSize,
                             OptionSchema.DefaultCameraPosition, OptionSchema.DefaultUsingCustomParticles, OptionSchema.DefaultRotationX,
                                 OptionSchema.DefaultRotationY, OptionSchema.DefaultVideoDelay, OptionSchema.DefaultRotationZoomAutomaticReset, OptionSchema.DefaultNeedSaveSettingsToCookies,
-                                    OptionSchema.DefaultWaitAllFrames];
+                                    OptionSchema.DefaultWaitAllFrames, OptionSchema.DefaultAlwaysDownloadVideo];
 
-var CanSaveToCookiesNames = [OptionNames.Opacity, OptionNames.PointSize, OptionNames.VideoDelay, OptionNames.RotationZoomAutomaticReset, OptionNames.WaitAllFrames];
+var CanSaveToCookiesNames = [OptionNames.Opacity, OptionNames.PointSize, OptionNames.VideoDelay, OptionNames.RotationZoomAutomaticReset, OptionNames.WaitAllFrames,
+                                OptionNames.AlwaysDownloadVideo];
 
 var CustomNames = [];
 var CustomValues = [];

@@ -14,6 +14,7 @@ ControlsNames.VideoPauseButton = "videoPause";
 ControlsNames.VideoNextButton = "videoNext";
 ControlsNames.VideoBackButton = "videoBack";
 ControlsNames.VideoCloseButton = "videoClose";
+ControlsNames.DownloadVideo = "downloadVideo";
 ControlsNames.CurrentFrameLabel = "currentFrame";
 
 ControlsNames.CutButton = "cut";
@@ -48,6 +49,8 @@ ControlsNames.SaveCookiesButton = "saveCookiesButton";
 ControlsNames.SaveCookiesCheckBox = "saveCookiesCheckBox";
 ControlsNames.WaitAllFramesButton = "waitAllFramesButton";
 ControlsNames.WaitAllFramesCheckBox = "waitAllFramesCheckBox";
+ControlsNames.AlwaysDownloadVideoButton = "alwaysDownloadVideoButton";
+ControlsNames.AlwaysDownloadVideoCheckBox = "alwaysDownloadVideoCheckBox";
 
 ControlsNames.SnapshotNameTextBox = "snapshotNameTextBox";
 ControlsNames.TakeSnapshotButton = "takeSnapshotButton";

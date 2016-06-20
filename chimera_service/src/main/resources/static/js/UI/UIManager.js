@@ -12,6 +12,7 @@
                                 ControlsNames.SnapshotsManagerButton, ControlsNames.ChangeSettingButton, ControlsNames.AboutButton];
     var changeSettingsSceneContainer = [ControlsNames.OptionsContainer];
     var snapshotsManagerContainer = [ControlsNames.SnapshotsManagerContainer];
+    var downloadVideoContainer = [ControlsNames.DownloadVideo];
     var currentScene = "";
 
     this.getCurrentScene = function () {
@@ -55,6 +56,14 @@
 
     this.closeCurrentFrameInfoScene = function () {
         _uiCreator.setSceneVisibility(currentFrameInfoSceneContainer, false);
+    }
+
+    this.loadDownloadVideoScene = function () {
+        _uiCreator.setSceneVisibility(downloadVideoContainer, true);
+    }
+
+    this.closeDownloadVideoScene = function () {
+        _uiCreator.setSceneVisibility(downloadVideoContainer, false);
     }
 
     this.loadCutScene = function () {
@@ -115,6 +124,7 @@
         _uiCreator.setPosition(cutSceneContainer, pageGrid);
         _uiCreator.setPosition(changeSettingsSceneContainer, pageGrid);
         _uiCreator.setPosition(snapshotsManagerContainer, pageGrid);
+        _uiCreator.setPosition(downloadVideoContainer, pageGrid);
     }
 
     this.getUICreator = function () {
