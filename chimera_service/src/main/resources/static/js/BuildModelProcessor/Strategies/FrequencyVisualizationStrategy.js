@@ -1,7 +1,7 @@
 ﻿FrequencyVisualizationStrategy = function () {
 
     var colors = [];
-    var rgbColors = new Colors(true);
+    var rgbColors = new Colors();
 
     this.ConvertToColorMap = function (data) {
         colors = [];

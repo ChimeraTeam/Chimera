@@ -36,12 +36,12 @@
         buildProcessor = new BuildProcessor(visualizationType, this);
     }
 
-    this.getChimeraData = function () {
-        return chimeraData;
+    this.getUIManager = function () {
+        return uiManager;
     }
 
-    this.getUIManager = function() {
-        return uiManager;
+    this.getChimeraData = function(){
+        return chimeraData;
     }
 
     window.onload = function onload() {
@@ -62,7 +62,7 @@
     }
 
     window.onoffline = function () {
-        ChimeraMessage.ShowMessage(ChimeraMessage.Warning, ChimeraMessage.OnOfflineWarning);
+        ChimeraMessage.showMessage(ChimeraMessage.Warning, ChimeraMessage.OnOfflineWarning);
     }
 
     function DataReadyCallback()
@@ -87,7 +87,7 @@
 
     this.startVisualization = function () {
         var currentFrame = document.getElementById(ControlsNames.SelectTimeMomentTextBox).value;
-        buildProcessor.build(currentFrame, false);
+        buildProcessor.process(new BuildOptions(null, null, null, currentFrame, false));
     }
 
     this.playVideo = function () {
@@ -158,7 +158,7 @@
             buildProcessor.rebuild();
         }
         else {
-            ChimeraMessage.ShowMessage(ChimeraMessage.Info, "no dirty options for reset");
+            ChimeraMessage.showMessage(ChimeraMessage.Info, "no dirty options for reset");
         }
     }
 
@@ -181,7 +181,7 @@
         var value = getOpacitySliderValue();
 
         if (uiManager.getCurrentScene() == 'CutScene') {
-            buildProcessor.customParticlesBuild(value, Options.GetValue(OptionNames.PointSize), cutProcessor.getCutParticles());
+            buildProcessor.process(new BuildOptions(cutProcessor.getCutParticles(), value, null, null, false));
         }
         else {
             buildProcessor.updateOpacity(value);
@@ -195,14 +195,14 @@
         var value = getPointSizeSliderValue();
 
         if (uiManager.getCurrentScene() == 'CutScene') {
-            buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), value, cutProcessor.getCutParticles());
+            buildProcessor.process(new BuildOptions(cutProcessor.getCutParticles(), null, value, null, false));
         }
         else {
             buildProcessor.updatePointSize(value);
         }
 
         document.getElementById(ControlsNames.PointSizeLabel).value = Templates.PointSizeLabelTemplate + value;
-        Options.GetValue(OptionNames.PointSize);
+        Options.SetValue(OptionNames.PointSize, value);
     }
 
     this.snapshotsManagerButton_OnClick = function () {
@@ -254,12 +254,12 @@
     }
 
     this.onWaitAllFramesCheckBoxClicked = function () {
-        ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
+        ChimeraMessage.showMessage(ChimeraMessageType.Warning, 'wait for all frames option will be applied only if save cookie option is enable and after page restart');
     }
 
     this.onSaveCookieCheckBoxClicked = function () {
         if (!document.getElementById(ControlsNames.SaveCookiesCheckBox.checked))
-            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'your custom settings will be reset after page unload if you disable this option');
+            ChimeraMessage.showMessage(ChimeraMessageType.Warning, 'your custom settings will be reset after page unload if you disable this option');
     }
 
     this.takeSnapshot = function () {
@@ -267,7 +267,7 @@
         var tmpl = document.getElementById('snapshot-template');
 
         if (name == "") {
-            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'Please input snapshot name');
+            ChimeraMessage.showMessage(ChimeraMessageType.Warning, 'Please input snapshot name');
             return;
         }
 
@@ -278,7 +278,7 @@
         var res = snapshotsManager.takeSnapshot(snapshot);
 
         if (!res) {
-            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, 'Another snapshot with the same name is exist');
+            ChimeraMessage.showMessage(ChimeraMessageType.Warning, 'Another snapshot with the same name is exist');
             return;
         }
 
@@ -308,7 +308,7 @@
         var snapshotInfo = snapshotsManager.getSnapshot(name);
         var particles = snapshotInfo.particles;
         snapshotsManager.revertSnapshot(snapshotInfo);
-        buildProcessor.customParticlesBuild(snapshotInfo.opacity, snapshotInfo.pointSize, particles);
+        buildProcessor.process(new BuildOptions(particles, snapshotInfo.opacity, snapshotInfo.pointSize, null, false));
         uiManager.loadAdditionalFunctionalityScene();
         UIUpdater.update(uiManager);
         this.removeSnapshot();

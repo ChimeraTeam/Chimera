@@ -5,6 +5,10 @@
 Globals.WebSocketUrl = "ws://chimera.biomed.kiev.ua:8983/chimera_service/websocket";
 Globals.StatUrl = "http://chimera.biomed.kiev.ua:8983/chimera_service/stat";
 
+Globals.DataTransferContainer = "sockerDataTransferContainer";
+
+Globals.PhaseStrategyString = "Phase";
+
 Globals.SmallOsillatorsCount = 125000;
 Globals.MediumOsillatorsCount = 1000000;
 Globals.LargeOsillatorsCount = 8000000;

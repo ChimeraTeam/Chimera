@@ -11,7 +11,7 @@
         if (pause)
             return;
 
-        processor.build(currentFrame, true);
+        processor.process(new BuildOptions(null, null, null, currentFrame, true));
 
         if (saveVideo) {
             saveAsImage();
@@ -38,7 +38,7 @@
         pause = false;
         end = false;
 
-        if (confirm('Do you want download video in .gif format after video will be finished?')) {
+        if (ChimeraMessage.showMessage(ChimeraMessageType.Confirm, ChimeraMessage.IsNeedDownloadVideo)) {
             saveVideo = true;
             gifDelay = Options.GetValue(OptionNames.VideoDelay) / 1000 + 0.1;
         } else {
@@ -74,16 +74,16 @@
 
     this.next = function () {
         currentFrame++;
-        if (!processor.build(currentFrame, true)) {
-            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.LastTimeMomentWarning);
+        if (!processor.process(new BuildOptions(null, null, null, currentFrame, true))) {
+            ChimeraMessage.showMessage(ChimeraMessageType.Warning, ChimeraMessage.LastTimeMomentWarning);
             currentFrame--;
         }
     }
 
     this.back = function () {
         currentFrame--;
-        if (!processor.build(currentFrame, true)) {
-            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.FirstTimeMomentWarning);
+        if (!processor.process(new BuildOptions(null, null, null, currentFrame, true))) {
+            ChimeraMessage.showMessage(ChimeraMessageType.Warning, ChimeraMessage.FirstTimeMomentWarning);
             currentFrame++;
         }
     }

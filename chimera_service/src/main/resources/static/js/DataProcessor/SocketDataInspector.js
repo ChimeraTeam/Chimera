@@ -49,7 +49,7 @@
         }
 
         if (!waitAllFrames) {
-            var container = document.getElementById("sockerDataTransferContainer");
+            var container = document.getElementById(Globals.DataTransferContainer);
             container.innerHTML = data;
 
             var event = container["onchange"];
@@ -64,7 +64,7 @@
         info.showProgressMethod(currentFrame);
 
         if (currentFrame == info.frames) {
-            var container = document.getElementById("sockerDataTransferContainer");
+            var container = document.getElementById(Globals.DataTransferContainer);
             if (container != null) {
                 container.innerHTML = data;
             }
