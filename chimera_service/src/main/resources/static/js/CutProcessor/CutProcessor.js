@@ -31,7 +31,7 @@
     this.setCurrentType = function (value) {
         document.getElementById(ControlsNames.CurrentCutTypeLabel).value = value;
     }
-    
+
     this.getCutParticles = function () {
         return cutParticles;
     }
@@ -67,7 +67,7 @@
 
         saveCurrentState();
         cutParticles = newParticles;
-        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), cutParticles);
+        buildProcessor.process(new BuildOptions(cutParticles, null, null, null, false));
     }
 
     function cutVerticalPart(event, cutVector) {
@@ -94,7 +94,8 @@
 
         saveCurrentState();
         cutParticles = newParticles;
-        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), cutParticles);
+        buildProcessor.process(
+            new BuildOptions(cutParticles, null, null, null, false));
     }
 
     function saveCurrentState() {
@@ -141,7 +142,9 @@
 
         var particles = previouslyStatesStack.pop();
         cutParticles = particles;
-        buildProcessor.customParticlesBuild(Options.GetValue(OptionNames.Opacity), Options.GetValue(OptionNames.PointSize), particles);
+
+        buildProcessor.process(
+            new BuildOptions(particles, null, null, null, false));
     }
 
     window.onmousemove = function (event) {

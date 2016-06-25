@@ -14,10 +14,11 @@
         <script type="text/javascript" src="js/ChimeraVisualizationManager.js"></script>
         <script type="text/javascript" src="js/ThirdParty/three.js"></script>
         <script type="text/javascript" src="js/ThirdParty/gitshot.js"></script>
-        <script type="text/javascript" src="js/API/Cookies.js"></script>
-        <script type="text/javascript" src="js/API/Colors.js"></script>
-        <script type="text/javascript" src="js/API/DateTime.js"></script>
-        <script type="text/javascript" src="js/API/RGBColorMap.js"></script>
+        <script type="text/javascript" src="js/Utilities/Cookies.js"></script>
+        <script type="text/javascript" src="js/BuildModelProcessor/Colors/Colors.js"></script>
+        <script type="text/javascript" src="js/BuildModelProcessor/Colors/RGBColorMap.js"></script>
+        <script type="text/javascript" src="js/BuildModelProcessor/Colors/PalleteConverter.js"></script>
+        <script type="text/javascript" src="js/Utilities/DateTime.js"></script>
         <script type="text/javascript" src="js/Options/Globals.js"></script>
         <script type="text/javascript" src="js/Options/OptionSchema.js"></script>
         <script type="text/javascript" src="js/Options/OptionNames.js"></script>
@@ -26,15 +27,16 @@
         <script type="text/javascript" src="js/Snapshots/Snapshot.js"></script>
         <script type="text/javascript" src="js/Snapshots/SnapshotsManager.js"></script>
         <script type="text/javascript" src="js/Snapshots/SnapshotsManagerWindowHandlers.js"></script>
-        <script type="text/javascript" src="js/API/ControlsNames.js"></script>
-        <script type="text/javascript" src="js/API/ChimeraMessage.js"></script>
-        <script type="text/javascript" src="js/API/ChimeraMessageType.js"></script>
+        <script type="text/javascript" src="js/Options/ControlsNames.js"></script>
+        <script type="text/javascript" src="js/Messaging/ChimeraMessage.js"></script>
+        <script type="text/javascript" src="js/Messaging/ChimeraMessageType.js"></script>
         <script type="text/javascript" src="js/UI/PageGrid.js"></script>
         <script type="text/javascript" src="js/UI/positionConfig.js"></script>
         <script type="text/javascript" src="js/UI/Templates.js"></script>
         <script type="text/javascript" src="js/UI/UIManager.js"></script>
         <script type="text/javascript" src="js/UI/UICreator.js"></script>
         <script type="text/javascript" src="js/UI/UIUpdater.js"></script>
+        <script type="text/javascript" src="js/BuildModelProcessor/BuildOptions.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/BuildProcessor.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/PhaseColorDecorator.js"></script>
         <script type="text/javascript" src="js/BuildModelProcessor/Strategies/PhaseVisualizationStrategy.js"></script>
@@ -64,6 +66,7 @@
         <input id="videoNext" type="button" class="chimeraButton" value="Next" onclick="chimeraManager.videoNext()" disabled>
         <input id="videoBack" type="button" class="chimeraButton" value="Back" onclick="chimeraManager.videoBack()" disabled>
         <input id="videoClose" type="button"class="chimeraButton" value="Close" onclick="chimeraManager.videoClose()">
+        <input id="downloadVideo" type="button"class="chimeraButton" value="Download Video" onclick="chimeraManager.downloadVideo()">
         <input id="currentFrame" type="text" class="chimeraLabel" value="Current Frame:" disabled />
         <input id="cut" type="submit" class="chimeraButton" value="Cut" onclick="chimeraManager.cut()">
         <input id="horizontalCut" type="button" class="chimeraButton" value="H" onclick="chimeraManager.horizontalCut()"/>
@@ -109,7 +112,10 @@
             <br><br>
             <input id="waitAllFramesButton" type="text" class="chimeraSettingsLabel" value="Wait All Frames:"/>
             <input id="waitAllFramesCheckBox" type="checkbox" class="chimeraSettingsCheckbox" onclick="chimeraManager.onWaitAllFramesCheckBoxClicked()"/>
-            <br><br><br><br><br><br><br><br><br><br>
+            <br><br>
+            <input id="alwaysDownloadVideoButton" type="text" class="chimeraSettingsLabel" value="Save video:"/>
+            <input id="alwaysDownloadVideoCheckBox" type="checkbox" class="chimeraSettingsCheckbox"/>
+            <br><br><br><br><br><br><br>
             <input id="applySettingsButtons" type="button" class="chimeraSettingsButton" value="Apply" onclick="chimeraManager.applySettings()"/>
             <br><br>
             <input id="cancelSettingsButtons" type="button" class="chimeraSettingsButton" value="Cancel" onclick="chimeraManager.changeSettings()"/>

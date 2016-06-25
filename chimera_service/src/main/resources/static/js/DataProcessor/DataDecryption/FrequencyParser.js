@@ -3,7 +3,9 @@
  */
 
 var FrequencyParser = function () {
-    this.parse = function (frameData, min, max, readyData) {
+    this.parse = function (frameData, readyData) {
+        var max = frameData.pop();
+        var min = frameData.pop();
         var multiplier = RGBColorMap.getCount()/(max - min);
 
         for (var i = 0; i < frameData.length; i++) {

@@ -1,12 +1,12 @@
 ﻿﻿var DataDecryptor = function () {
 
     this.decrypt = function (data) {
+        var worker = new LZMAWorker();
+        data = worker.extract(data);
+
         if (Globals.VisualizationType == 'P') {
             return data.split(',');
         }
-
-        var worker = new LZMAWorker();
-        data = worker.extract(data);
 
         var readyData = [];
         var parser = new FrequencyParser();
@@ -18,9 +18,7 @@
 
         for (var i = 0; i < count; i++) {
             var current = array.slice(i * oneFrameSize, (i + 1) * oneFrameSize);
-            var max = current.pop();
-            var min = current.pop();
-            parser.parse(current, min, max, readyData);
+            parser.parse(current, readyData);
         }
 
         return readyData;

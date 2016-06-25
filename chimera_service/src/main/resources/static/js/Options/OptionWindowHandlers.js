@@ -7,7 +7,8 @@ var OptionWindowHandlers = function () {
                                 ControlsNames.PointSizeOptionTextBox, ControlsNames.VideoDelayOptionLabel, ControlsNames.VideoDelayOptionTextBox,
                                     ControlsNames.AutoResetRotationZoomLabel, ControlsNames.AutoResetRotationZoomCheckBox, ControlsNames.ApplySettingsButton,
                                         ControlsNames.CancelSettingsButton, ControlsNames.SaveCookiesButton, ControlsNames.SaveCookiesCheckBox,
-                                            ControlsNames.WaitAllFramesButton, ControlsNames.WaitAllFramesCheckBox];
+                                            ControlsNames.WaitAllFramesButton, ControlsNames.WaitAllFramesCheckBox, ControlsNames.AlwaysDownloadVideoButton,
+                                                ControlsNames.AlwaysDownloadVideoCheckBox];
     var _uiCreator = new UICreator();
 
     this.setChildControlsVisibility = function (isVisible) {
@@ -22,6 +23,7 @@ var OptionWindowHandlers = function () {
         Options.SetValue(OptionNames.RotationZoomAutomaticReset, _uiCreator.getCheckBoxCheckedValue(ControlsNames.AutoResetRotationZoomCheckBox));
         Options.SetValue(OptionNames.NeedSaveSettingsToCookies, _uiCreator.getCheckBoxCheckedValue(ControlsNames.SaveCookiesCheckBox));
         Options.SetValue(OptionNames.WaitAllFrames, _uiCreator.getCheckBoxCheckedValue(ControlsNames.WaitAllFramesCheckBox));
+        Options.SetValue(OptionNames.AlwaysDownloadVideo, _uiCreator.getCheckBoxCheckedValue(ControlsNames.AlwaysDownloadVideoCheckBox));
 
         Options.Merge();
     }
@@ -33,5 +35,6 @@ var OptionWindowHandlers = function () {
         _uiCreator.setCheckBoxCheckedValue(ControlsNames.AutoResetRotationZoomCheckBox, Options.GetDefaultBoolValue(OptionNames.RotationZoomAutomaticReset));
         _uiCreator.setCheckBoxCheckedValue(ControlsNames.SaveCookiesCheckBox, Options.GetDefaultBoolValue(OptionNames.NeedSaveSettingsToCookies));
         _uiCreator.setCheckBoxCheckedValue(ControlsNames.WaitAllFramesCheckBox, Options.GetDefaultBoolValue(OptionNames.WaitAllFrames));
+        _uiCreator.setCheckBoxCheckedValue(ControlsNames.AlwaysDownloadVideoCheckBox, Options.GetDefaultBoolValue(OptionNames.AlwaysDownloadVideo));
     }
 }

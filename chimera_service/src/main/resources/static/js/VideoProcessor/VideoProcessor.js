@@ -3,7 +3,6 @@
     var currentFrame = 1;
     var pause;
     var end = false;
-    var saveVideo = false;
     var images = [];
     var gifDelay;
 
@@ -11,11 +10,9 @@
         if (pause)
             return;
 
-        processor.build(currentFrame, true);
+        processor.process(new BuildOptions(null, null, null, currentFrame, true));
 
-        if (saveVideo) {
-            saveAsImage();
-        }
+        saveAsImage();
 
         currentFrame++;
 
@@ -23,7 +20,11 @@
             end = true;
             chimeraManager.videoPause();
             currentFrame--;
-            createGifAndDownload();
+            if (Options.GetBoolValue(OptionNames.AlwaysDownloadVideo)) {
+                createGifAndDownload();
+            } else {
+                chimeraManager.getUIManager().loadDownloadVideoScene();
+            }
             return;
         }
 
@@ -37,13 +38,6 @@
         processor = buildProcessor;
         pause = false;
         end = false;
-
-        if (confirm('Are you want download video in .gif format after video will finished?')) {
-            saveVideo = true;
-            gifDelay = Options.GetValue(OptionNames.VideoDelay) / 1000 + 0.1;
-        } else {
-            saveVideo = false;
-        }
     }
 
     this.isVideoEnd = function () {
@@ -68,26 +62,31 @@
     }
 
     this.close = function () {
+        chimeraManager.getUIManager().closeDownloadVideoScene();
         processor.clearScene();
         currentFrame = 0;
     }
 
     this.next = function () {
         currentFrame++;
-        if (!processor.build(currentFrame, true)) {
-            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.LastTimeMomentWarning);
+        if (!processor.process(new BuildOptions(null, null, null, currentFrame, true))) {
+            ChimeraMessage.showMessage(ChimeraMessageType.Warning, ChimeraMessage.LastTimeMomentWarning);
             currentFrame--;
         }
     }
 
     this.back = function () {
         currentFrame--;
-        if (!processor.build(currentFrame, true)) {
-            ChimeraMessage.ShowMessage(ChimeraMessageType.Warning, ChimeraMessage.FirstTimeMomentWarning);
+        if (!processor.process(new BuildOptions(null, null, null, currentFrame, true))) {
+            ChimeraMessage.showMessage(ChimeraMessageType.Warning, ChimeraMessage.FirstTimeMomentWarning);
             currentFrame++;
         }
     }
 
+    this.downloadVideo = function () {
+        createGifAndDownload();
+    }
+    
     function saveAsImage() {
         var image = processor.takeScreenShot();
         images.push(image);

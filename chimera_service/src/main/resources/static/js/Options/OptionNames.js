@@ -6,6 +6,7 @@ OptionNames = function () {
 
 };
 
+OptionNames.AlwaysDownloadVideo = "AlwaysDownloadVideo";
 OptionNames.OscillatorsNumber = "OscillatorsNumber";
 OptionNames.Opacity = "Opacity";
 OptionNames.PointSize = "PointSize";

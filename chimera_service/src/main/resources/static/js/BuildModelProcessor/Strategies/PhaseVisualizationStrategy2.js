@@ -11,7 +11,7 @@ var PhaseVisualizationStrategy2 = function () {
 
         var S = 0.8;
         var V = 1;
-        var converter = new Colors(false);
+        var converter = new PaletteConverter();
 
         for (var i = 0; i < data.length; i++) {
             colors[i] = new THREE.Color();
@@ -20,7 +20,6 @@ var PhaseVisualizationStrategy2 = function () {
             colors[i].setHSL(hsl.h, hsl.s, hsl.l);
         }
 
-        return PhaseColorDecorator.decorate(colors);;
+        return PhaseColorDecorator.decorate(colors);
     }
-
 }

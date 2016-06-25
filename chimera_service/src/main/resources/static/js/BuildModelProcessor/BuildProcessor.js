@@ -1,7 +1,7 @@
-﻿BuildProcessor = function (strategy, chimeraManager) {
+﻿var BuildProcessor = function (strategy, manager) {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    var renderer = new THREE.WebGLRenderer({antialias: true});
     var particleSystem;
     var particlesTemporary = new THREE.Geometry();
     var particles = new THREE.Geometry();
@@ -10,8 +10,8 @@
     var buildStrategyInstance;
     var currentFrameData = [];
     var currentFrame;
-    var max = -100, min = 100;
     var cutInProgress = false;
+    var chimeraManager = manager;
     var uiManager = chimeraManager.getUIManager();
 
     renderer.setSize(container.offsetWidth, container.offsetHeight);
@@ -20,7 +20,7 @@
     init(strategy);
 
     function init(st) {
-        if (st == "Phase") {
+        if (st == Globals.PhaseStrategyString) {
             if (Globals.PhaseVisualizationStrategy == "1") {
                 buildStrategyInstance = new PhaseVisualizationStrategy2();
             } else {
@@ -39,8 +39,8 @@
 
         for (var p = 0; p < Globals.OscillatorsNumber; p++) {
             var pX = ((p) % Math.pow(value, 2)) % value / 3 - 8.3,
-                    pY = ((p) % Math.pow(value, 2)) / value / 3 - 8.3,
-                    pZ = p / Math.pow(value, 2) / 3 - 8.3,
+                pY = ((p) % Math.pow(value, 2)) / value / 3 - 8.3,
+                pZ = p / Math.pow(value, 2) / 3 - 8.3,
                 particle = new THREE.Vector3(pX, pY, pZ);
             particles.vertices.push(particle);
         }
@@ -74,8 +74,8 @@
         var pMaterial = createMaterial(opacity, size);
 
         particleSystem = new THREE.PointCloud(
-                    particlesForRendering,
-                    pMaterial);
+            particlesForRendering,
+            pMaterial);
         scene.add(particleSystem);
 
         camera.position.z = Options.GetValue(OptionNames.CameraPosition);
@@ -98,8 +98,8 @@
     this.getWebGLContainerHeight = function () {
         return container.offsetHeight;
     }
-    
-    this.customParticlesBuild = function (opacity, size, particlesArray) {
+
+    function customParticlesBuild(opacity, size, particlesArray) {
         scene.remove(scene.children[0]);
         renderModel(opacity, size, particlesArray);
     }
@@ -127,12 +127,16 @@
         var strMime = "image/jpeg";
         return renderer.domElement.toDataURL(strMime);
     }
-    
+
     this.isNeedRebuild = function () {
         return currentFrameData.length > 0;
     }
+    
+    this.clearScene = function () {
+        clear();
+    }
 
-    this.clearScene = function() {
+    function clear() {
         scene.remove(scene.children[0]);
         delete particleSystem;
         currentFrameData.length = 0;
@@ -143,19 +147,27 @@
     }
 
     this.rebuild = function () {
-        this.build(currentFrame, false);
+        build(currentFrame, false);
     }
 
-    this.build = function (frame, isVideo) {
+    this.process = function (buildOptions) {
+        if (buildOptions.particles == null) {
+            build(buildOptions.frame, buildOptions.isVideoMode);
+        } else {
+            customParticlesBuild(buildOptions.opacity, buildOptions.size, buildOptions.particles);
+        }
+    }
+
+    function build(frame, isVideo) {
         if (parseInt(frame) < 1 || parseInt(frame) > Globals.MaxTimeFrame) {
             if (!isVideo) {
-                ChimeraMessage.ShowMessage(ChimeraMessageType.Error, ChimeraMessage.TimeMomentRangeError);
+                ChimeraMessage.showMessage(ChimeraMessageType.Error, ChimeraMessage.TimeMomentRangeError);
             }
 
             return false;
         }
 
-        this.clearScene();
+        clear();
         uiManager.loadAdditionalFunctionalityScene();
 
         selectDataForCurrentFrame(frame);
@@ -185,10 +197,6 @@
         renderParticles();
     }
 
-    this.setCustomParticles = function (particlesArray) {
-        customParticles = particlesArray;
-    }
-
     this.removeCustomObjects = function () {
         for (var i = 0; i < scene.children.length; i++) {
             if (scene.children[i].name == 'customLine') {
@@ -211,7 +219,7 @@
         particlesBuild(Options.GetValue(OptionNames.Opacity), size);
     }
 
-    this.getCurrentFrameData = function() {
+    this.getCurrentFrameData = function () {
         return currentFrameData;
     }
 
@@ -219,7 +227,7 @@
         return particles;
     }
 
-    this.setCutInProgress = function(value) {
+    this.setCutInProgress = function (value) {
         cutInProgress = value;
     }
 
