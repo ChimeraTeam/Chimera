@@ -22,7 +22,6 @@ import static constants.Types.FREQUENCY;
 @Scope("prototype")
 public class ChimeraService {
 
-    int i = 0;
     private static final String[] OSCILLATIONS_100 = {"100x100x100", "8"};
     private static final String[] OSCILLATIONS_200 = {"200x200x200", "64"};
     private static final String[] OSCILLATIONS_400 = {"400x400x400", "512"};

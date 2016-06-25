@@ -35,8 +35,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
             return;
         }
 
-        log.info("Starting processing file={}, type={}, session={}",
-                new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
+        log.info("Starting processing file={}, type={}, session={}", inputData.getFileName(), inputData.getType().name(), session.getId());
 
         int iterator = 0;
         try {
@@ -58,8 +57,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
 
         chimeraService.commitTransaction();
 
-        log.info("Processed successfully file={}, type={}, session={}",
-                new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
+        log.info("Processed successfully file={}, type={}, session={}", inputData.getFileName(), inputData.getType().name(), session.getId());
     }
 
     private String generateCacheKey(InputData inputData) {
