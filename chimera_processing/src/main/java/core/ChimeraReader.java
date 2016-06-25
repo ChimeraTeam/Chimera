@@ -4,24 +4,19 @@ import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.Iterator;
+
+import static org.apache.commons.io.IOUtils.closeQuietly;
 
 /**
  * Created by gleb on 08.10.15.
  */
 @Component
-public class ChimeraReader implements Iterator<String> {
+public class ChimeraReader {
 
     private BufferedReader stream;
-    private String file;
-    private String data;
+    private String currentValue;
 
     public ChimeraReader(String file) {
-        this.file = file;
-        initStream();
-    }
-
-    private void initStream() {
         try {
             FileInputStream compressed = new FileInputStream(file);
             XZCompressorInputStream xzIn = new XZCompressorInputStream(compressed, true);
@@ -31,18 +26,16 @@ public class ChimeraReader implements Iterator<String> {
         }
     }
 
-    @Override
-    public boolean hasNext() {
-        try {
-            data = stream.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return data != null;
+    public boolean hasData() throws IOException {
+        currentValue = stream.readLine();
+        return currentValue != null;
     }
 
-    @Override
-    public String next() {
-        return data;
+    public String readLine() {
+        return currentValue;
+    }
+
+    public void close() {
+        closeQuietly(stream);
     }
 }

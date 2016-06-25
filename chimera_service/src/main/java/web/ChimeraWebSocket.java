@@ -1,9 +1,8 @@
 package web;
 
 
+import lombok.extern.slf4j.Slf4j;
 import model.InputData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
@@ -18,51 +17,49 @@ import java.io.IOException;
  */
 
 @Component
+@Slf4j
 public class ChimeraWebSocket extends TextWebSocketHandler {
-
-    private Logger logger = LoggerFactory.getLogger(ChimeraWebSocket.class);
 
     @Autowired
     private ChimeraService chimeraService;
 
     @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message) {
-        logger.info("Get message message={} session={}", message.getPayload(), session.getId());
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+        log.info("Get message message={}, session={}", message.getPayload(), session.getId());
 
-        new Thread(() -> {
+        InputData inputData = chimeraService.createInputData(message.getPayload());
 
-            InputData inputData = chimeraService.createInputData(message.getPayload());
+        String fromCache = chimeraService.checkInCache(generateCacheKey(inputData));
+        if (fromCache != null) {
+            session.sendMessage(new TextMessage("c" + fromCache));
+            return;
+        }
 
-            String result = chimeraService.checkInCache(generateCacheKey(inputData));
-            if (result != null) {
-                try {
-                    session.sendMessage(new TextMessage("c" + result));
-                } catch (IOException e) {
-                    logger.error(e.getMessage());
-                }
-                return;
-            }
+        log.info("Starting processing file={}, type={}, session={}",
+                new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
 
-            logger.info("Starting processing file={} type={} session={}",
-                    new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
-
-
-            while (chimeraService.hasNext()) {
-                String value = chimeraService.next();
+        int iterator = 0;
+        try {
+            chimeraService.beginTransaction(generateCacheKey(inputData));
+            while (chimeraService.hasData() && iterator != Integer.valueOf(inputData.getFrames())) {
+                String value = chimeraService.getValue();
                 if (value != null) {
-                    try {
-                        if (!session.isOpen()) return;
-                        session.sendMessage(new TextMessage(value));
-                    } catch (IOException e) {
-                        logger.error(e.getMessage());
-                    }
-                    chimeraService.putInCache(generateCacheKey(inputData), value);
+                    iterator++;
+                    session.sendMessage(new TextMessage(value));
+                    chimeraService.putToCache(generateCacheKey(inputData), value);
                 }
             }
+        } catch (Exception e) {
+            chimeraService.rollbackTransaction();
+            log.error("Error while parsing or sending data", e);
+        } finally {
+            chimeraService.close();
+        }
 
-            logger.info("Processed successfully file={} type={} session={}",
-                    new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
-        }).start();
+        chimeraService.commitTransaction();
+
+        log.info("Processed successfully file={}, type={}, session={}",
+                new String[]{inputData.getFileName(), inputData.getType().name(), session.getId()});
     }
 
     private String generateCacheKey(InputData inputData) {

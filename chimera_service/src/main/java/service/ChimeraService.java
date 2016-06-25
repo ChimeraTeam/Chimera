@@ -2,18 +2,27 @@ package service;
 
 import constants.Compress;
 import constants.Types;
-import core.ChimeraParser;
 import core.ChimeraReader;
+import core.FrequencyParser;
+import core.GeneralParser;
+import core.PhaseParser;
 import model.InputData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+
+import static constants.Types.FREQUENCY;
 
 /**
  * Created by gleb on 5/22/16.
  */
 @Component
+@Scope("prototype")
 public class ChimeraService {
 
+    int i = 0;
     private static final String[] OSCILLATIONS_100 = {"100x100x100", "8"};
     private static final String[] OSCILLATIONS_200 = {"200x200x200", "64"};
     private static final String[] OSCILLATIONS_400 = {"400x400x400", "512"};
@@ -22,22 +31,22 @@ public class ChimeraService {
     private CacheManager cacheManager;
 
     private ChimeraReader reader;
-    private ChimeraParser parser;
+    private GeneralParser parser;
 
     public String checkInCache(String fileName) {
         return cacheManager.get(fileName);
     }
 
-    public void putInCache(String fileName, String value) {
+    public void putToCache(String fileName, String value) {
         cacheManager.put(fileName, value);
     }
 
-    public boolean hasNext() {
-        return reader.hasNext();
+    public String getValue() throws IOException {
+        return parser.parse(reader.readLine());
     }
 
-    public String next() {
-        return parser.process(reader.next());
+    public boolean hasData() throws IOException {
+        return reader.hasData();
     }
 
     public InputData createInputData(String input) {
@@ -51,9 +60,29 @@ public class ChimeraService {
         return inputData;
     }
 
+    public void beginTransaction(String key) {
+        cacheManager.beginTransaction(key);
+    }
+
+    public void commitTransaction() {
+        cacheManager.commitTransaction();
+    }
+
+    public void rollbackTransaction() {
+        cacheManager.rollbackTransaction();
+    }
+
+    public void close() {
+        this.reader.close();
+    }
+
     private void init(InputData inputData) {
         this.reader = new ChimeraReader(inputData.getFileName());
-        this.parser = new ChimeraParser(inputData.getType(), inputData.getCompress());
+        if (FREQUENCY.equals(inputData.getType())) {
+            this.parser = new FrequencyParser(inputData.getCompress());
+        } else {
+            this.parser = new PhaseParser(inputData.getCompress());
+        }
     }
 
     private Compress getCompressValue(String compress, String fileName) {
