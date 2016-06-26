@@ -5,8 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.test.ImportAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.DispatcherServlet;
 import service.CacheManager;
+import service.ChimeraService;
 
 /**
  * Created by gleb on 5/22/16.
@@ -32,6 +34,12 @@ public class Launcher {
     @Bean
     public CacheManager cacheManager() {
         return new CacheManager(redisHost);
+    }
+
+    @Bean
+    @Scope("prototype")
+    public ChimeraService chimeraService() {
+        return new ChimeraService();
     }
 
 }

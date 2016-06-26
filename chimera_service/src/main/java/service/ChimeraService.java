@@ -8,7 +8,6 @@ import core.GeneralParser;
 import core.PhaseParser;
 import model.InputData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,7 +18,6 @@ import static constants.Types.FREQUENCY;
  * Created by gleb on 5/22/16.
  */
 @Component
-@Scope("prototype")
 public class ChimeraService {
 
     private static final String[] OSCILLATIONS_100 = {"100x100x100", "8"};

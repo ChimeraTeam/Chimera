@@ -4,7 +4,7 @@ package web;
 import lombok.extern.slf4j.Slf4j;
 import model.InputData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -18,15 +18,16 @@ import java.io.IOException;
  */
 
 @Component
-@Scope("session")
 @Slf4j
 public class ChimeraWebSocket extends TextWebSocketHandler {
 
     @Autowired
-    private ChimeraService chimeraService;
+    private ApplicationContext applicationContext;
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+        ChimeraService chimeraService = applicationContext.getBean(ChimeraService.class);
+
         log.info("Get message message={}, session={}", message.getPayload(), session.getId());
 
         InputData inputData = chimeraService.createInputData(message.getPayload());
