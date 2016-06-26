@@ -4,6 +4,7 @@ package web;
 import lombok.extern.slf4j.Slf4j;
 import model.InputData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -17,6 +18,7 @@ import java.io.IOException;
  */
 
 @Component
+@Scope("session")
 @Slf4j
 public class ChimeraWebSocket extends TextWebSocketHandler {
 
@@ -32,6 +34,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
         String fromCache = chimeraService.checkInCache(generateCacheKey(inputData));
         if (fromCache != null) {
             session.sendMessage(new TextMessage("c" + fromCache));
+            log.info("Processed from cache file={}, type={}, session={}", inputData.getFileName(), inputData.getType().name(), session.getId());
             return;
         }
 
