@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Statistics</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Ip</th>
+        <th>Visits</th>
+    </tr>
+
+    <!--<tr th:each="entry : ${data}">-->
+    <!--<td><a th:href="http://whatismyipaddress.com/ip/" ${entry.key}>${entry.key}</a></td>-->
+    <!--<td>${entry.value}</td>-->
+    <!--</tr>-->
+
+    <tr th:each="entry : ${data}">
+        <td>
+            <a th:href="@{'http://whatismyipaddress.com/ip/' + ${entry.key}}">
+                <b th:text="${entry.key}"></b>
+            </a>
+        </td>
+        <td th:text="${entry.value}">num</td>
+    </tr>
+
+</table>
+</body>
+</html>

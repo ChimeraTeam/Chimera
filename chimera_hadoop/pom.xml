@@ -14,6 +14,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>univ.kiev.ua</groupId>
+            <artifactId>chimera_common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Spring Data Apache Hadoop -->
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -26,13 +32,6 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-core</artifactId>
             <version>1.2.1</version>
-        </dependency>
-
-        <!--Logging-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.12</version>
         </dependency>
 
         <!--JUnit testing-->

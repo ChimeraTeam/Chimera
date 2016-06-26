@@ -1,7 +1,8 @@
 package map;
 
-import enums.RegExps;
-import enums.Types;
+
+import constants.RegExps;
+import constants.Types;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
