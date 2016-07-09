@@ -25,8 +25,8 @@ public class CacheManager {
     private void connectToRedis() {
         try {
             this.client.connect();
-        } catch (Exception e) {
-            log.warn("Can't connect to Redis");
+        } catch (RuntimeException e) {
+            log.warn("Can't connect to Redis ", e);
         }
     }
 

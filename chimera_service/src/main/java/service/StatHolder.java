@@ -20,7 +20,7 @@ public class StatHolder {
 
     public synchronized void put(String address) {
         if (data.containsKey(address)) {
-            Integer visits = data.get(address);
+            int visits = data.get(address);
             data.put(address, ++visits);
         } else {
             data.put(address, 1);

@@ -31,15 +31,14 @@ public class FrequencyParser extends GeneralParser {
         return line.split(" ")[0];
     }
 
+    @Override
     public String parseValue(String line) {
-        double frequency = Double.valueOf(line);
+        double frequency = Double.parseDouble(line);
         return compressValue(frequency);
     }
 
-    private String compressValue(Double frequency) {
-        frequency += 1;
-        frequency *= 128;
-        return String.valueOf(frequency.intValue());
+    private String compressValue(double frequency) {
+        return String.valueOf((int) ((++frequency) * 128));
     }
 
 }

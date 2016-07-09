@@ -2,20 +2,17 @@ package model;
 
 import constants.Compress;
 import constants.Types;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Value;
 
 /**
  * Created by gleb on 5/22/16.
  */
-@AllArgsConstructor
+@Builder
+@Value
 public class InputData {
-    @Getter
-    private final String fileName;
-    @Getter
-    private final Types type;
-    @Getter
-    private final Compress compress;
-    @Getter
-    private final String frames;
+    private String fileName;
+    private Types type;
+    private Compress compress;
+    private String frames;
 }

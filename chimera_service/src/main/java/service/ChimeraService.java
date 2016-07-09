@@ -48,11 +48,13 @@ public class ChimeraService {
 
     public InputData createInputData(String input) {
         String[] params = input.split("_");
-        String fileName = params[0];
-        String type = params[1];
-        String compress = params[2];
-        String frames = params[3];
-        InputData inputData = new InputData(fileName, Types.getEnum(type), getCompressValue(compress, fileName), frames);
+
+        InputData inputData = InputData.builder()
+                .fileName(params[0])
+                .type(Types.getEnum(params[1]))
+                .compress(getCompressValue(params[2], params[0]))
+                .frames(params[3]).build();
+
         init(inputData);
         return inputData;
     }
@@ -86,11 +88,11 @@ public class ChimeraService {
         Compress compressEnum = Compress.getEnum(compress);
         if (compressEnum != null) {
             if (fileName.contains(OSCILLATIONS_100[0])) {
-                compressEnum.setCompressValue(Integer.valueOf(OSCILLATIONS_100[1]));
+                compressEnum.setCompressValue(Integer.parseInt(OSCILLATIONS_100[1]));
             } else if (fileName.contains(OSCILLATIONS_200[0])) {
-                compressEnum.setCompressValue(Integer.valueOf(OSCILLATIONS_200[1]));
+                compressEnum.setCompressValue(Integer.parseInt(OSCILLATIONS_200[1]));
             } else if (fileName.contains(OSCILLATIONS_400[0])) {
-                compressEnum.setCompressValue(Integer.valueOf(OSCILLATIONS_400[1]));
+                compressEnum.setCompressValue(Integer.parseInt(OSCILLATIONS_400[1]));
             } else {
                 compressEnum.setCompressValue(0);
             }

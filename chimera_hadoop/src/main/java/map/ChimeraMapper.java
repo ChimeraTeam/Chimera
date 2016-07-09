@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class ChimeraMapper extends Mapper<LongWritable, Text, Text, Text> {
 
-    private static final String IGNORE_LINES[] = {
+    private static final String[] IGNORE_LINES = {
             "; Solver config file = solver-config",
             "; Links matrix file = /dev/stdin",
             "; Neurons state file = init_state",

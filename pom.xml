@@ -16,23 +16,24 @@
     </modules>
 
     <properties>
+        <sonar.exclusions>**/*.js</sonar.exclusions>
         <spring.version>4.2.6.RELEASE</spring.version>
         <lombok.version>1.16.8</lombok.version>
         <slf4j.version>1.7.21</slf4j.version>
+        <junit.version>4.12</junit.version>
+        <lombok.version>1.16.8</lombok.version>
+        <commons.lang3.version>3.4</commons.lang3.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
 
-        <!--Code generation-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.8</version>
+            <version>${lombok.version}</version>
         </dependency>
 
-
-        <!--Spring core-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -57,12 +58,16 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang3.version}</version>
+        </dependency>
 
-        <!--Testing-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 

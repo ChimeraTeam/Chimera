@@ -31,6 +31,7 @@ public class PhaseParser extends GeneralParser {
         return line.split(" ")[2];
     }
 
+    @Override
     public String parseValue(String line) {
         double phase = Math.abs(Double.valueOf(line));
         double actual = phase - ((int) (phase / (2 * PI))) * 2 * PI;
@@ -38,7 +39,7 @@ public class PhaseParser extends GeneralParser {
     }
 
     private String compressValue(double phase) {
-        return String.valueOf((new Double(180 * phase / PI)).intValue());
+        return String.valueOf((int) (180 * phase / PI));
     }
 
 }

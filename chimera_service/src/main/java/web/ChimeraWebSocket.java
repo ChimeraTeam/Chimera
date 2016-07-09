@@ -44,7 +44,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
         int iterator = 0;
         try {
             chimeraService.beginTransaction(generateCacheKey(inputData));
-            while (chimeraService.hasData() && iterator != Integer.valueOf(inputData.getFrames())) {
+            while (chimeraService.hasData() && iterator != Integer.parseInt(inputData.getFrames())) {
                 String value = chimeraService.getValue();
                 if (value != null) {
                     iterator++;
@@ -52,7 +52,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
                     chimeraService.putToCache(generateCacheKey(inputData), value);
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             chimeraService.rollbackTransaction();
             log.error("Error while parsing or sending data", e);
         } finally {
