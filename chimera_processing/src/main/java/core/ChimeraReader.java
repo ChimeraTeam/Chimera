@@ -16,6 +16,7 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 @Slf4j
 public class ChimeraReader {
 
+    private static final int BUFFER_SIZE = 8192 * 8;
     private BufferedReader stream;
     private String currentValue;
 
@@ -23,7 +24,7 @@ public class ChimeraReader {
         try {
             FileInputStream compressed = new FileInputStream(file);
             XZCompressorInputStream xzIn = new XZCompressorInputStream(compressed, true);
-            this.stream = new BufferedReader(new InputStreamReader(new BufferedInputStream(xzIn), UTF_8));
+            stream = new BufferedReader(new InputStreamReader(new BufferedInputStream(xzIn, BUFFER_SIZE), UTF_8));
         } catch (IOException e) {
             log.error("Error occurred while creating reader ", e);
             closeQuietly(stream);

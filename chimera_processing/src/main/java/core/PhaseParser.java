@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import static constants.RegExps.PHASE;
 import static java.lang.Math.PI;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Created by gleb on 6/25/16.
@@ -18,7 +19,7 @@ public class PhaseParser extends GeneralParser {
 
     @Override
     protected String additional(double min, double max) {
-        return "";
+        return EMPTY;
     }
 
     @Override
