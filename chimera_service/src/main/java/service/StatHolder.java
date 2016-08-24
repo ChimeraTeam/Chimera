@@ -19,12 +19,8 @@ public class StatHolder {
     }
 
     public synchronized void put(String address) {
-        if (data.containsKey(address)) {
-            int visits = data.get(address);
-            data.put(address, ++visits);
-        } else {
-            data.put(address, 1);
-        }
+        data.computeIfPresent(address, (s, visits) -> ++visits);
+        data.computeIfAbsent(address, s -> 1);
     }
 
     public Map<String, Integer> getData() {
