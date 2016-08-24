@@ -3,4 +3,4 @@ Chimera
 
 GRID service for visualization biological neural network
 
-![alt tag](http://s1.developerslife.ru/public/images/gifs/841b3185-92b7-4515-af6b-5506606e052e.gif)
+![alt tag](https://vk.com/doc20380481_283940486?hash=10b864a4dc26f04852&dl=6851bae1f6f56882c0)
