@@ -12,6 +12,9 @@ import org.springframework.web.servlet.DispatcherServlet;
 import service.CacheManager;
 import service.ChimeraService;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Created by gleb on 5/22/16.
  */
@@ -21,6 +24,8 @@ public class Launcher {
 
     @Value("${spring.redis.host}")
     private String redisHost;
+    @Value("${async.cache.threads}")
+    private int threads;
 
     public static void main(String[] args) {
         SpringApplication.run(Launcher.class, args);
@@ -42,6 +47,11 @@ public class Launcher {
     @Scope("prototype")
     public ChimeraService chimeraService() {
         return new ChimeraService();
+    }
+
+    @Bean
+    public ExecutorService executorService() {
+        return Executors.newFixedThreadPool(threads);
     }
 
 }

@@ -12,6 +12,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import service.ChimeraService;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Created by gleb on 06.10.15.
@@ -23,6 +25,8 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
 
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private ExecutorService executorService;
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
@@ -32,15 +36,14 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
 
         InputData inputData = chimeraService.createInputData(message.getPayload());
 
-        String fromCache = chimeraService.checkInCache(generateCacheKey(inputData));
-        if (fromCache != null) {
+        Optional<String> fromCache = chimeraService.checkInCache(generateCacheKey(inputData));
+        if (fromCache.isPresent()) {
             session.sendMessage(new TextMessage("c" + fromCache));
             log.info("Processed from cache file={}, type={}, session={}", inputData.getFileName(), inputData.getType().name(), session.getId());
             return;
         }
 
         log.info("Starting processing file={}, type={}, session={}", inputData.getFileName(), inputData.getType().name(), session.getId());
-
         int iterator = 0;
         try {
             chimeraService.beginTransaction(generateCacheKey(inputData));
@@ -49,6 +52,7 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
                 if (value != null) {
                     iterator++;
                     session.sendMessage(new TextMessage(value));
+                    executorService.submit(() -> chimeraService.putToCache(generateCacheKey(inputData), value));
                     chimeraService.putToCache(generateCacheKey(inputData), value);
                 }
             }

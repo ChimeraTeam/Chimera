@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static constants.Types.FREQUENCY;
 
@@ -30,7 +31,7 @@ public class ChimeraService {
     private ChimeraReader reader;
     private GeneralParser parser;
 
-    public String checkInCache(String fileName) {
+    public Optional<String> checkInCache(String fileName) {
         return cacheManager.get(fileName);
     }
 

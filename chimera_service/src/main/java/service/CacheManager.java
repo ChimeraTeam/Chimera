@@ -5,7 +5,11 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
+import java.util.Optional;
+
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 
 /**
  * Created by gleb on 5/21/16.
@@ -36,8 +40,8 @@ public class CacheManager {
         }
     }
 
-    public String get(String fileName) {
-        return client.isConnected() ? client.get(fileName) : null;
+    public Optional<String> get(String fileName) {
+        return client.isConnected() ? ofNullable(client.get(fileName)) : empty();
     }
 
     public void beginTransaction(String key) {
