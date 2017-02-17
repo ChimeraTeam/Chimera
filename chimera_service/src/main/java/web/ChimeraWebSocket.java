@@ -53,7 +53,6 @@ public class ChimeraWebSocket extends TextWebSocketHandler {
                     iterator++;
                     session.sendMessage(new TextMessage(value));
                     executorService.submit(() -> chimeraService.putToCache(generateCacheKey(inputData), value));
-                    chimeraService.putToCache(generateCacheKey(inputData), value);
                 }
             }
         } catch (IOException e) {
